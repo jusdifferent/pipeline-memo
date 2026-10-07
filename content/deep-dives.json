@@ -1,0 +1,705 @@
+{
+ "series": [
+  {
+   "slug": "build",
+   "name": "Company build stories",
+   "short": "Build story",
+   "description": "How one company's growth machine was actually built, from the founding insight to scale."
+  },
+  {
+   "slug": "gtm",
+   "name": "GTM playbooks",
+   "short": "GTM playbook",
+   "description": "One go-to-market motion taken apart: how it works, what it costs, and where it breaks."
+  },
+  {
+   "slug": "inflection",
+   "name": "Inflection points",
+   "short": "Inflection point",
+   "description": "The decisions that changed a company's trajectory, and what they changed in the machine."
+  },
+  {
+   "slug": "category",
+   "name": "Category creation",
+   "short": "Category creation",
+   "description": "How companies named a problem, built a market around it, and made themselves the obvious choice."
+  }
+ ],
+ "deepDives": [
+  {
+   "slug": "how-wiz-built-a-30b-cybersecurity-company-in-five-years",
+   "company": "Wiz",
+   "title": "How Wiz Built a $30B Cybersecurity Company in Five Years",
+   "series": "build",
+   "number": 1,
+   "industry": "Security",
+   "dek": "Few enterprise software companies have ever scaled this fast. What was the machine underneath the speed?",
+   "featured": true,
+   "brand": {
+    "bg": "#325FE8",
+    "fg": "#FFFFFF",
+    "ac": "#A9C8FF"
+   },
+   "domain": "wiz.io",
+   "label": "Wiz"
+  },
+  {
+   "slug": "the-gtm-machine-behind-hubspot",
+   "company": "HubSpot",
+   "title": "The GTM Machine Behind HubSpot",
+   "series": "build",
+   "number": 2,
+   "industry": "Revenue tools",
+   "dek": "Inbound marketing, a free CRM, and a network of agency partners. Which parts of HubSpot's go-to-market actually compounded?",
+   "featured": true,
+   "brand": {
+    "bg": "#FF7A59",
+    "fg": "#213343",
+    "ac": "#FFFFFF"
+   },
+   "domain": "hubspot.com",
+   "label": "HubSpot",
+   "logoMono": true
+  },
+  {
+   "slug": "how-vanta-turned-compliance-into-a-growth-engine",
+   "company": "Vanta",
+   "title": "How Vanta Turned Compliance Into a Growth Engine",
+   "series": "build",
+   "number": 3,
+   "industry": "Security",
+   "dek": "Compliance used to be a cost center and a deadline. Vanta made it a reason to buy, and a channel for growth.",
+   "featured": false,
+   "brand": {
+    "bg": "#3D2A8C",
+    "fg": "#FFFFFF",
+    "ac": "#B9A7FF"
+   },
+   "domain": "vanta.com",
+   "label": "Vanta"
+  },
+  {
+   "slug": "how-datadog-won-developers-and-the-enterprise",
+   "company": "Datadog",
+   "title": "How Datadog Won Developers and the Enterprise",
+   "series": "build",
+   "number": 4,
+   "industry": "Infrastructure & IT",
+   "dek": "Datadog started with engineers and ended up in enterprise budgets. How bottom-up adoption turned into large contracts.",
+   "featured": false,
+   "brand": {
+    "bg": "#632CA6",
+    "fg": "#FFFFFF",
+    "ac": "#C9A9F2"
+   },
+   "domain": "datadoghq.com",
+   "label": "Datadog"
+  },
+  {
+   "slug": "why-notions-plg-engine-worked",
+   "company": "Notion",
+   "title": "Why Notion's PLG Engine Worked",
+   "series": "build",
+   "number": 5,
+   "industry": "Collaboration",
+   "dek": "A tool people chose for themselves before their companies did. Why Notion's product-led engine worked when so many others stall.",
+   "featured": false,
+   "brand": {
+    "bg": "#191919",
+    "fg": "#FFFFFF",
+    "ac": "#A5A5A5"
+   },
+   "domain": "notion.so",
+   "label": "Notion"
+  },
+  {
+   "slug": "how-rippling-built-a-multi-product-gtm-machine",
+   "company": "Rippling",
+   "title": "How Rippling Built a Multi-Product GTM Machine",
+   "series": "build",
+   "number": 6,
+   "industry": "HR & finance",
+   "dek": "Most companies earn the right to a second product. Rippling was built to sell many from the start. How that bet shaped its go-to-market.",
+   "featured": false,
+   "brand": {
+    "bg": "#4D1B3A",
+    "fg": "#FFFFFF",
+    "ac": "#F4C04E"
+   },
+   "domain": "rippling.com",
+   "label": "Rippling"
+  },
+  {
+   "slug": "how-crowdstrike-built-a-category-around-endpoint-security",
+   "company": "CrowdStrike",
+   "title": "How CrowdStrike Built a Category Around Endpoint Security",
+   "series": "build",
+   "number": 7,
+   "industry": "Security",
+   "dek": "How a cloud-native approach to endpoint security became a category, and how the category became a moat.",
+   "featured": false,
+   "brand": {
+    "bg": "#D6001C",
+    "fg": "#FFFFFF",
+    "ac": "#1A1A1A"
+   },
+   "domain": "crowdstrike.com",
+   "label": "CrowdStrike"
+  },
+  {
+   "slug": "how-snowflake-broke-into-a-market-dominated-by-giants",
+   "company": "Snowflake",
+   "title": "How Snowflake Broke Into a Market Dominated by Giants",
+   "series": "build",
+   "number": 8,
+   "industry": "Data",
+   "dek": "The data warehouse market belonged to some of the largest companies in tech. How a newcomer broke in anyway.",
+   "featured": true,
+   "brand": {
+    "bg": "#29B5E8",
+    "fg": "#0B2C4A",
+    "ac": "#FFFFFF"
+   },
+   "domain": "snowflake.com",
+   "label": "Snowflake",
+   "logoMono": true
+  },
+  {
+   "slug": "how-servicenow-became-enterprise-software-infrastructure",
+   "company": "ServiceNow",
+   "title": "How ServiceNow Became Enterprise Software Infrastructure",
+   "series": "build",
+   "number": 9,
+   "industry": "Infrastructure & IT",
+   "dek": "From IT ticketing to the workflow layer of the enterprise. How ServiceNow became something companies run their operations on.",
+   "featured": false,
+   "brand": {
+    "bg": "#032D42",
+    "fg": "#FFFFFF",
+    "ac": "#62D84E"
+   },
+   "domain": "servicenow.com",
+   "label": "ServiceNow"
+  },
+  {
+   "slug": "how-cloudflare-turned-infrastructure-into-a-distribution-advantage",
+   "company": "Cloudflare",
+   "title": "How Cloudflare Turned Infrastructure Into a Distribution Advantage",
+   "series": "build",
+   "number": 10,
+   "industry": "Infrastructure & IT",
+   "dek": "Cloudflare gave core infrastructure away to millions of websites. How that footprint became a distribution advantage in the enterprise.",
+   "featured": false,
+   "brand": {
+    "bg": "#F38020",
+    "fg": "#1B1B1B",
+    "ac": "#FFFFFF"
+   },
+   "domain": "cloudflare.com",
+   "label": "Cloudflare"
+  },
+  {
+   "slug": "how-figma-spread-through-product-teams-before-selling-to-enterprises",
+   "company": "Figma",
+   "title": "How Figma Spread Through Product Teams Before Selling to Enterprises",
+   "series": "build",
+   "number": 11,
+   "industry": "Design",
+   "dek": "Figma spread designer to designer and team to team before it needed an enterprise sale. How the bottom-up path worked.",
+   "featured": false,
+   "brand": {
+    "bg": "#1E1E1E",
+    "fg": "#FFFFFF",
+    "ac": "#A259FF"
+   },
+   "domain": "figma.com",
+   "label": "Figma",
+   "logoType": "symbol",
+   "logoTheme": false
+  },
+  {
+   "slug": "how-canva-moved-from-smb-self-serve-to-enterprise",
+   "company": "Canva",
+   "title": "How Canva Moved From SMB Self-Serve to Enterprise",
+   "series": "build",
+   "number": 12,
+   "industry": "Design",
+   "dek": "Canva won millions of individual users first. What changed in the machine when it started selling to large organizations.",
+   "featured": false,
+   "brand": {
+    "bg": "#7D2AE8",
+    "fg": "#FFFFFF",
+    "ac": "#00C4CC"
+   },
+   "domain": "canva.com",
+   "label": "Canva"
+  },
+  {
+   "slug": "how-monday-com-scaled-paid-acquisition-without-becoming-a-commodity",
+   "company": "Monday.com",
+   "title": "How Monday.com Scaled Paid Acquisition Without Becoming a Commodity",
+   "series": "build",
+   "number": 13,
+   "industry": "Collaboration",
+   "dek": "Monday.com grew in a crowded category with a heavy bet on paid acquisition. How it scaled spend without being reduced to a commodity.",
+   "featured": false,
+   "brand": {
+    "bg": "#6161FF",
+    "fg": "#FFFFFF",
+    "ac": "#FFCB00"
+   },
+   "domain": "monday.com",
+   "label": "Monday.com"
+  },
+  {
+   "slug": "how-mongodb-turned-open-source-into-an-enterprise-gtm-engine",
+   "company": "MongoDB",
+   "title": "How MongoDB Turned Open Source Into an Enterprise GTM Engine",
+   "series": "build",
+   "number": 14,
+   "industry": "Data",
+   "dek": "How a free database developers loved became an enterprise business, and the tensions it had to manage along the way.",
+   "featured": false,
+   "brand": {
+    "bg": "#E3FCF7",
+    "fg": "#001E2B",
+    "ac": "#00684A"
+   },
+   "domain": "mongodb.com",
+   "label": "MongoDB"
+  },
+  {
+   "slug": "how-atlassian-built-a-giant-without-a-traditional-sales-motion",
+   "company": "Atlassian",
+   "title": "How Atlassian Built a Giant Without a Traditional Sales Motion",
+   "series": "build",
+   "number": 15,
+   "industry": "Developer tools",
+   "dek": "Atlassian grew into a giant while avoiding a traditional enterprise sales force for years. What did the work instead.",
+   "featured": false,
+   "brand": {
+    "bg": "#0052CC",
+    "fg": "#FFFFFF",
+    "ac": "#B3D4FF"
+   },
+   "domain": "atlassian.com",
+   "label": "Atlassian"
+  },
+  {
+   "slug": "how-okta-won-identity",
+   "company": "Okta",
+   "title": "How Okta Won Identity",
+   "series": "build",
+   "number": 16,
+   "industry": "Security",
+   "dek": "Identity looked like a feature inside bigger platforms. How Okta made it a standalone category and won it.",
+   "featured": false,
+   "brand": {
+    "bg": "#00297A",
+    "fg": "#FFFFFF",
+    "ac": "#7DB6FF"
+   },
+   "domain": "okta.com",
+   "label": "Okta"
+  },
+  {
+   "slug": "inside-salesforces-enterprise-sales-playbook",
+   "company": "Salesforce",
+   "title": "Inside Salesforce's Enterprise Sales Playbook",
+   "series": "gtm",
+   "number": 1,
+   "industry": "Revenue tools",
+   "dek": "The enterprise sales motion much of SaaS copied. How it's structured, why it works, and where it doesn't transfer.",
+   "featured": false,
+   "brand": {
+    "bg": "#032D60",
+    "fg": "#FFFFFF",
+    "ac": "#00A1E0"
+   },
+   "domain": "salesforce.com",
+   "label": "Salesforce"
+  },
+  {
+   "slug": "how-hubspot-built-inbound-marketing-into-its-moat",
+   "company": "HubSpot",
+   "title": "How HubSpot Built Inbound Marketing Into Its Moat",
+   "series": "gtm",
+   "number": 2,
+   "industry": "Revenue tools",
+   "dek": "HubSpot didn't just use inbound marketing. It named it, taught it, and built a moat out of it.",
+   "featured": false,
+   "brand": {
+    "bg": "#FF7A59",
+    "fg": "#213343",
+    "ac": "#FFFFFF"
+   },
+   "domain": "hubspot.com",
+   "label": "HubSpot II",
+   "logoMono": true
+  },
+  {
+   "slug": "how-slack-turned-product-usage-into-enterprise-expansion",
+   "company": "Slack",
+   "title": "How Slack Turned Product Usage Into Enterprise Expansion",
+   "series": "gtm",
+   "number": 3,
+   "industry": "Collaboration",
+   "dek": "How individual teams adopting Slack turned into company-wide contracts, and the expansion machine behind it.",
+   "featured": false,
+   "brand": {
+    "bg": "#4A154B",
+    "fg": "#FFFFFF",
+    "ac": "#ECB22E"
+   },
+   "domain": "slack.com",
+   "label": "Slack"
+  },
+  {
+   "slug": "how-zoom-engineered-viral-distribution",
+   "company": "Zoom",
+   "title": "How Zoom Engineered Viral Distribution",
+   "series": "gtm",
+   "number": 4,
+   "industry": "Collaboration",
+   "dek": "Every Zoom meeting was also an invitation. How the product carried its own distribution.",
+   "featured": false,
+   "brand": {
+    "bg": "#0B5CFF",
+    "fg": "#FFFFFF",
+    "ac": "#A9C4FF"
+   },
+   "domain": "zoom.us",
+   "label": "Zoom"
+  },
+  {
+   "slug": "the-partner-ecosystem-behind-microsoft-azure",
+   "company": "Microsoft Azure",
+   "title": "The Partner Ecosystem Behind Microsoft Azure",
+   "series": "gtm",
+   "number": 5,
+   "industry": "Infrastructure & IT",
+   "dek": "Microsoft's cloud business runs through a vast network of partners. How the ecosystem works as a distribution engine.",
+   "featured": false,
+   "brand": {
+    "bg": "#0078D4",
+    "fg": "#FFFFFF",
+    "ac": "#50E6FF"
+   },
+   "domain": "azure.microsoft.com",
+   "label": "Microsoft Azure",
+   "logoMono": true
+  },
+  {
+   "slug": "how-stripe-turned-developers-into-its-distribution-channel",
+   "company": "Stripe",
+   "title": "How Stripe Turned Developers Into Its Distribution Channel",
+   "series": "gtm",
+   "number": 6,
+   "industry": "HR & finance",
+   "dek": "Stripe sold to developers first, with its documentation as the pitch. How that became a channel into companies of every size.",
+   "featured": false,
+   "brand": {
+    "bg": "#635BFF",
+    "fg": "#FFFFFF",
+    "ac": "#00D4FF"
+   },
+   "domain": "stripe.com",
+   "label": "Stripe"
+  },
+  {
+   "slug": "how-deel-built-a-global-outbound-machine",
+   "company": "Deel",
+   "title": "How Deel Built a Global Outbound Machine",
+   "series": "gtm",
+   "number": 7,
+   "industry": "HR & finance",
+   "dek": "How Deel built an outbound engine that could sell global payroll into companies around the world, fast.",
+   "featured": false,
+   "brand": {
+    "bg": "#15357A",
+    "fg": "#FFFFFF",
+    "ac": "#FFD24C"
+   },
+   "domain": "deel.com",
+   "label": "Deel"
+  },
+  {
+   "slug": "how-ramp-uses-content-as-a-sales-weapon",
+   "company": "Ramp",
+   "title": "How Ramp Uses Content as a Sales Weapon",
+   "series": "gtm",
+   "number": 8,
+   "industry": "HR & finance",
+   "dek": "Ramp publishes like a media company. How that content works as a sales tool, not just marketing.",
+   "featured": false,
+   "brand": {
+    "bg": "#E4F222",
+    "fg": "#1A1A1A",
+    "ac": "#1A1A1A"
+   },
+   "domain": "ramp.com",
+   "label": "Ramp"
+  },
+  {
+   "slug": "how-gong-created-demand-before-buyers-knew-the-category",
+   "company": "Gong",
+   "title": "How Gong Created Demand Before Buyers Knew the Category",
+   "series": "gtm",
+   "number": 9,
+   "industry": "Revenue tools",
+   "dek": "Gong built demand for a product before buyers had a name for what it did. How the content and data engine made that possible.",
+   "featured": false,
+   "brand": {
+    "bg": "#8039DF",
+    "fg": "#FFFFFF",
+    "ac": "#FFB1E0"
+   },
+   "domain": "gong.io",
+   "label": "Gong",
+   "logoMono": true
+  },
+  {
+   "slug": "the-decision-that-changed-adobes-business-model",
+   "company": "Adobe",
+   "title": "The Decision That Changed Adobe's Business Model",
+   "series": "inflection",
+   "number": 1,
+   "industry": "Design",
+   "dek": "Adobe moved from boxed software to subscriptions. The decision, the risk, and what it did to the whole business.",
+   "featured": false,
+   "brand": {
+    "bg": "#FA0F00",
+    "fg": "#FFFFFF",
+    "ac": "#2C2C2C"
+   },
+   "domain": "adobe.com",
+   "label": "Adobe"
+  },
+  {
+   "slug": "why-microsoft-bet-the-company-on-the-cloud",
+   "company": "Microsoft",
+   "title": "Why Microsoft Bet the Company on the Cloud",
+   "series": "inflection",
+   "number": 2,
+   "industry": "Infrastructure & IT",
+   "dek": "Why Microsoft bet its future on the cloud, and how the bet reshaped its sales, products, and partners.",
+   "featured": true,
+   "brand": {
+    "bg": "#F2F2F2",
+    "fg": "#1B1B1B",
+    "ac": "#00A4EF"
+   },
+   "domain": "microsoft.com",
+   "label": "Microsoft"
+  },
+  {
+   "slug": "the-moment-shopify-stopped-being-just-a-store-builder",
+   "company": "Shopify",
+   "title": "The Moment Shopify Stopped Being Just a Store Builder",
+   "series": "inflection",
+   "number": 3,
+   "industry": "Commerce",
+   "dek": "The point where Shopify stopped being a website builder and became the platform merchants run on.",
+   "featured": false,
+   "brand": {
+    "bg": "#95BF47",
+    "fg": "#0B2A1B",
+    "ac": "#FFFFFF"
+   },
+   "domain": "shopify.com",
+   "label": "Shopify"
+  },
+  {
+   "slug": "how-githubs-microsoft-acquisition-changed-its-growth-engine",
+   "company": "GitHub",
+   "title": "How GitHub's Microsoft Acquisition Changed Its Growth Engine",
+   "series": "inflection",
+   "number": 4,
+   "industry": "Developer tools",
+   "dek": "What changed in GitHub's growth engine after Microsoft acquired it, and what didn't.",
+   "featured": false,
+   "brand": {
+    "bg": "#0D1117",
+    "fg": "#FFFFFF",
+    "ac": "#3FB950"
+   },
+   "domain": "github.com",
+   "label": "GitHub"
+  },
+  {
+   "slug": "why-twilio-moved-upmarket",
+   "company": "Twilio",
+   "title": "Why Twilio Moved Upmarket",
+   "series": "inflection",
+   "number": 5,
+   "industry": "Developer tools",
+   "dek": "Twilio grew on developers with credit cards. Why it moved upmarket, and what the shift demanded.",
+   "featured": false,
+   "brand": {
+    "bg": "#F22F46",
+    "fg": "#FFFFFF",
+    "ac": "#121C2D"
+   },
+   "domain": "twilio.com",
+   "label": "Twilio"
+  },
+  {
+   "slug": "how-zoom-went-from-pandemic-hypergrowth-to-enterprise-retention",
+   "company": "Zoom",
+   "title": "How Zoom Went From Pandemic Hypergrowth to Enterprise Retention",
+   "series": "inflection",
+   "number": 6,
+   "industry": "Collaboration",
+   "dek": "Zoom's usage surged during the pandemic. How it tried to turn that surge into durable enterprise revenue.",
+   "featured": false,
+   "brand": {
+    "bg": "#0B5CFF",
+    "fg": "#FFFFFF",
+    "ac": "#A9C4FF"
+   },
+   "domain": "zoom.us",
+   "label": "Zoom II"
+  },
+  {
+   "slug": "what-happened-when-dropboxs-plg-engine-hit-its-ceiling",
+   "company": "Dropbox",
+   "title": "What Happened When Dropbox's PLG Engine Hit Its Ceiling",
+   "series": "inflection",
+   "number": 7,
+   "industry": "Collaboration",
+   "dek": "Dropbox's product-led engine was one of the most famous in software. What happened when it reached its limit.",
+   "featured": false,
+   "brand": {
+    "bg": "#0061FE",
+    "fg": "#FFFFFF",
+    "ac": "#B4DC19"
+   },
+   "domain": "dropbox.com",
+   "label": "Dropbox",
+   "logoMono": true
+  },
+  {
+   "slug": "how-gainsight-made-customer-success-a-software-category",
+   "company": "Gainsight",
+   "title": "How Gainsight Made Customer Success a Software Category",
+   "series": "category",
+   "number": 1,
+   "industry": "Revenue tools",
+   "dek": "Customer success was a job before it was a market. How Gainsight turned it into a software category.",
+   "featured": false,
+   "brand": {
+    "bg": "#1F1F7A",
+    "fg": "#FFFFFF",
+    "ac": "#F5A623"
+   },
+   "domain": "gainsight.com",
+   "label": "Gainsight"
+  },
+  {
+   "slug": "how-gong-helped-invent-revenue-intelligence",
+   "company": "Gong",
+   "title": "How Gong Helped Invent Revenue Intelligence",
+   "series": "category",
+   "number": 2,
+   "industry": "Revenue tools",
+   "dek": "How Gong helped name and define revenue intelligence, and why owning the name mattered.",
+   "featured": true,
+   "brand": {
+    "bg": "#8039DF",
+    "fg": "#FFFFFF",
+    "ac": "#FFB1E0"
+   },
+   "domain": "gong.io",
+   "label": "Gong II",
+   "logoMono": true
+  },
+  {
+   "slug": "how-drift-manufactured-the-conversational-marketing-category",
+   "company": "Drift",
+   "title": "How Drift Manufactured the Conversational Marketing Category",
+   "series": "category",
+   "number": 3,
+   "industry": "Revenue tools",
+   "dek": "Drift didn't just sell chat software. It named a category and marketed the category as hard as the product.",
+   "featured": false,
+   "brand": {
+    "bg": "#0176FF",
+    "fg": "#FFFFFF",
+    "ac": "#A9D0FF"
+   },
+   "domain": "drift.com",
+   "label": "Drift"
+  },
+  {
+   "slug": "how-snowflake-reframed-the-data-warehouse",
+   "company": "Snowflake",
+   "title": "How Snowflake Reframed the Data Warehouse",
+   "series": "category",
+   "number": 4,
+   "industry": "Data",
+   "dek": "Snowflake didn't just sell a better data warehouse. It changed what buyers thought a data warehouse was.",
+   "featured": false,
+   "brand": {
+    "bg": "#29B5E8",
+    "fg": "#0B2C4A",
+    "ac": "#FFFFFF"
+   },
+   "domain": "snowflake.com",
+   "label": "Snowflake II",
+   "logoMono": true
+  },
+  {
+   "slug": "how-wiz-reframed-cloud-security",
+   "company": "Wiz",
+   "title": "How Wiz Reframed Cloud Security",
+   "series": "category",
+   "number": 5,
+   "industry": "Security",
+   "dek": "How Wiz changed the way buyers thought about cloud security, and why the new frame favored Wiz.",
+   "featured": false,
+   "brand": {
+    "bg": "#325FE8",
+    "fg": "#FFFFFF",
+    "ac": "#A9C8FF"
+   },
+   "domain": "wiz.io",
+   "label": "Wiz II"
+  },
+  {
+   "slug": "why-some-category-creation-plays-work-and-others-die",
+   "company": "Category plays",
+   "title": "Why Some Category-Creation Plays Work and Others Die",
+   "series": "category",
+   "number": 6,
+   "industry": "Across companies",
+   "dek": "Category creation is one of the most copied strategies in B2B, and one of the most likely to fail. What separates the plays that work.",
+   "featured": false,
+   "brand": {
+    "bg": "#16347F",
+    "fg": "#F1F3F6",
+    "ac": "#FF7C48"
+   },
+   "domain": "",
+   "label": "Category plays"
+  },
+  {
+   "slug": "why-databricks-keeps-raising-billions",
+   "company": "Databricks",
+   "title": "Why Databricks Keeps Raising Billions",
+   "series": "category",
+   "number": 7,
+   "industry": "Data",
+   "dek": "Why Databricks keeps raising enormous private rounds instead of going public, and what the capital buys it.",
+   "featured": true,
+   "brand": {
+    "bg": "#FF3621",
+    "fg": "#FFFFFF",
+    "ac": "#1B3139"
+   },
+   "domain": "databricks.com",
+   "label": "Databricks",
+   "logoMono": true
+  }
+ ],
+ "_note": "brand colors are approximate except Wiz (from its Brandfetch profile): verify each at brandfetch.com/<domain>"
+}
