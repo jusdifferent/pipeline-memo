@@ -65,9 +65,9 @@ Company names and logos identify the subject of each deep dive. The footer and A
 
 ## Essays tab
 
-The site has two tabs at the top: **Company deep dives** (`/`, the logo tiles) and **Essays** (`/essays`, text links grouped by theme). The search bar filters whichever tab you're on.
+The site has two tabs at the top: **Company deep dives** (`/`, the logo tiles) and **Essays** (`/essays`, a list of text links). The search bar filters whichever tab you're on.
 
-Essay titles live in `content/essays.json` as one list. The tab shows them newest first: published essays by date, then the rest in the order listed. To publish an essay, add `content/essays/<slug>.md` (the slug is the title in lowercase with dashes, as in the essay's URL). It uses the same front matter as deep dives (`date`, optional `dek` and `readUrl`), with the same preview and email gate. Essays in research show a "notify me" form instead.
+Essay titles live in `content/essays.json` as one list, which doubles as the backlog. Only published essays appear on the site: the tab lists them newest first by date (same-date essays keep their order in the list), and unpublished titles get no page, link, or sitemap entry. To publish an essay, add `content/essays/<slug>.md` (the slug is the title in lowercase with dashes, as in the essay's URL). It uses the same front matter as deep dives (`date`, optional `dek` and `readUrl`), with the same preview and email gate.
 
 Signups from essay pages are tagged in Beehiiv as `essay-<slug>`.
 

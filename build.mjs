@@ -58,7 +58,7 @@ const INDUSTRIES = [...new Set(DD.map((d) => d.industry))].sort((a, b) => (a ===
 // ------------------------------------------------------------------ helpers
 const url = (dd) => `/deep-dives/${dd.slug}`;
 const code = (dd) => `${seriesBy[dd.series].short} ${String(dd.number).padStart(2, '0')}`;
-const fmtDate = (d) => (d ? new Date(`${d}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : '');
+const fmtDate = (d) => (d ? new Date(`${d}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : '');
 const status = (dd) => (dd.published ? fmtDate(dd.date) : 'In research');
 const brandVars = (dd) => `--ep-bg:${dd.brand.bg};--ep-fg:${dd.brand.fg};--ep-ac:${dd.brand.ac}`;
 const ONERR = `if(this.dataset.alt){this.src=this.dataset.alt;this.removeAttribute('data-alt')}else{this.closest('[data-logo-box]').classList.add('no-logo');this.remove()}`;
@@ -70,19 +70,20 @@ function logoBox(dd, cls) {
   </span>`;
 }
 
-// ------------------------------------------------------------------ essays (text-only, grouped by theme)
+// ------------------------------------------------------------------ essays (text-only list)
 const ESSAY_TITLES = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/essays.json'), 'utf8')).essays;
 const slugify = (t) => t.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const ESSAYS = ESSAY_TITLES.map((title) => ({ title, slug: slugify(title) }));
-for (const es of ESSAYS) {
+const ALL_ESSAYS = ESSAY_TITLES.map((title) => ({ title, slug: slugify(title) }));
+for (const es of ALL_ESSAYS) {
   const file = path.join(ROOT, 'content/essays', `${es.slug}.md`);
   if (!fs.existsSync(file)) continue;
   const { data: fm, body } = parseFrontmatter(fs.readFileSync(file, 'utf8'));
   if (fm.published === false) continue;
   Object.assign(es, { essay: body, date: fm.date, dek: fm.dek || '', readUrl: fm.readUrl || '', published: true, minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)) });
 }
-// Newest first: published essays by date, then the rest in the order listed.
-ESSAYS.sort((a, b) => (b.published ? 1 : 0) - (a.published ? 1 : 0) || String(b.date || '').localeCompare(String(a.date || '')));
+// Only published essays are built or listed; the rest of essays.json stays a private backlog.
+// Newest first by date; essays with the same date keep their order in essays.json.
+const ESSAYS = ALL_ESSAYS.filter((x) => x.published).sort((a, b) => String(b.date).localeCompare(String(a.date)));
 const essayUrl = (es) => `/essays/${es.slug}`;
 const ESSAY_VARS = '--ep-bg:#141414;--ep-fg:#FAF8F3;--ep-ac:#FFFFFF';
 
