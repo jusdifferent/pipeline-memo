@@ -14,10 +14,9 @@ A static site for Vercel with 39 deep dives across four series. There's no frame
   4. The **signup band** above the footer.
 - Returning subscribers skip gates automatically. Every signup is tagged in Beehiiv (`utm_campaign`) with where it happened: `floating-pill`, `header-modal`, `footer-band`, or the slug of the deep dive whose gate converted them.
 
-## Before launch: fill in the placeholders
+## Personal details
 
-1. **`site.config.json`**: your name, domain, contact email, LinkedIn.
-2. **About page bio**: search `build.mjs` for `[Bio paragraph`.
+`site.config.json` holds `author`, `contactEmail`, `linkedin`, and `bio` (a list of About-page paragraphs). Anything left empty is hidden on the site rather than shown as a placeholder. Set `url` to the custom domain once there is one.
 
 ## Publishing a deep dive
 
@@ -30,7 +29,7 @@ dek: Optional. Replaces the summary shown under the title.
 readUrl: https://yourname.beehiiv.com/p/how-okta-won-identity
 ---
 
-Opening paragraphs. The first three are the free preview.
+Opening paragraphs. Everything before the first ## heading is the free preview.
 
 ## The founding insight
 
@@ -41,7 +40,7 @@ Use ## for chapter headings.
 
 **Where the rest of the essay lives.** Without `readUrl`, the full essay is on your site and the gate unlocks it in place. With `readUrl`, the site shows only the preview, and after signing up the reader goes to that Beehiiv post. The on-site option is better for search traffic; the Beehiiv option keeps the full text off the open web. Note that the on-site gate is a soft gate: the full text is in the page for search engines, and a determined reader could find it.
 
-To change how many paragraphs the preview shows, edit `PREVIEW_PARAGRAPHS` in `build.mjs`.
+The preview runs to the first `##` heading, capped at `PREVIEW_PARAGRAPHS` (in `build.mjs`) paragraphs.
 
 ## Editing topics
 

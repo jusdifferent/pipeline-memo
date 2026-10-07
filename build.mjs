@@ -12,7 +12,8 @@ const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/deep-dives.json
 const SERIES = data.series;
 const seriesBy = Object.fromEntries(SERIES.map((s) => [s.slug, s]));
 const DD = data.deepDives;
-const PREVIEW_PARAGRAPHS = 3;
+// The free preview runs to the first ## heading, capped at this many paragraphs.
+const PREVIEW_PARAGRAPHS = 12;
 
 // ------------------------------------------------------------------ logos
 // 1. A file in public/logos/<company>.svg|png|webp always wins.
@@ -157,10 +158,10 @@ ${body}
   <div class="wrap foot-grid">
     <div><a class="wordmark" href="/">${e(cfg.name)}</a><p class="foot-tag">${e(cfg.tagline)}</p></div>
     <div><h2 class="foot-h">The series</h2><ul class="foot-links">${SERIES.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul></div>
-    <div><h2 class="foot-h">More</h2><ul class="foot-links"><li><a href="/about">About</a></li><li><a href="/advisory">Work with ${e(cfg.author)}</a></li><li><a href="/sponsor">Sponsor</a></li></ul></div>
-    <div><h2 class="foot-h">Elsewhere</h2><ul class="foot-links"><li><a href="${e(cfg.linkedin)}" rel="noopener">LinkedIn</a></li><li><a href="mailto:${e(cfg.contactEmail)}">Email</a></li><li><a href="/feed.xml">RSS</a></li></ul></div>
+    <div><h2 class="foot-h">More</h2><ul class="foot-links"><li><a href="/about">About</a></li><li><a href="/advisory">Work with me</a></li></ul></div>
+    <div><h2 class="foot-h">Elsewhere</h2><ul class="foot-links">${cfg.linkedin ? `<li><a href="${e(cfg.linkedin)}" rel="noopener">LinkedIn</a></li>` : ''}${cfg.contactEmail ? `<li><a href="mailto:${e(cfg.contactEmail)}">Email</a></li>` : ''}<li><a href="/feed.xml">RSS</a></li></ul></div>
   </div>
-  <div class="wrap foot-base"><p>© ${new Date().getFullYear()} ${e(cfg.author)}. Company names and logos belong to their owners and are used for identification only.</p></div>
+  <div class="wrap foot-base"><p>© ${new Date().getFullYear()} ${e(cfg.author || cfg.name)}. Company names and logos belong to their owners and are used for identification only.</p></div>
 </footer>
 
 <div class="float-sub" data-float hidden>
@@ -178,7 +179,7 @@ ${body}
     <h3>Industry</h3>
     <ul class="menu-cols">${INDUSTRIES.map((i) => `<li><a href="/?industry=${encodeURIComponent(i)}">${e(i)}</a></li>`).join('')}</ul>
     <h3>More</h3>
-    <ul><li><a href="/">All deep dives</a></li><li><a href="/essays">All essays</a></li><li><a href="/about">About</a></li><li><a href="/advisory">Work with ${e(cfg.author)}</a></li><li><a href="/sponsor">Sponsor</a></li></ul>
+    <ul><li><a href="/">All deep dives</a></li><li><a href="/essays">All essays</a></li><li><a href="/about">About</a></li><li><a href="/advisory">Work with me</a></li></ul>
   </nav>
 </dialog>
 <dialog class="modal modal-sub" id="subscribe-modal" aria-labelledby="sub-modal-h">
@@ -363,8 +364,7 @@ function prosePage({ title, pathName, description, lede, html }) {
 }
 const about = () => prosePage({
   title: 'About', pathName: '/about', description: `About ${cfg.name}.`, lede: e(cfg.tagline),
-  html: `<p>[Bio paragraph one: who you are and the work you've done, in plain terms, without naming confidential clients or numbers.]</p>
-<p>[Bio paragraph two: what you're known for, and the kind of problem people bring to you.]</p>
+  html: `${(cfg.bio || []).map((p) => `<p>${e(p)}</p>`).join('\n')}
 <h2>Why ${e(cfg.name)}</h2>
 <p>${e(cfg.intro)}</p>
 <p>Information about B2B growth is everywhere. Judgment is scarce: which signals matter, why a system that looks healthy stops producing pipeline, and what to fix first. Each piece is written for someone about to make that call.</p>
@@ -374,18 +374,12 @@ const about = () => prosePage({
 <p>Public sources only: filings, earnings calls, interviews, investor letters, and independent reporting. Every figure is sourced, and interpretation is kept separate from fact. Company names and logos identify the subject of each deep dive and don't imply endorsement.</p>`,
 });
 const advisory = () => prosePage({
-  title: `Work with ${cfg.author}`, pathName: '/advisory', description: `Advisory work with ${cfg.author}.`,
+  title: 'Work with me', pathName: '/advisory', description: 'Advisory work on positioning, paid social, and pipeline.',
   lede: 'For the problems that decide growth. A small number of engagements each year.',
   html: `<p>Most growth problems get treated as channel problems: more spend, a new agency, better creative. Usually the real constraint sits elsewhere: positioning, targeting, how leads are handled, or incentives between marketing and sales. The work starts by finding it.</p>
 <h2>How an engagement runs</h2>
 <ol class="steps"><li><strong>Diagnose.</strong> Find where growth or pipeline is actually breaking, and why.</li><li><strong>Define.</strong> Decide what buyers need to believe, and what has to change to get there.</li><li><strong>Deploy.</strong> Put that narrative into the market through the channels that reach the buyer.</li><li><strong>Refine.</strong> Adjust against business outcomes, not clicks or lead counts.</li></ol>
-<p><a class="btn" href="mailto:${e(cfg.contactEmail)}?subject=Advisory">Email ${e(cfg.author)}</a></p>`,
-});
-const sponsor = () => prosePage({
-  title: 'Sponsor', pathName: '/sponsor', description: `Sponsorship with ${cfg.name}.`, lede: 'Reach the people who decide where B2B budget goes.',
-  html: `<h2>The audience</h2><p>CMOs and heads of marketing, demand and growth leaders, founders and CEOs, revenue operations leaders, and investors in B2B software, AI, and security.</p>
-<h2>How sponsorship works</h2><p><strong>One sponsor per deep dive.</strong> Your company is the only sponsor on that essay and its email.</p><p><strong>Category exclusivity.</strong> No competitor sponsors during your term.</p><p><strong>Integrated and clearly labeled.</strong> Sponsor messages are written to fit the deep dive, never to change what it says.</p>
-<p><a class="btn" href="mailto:${e(cfg.contactEmail)}?subject=Sponsorship">Request the media kit</a></p>`,
+${cfg.contactEmail ? `<p><a class="btn" href="mailto:${e(cfg.contactEmail)}?subject=Advisory">Get in touch</a></p>` : ''}`,
 });
 const subscribePage = () => layout({ title: 'Subscribe', pathName: '/subscribe', description: `Subscribe to ${cfg.name}.`,
   body: `<section class="page-head wrap narrow"><h1>${e(cfg.signupHeadline)}</h1><p class="lede">${e(cfg.signupText)}</p>${subForm({ id: 'page-email', source: 'subscribe-page' })}</section>` });
@@ -400,7 +394,6 @@ ESSAYS.forEach((x) => write(`essays/${x.slug}.html`, essayPage(x)));
 DD.forEach((d) => write(`deep-dives/${d.slug}.html`, deepDivePage(d)));
 write('about.html', about());
 write('advisory.html', advisory());
-write('sponsor.html', sponsor());
 write('subscribe.html', subscribePage());
 write('welcome.html', simple('Subscribed', '/welcome', `<h1>You're subscribed</h1><p class="lede">The next ${e(cfg.name)} will arrive at the address you gave.</p><p><a class="textlink" href="/">Back to the deep dives</a></p>`));
 write('404.html', simple('Page not found', '/404', `<h1>That page doesn't exist</h1><p class="lede">The link may be old, or the deep dive may have moved.</p><p><a class="textlink" href="/">Browse all deep dives</a></p>`));
@@ -411,7 +404,7 @@ write('feed.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel><title>${e(cfg.name)}</title><link>${e(cfg.url)}</link><description>${e(cfg.description)}</description>
 ${live.map((d) => `<item><title>${e(d.title)}</title><link>${e(cfg.url + (d.isEssay ? essayUrl(d) : url(d)))}</link><guid>${e(cfg.url + (d.isEssay ? essayUrl(d) : url(d)))}</guid><pubDate>${new Date(`${d.date}T12:00:00Z`).toUTCString()}</pubDate><description>${e(d.dek)}</description></item>`).join('\n')}
 </channel></rss>`);
-const pages = ['', '/essays', '/about', '/advisory', '/sponsor', '/subscribe', ...DD.map(url), ...ESSAYS.map(essayUrl)];
+const pages = ['', '/essays', '/about', '/advisory', '/subscribe', ...DD.map(url), ...ESSAYS.map(essayUrl)];
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map((p) => `<url><loc>${e(cfg.url + p)}</loc></url>`).join('')}</urlset>`);
 write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.url}/sitemap.xml\n`);
 fs.cpSync(path.join(ROOT, 'public'), DIST, { recursive: true });
