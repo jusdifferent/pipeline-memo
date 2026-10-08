@@ -1,6 +1,6 @@
 ---
 date: 2026-10-07
-dek: Datadog never asked anyone to rip out their tools. It got onto every server for $15 a month, became the first screen every team checked, and sold them whatever that screen revealed.
+dek: Its rivals sold for tens of millions. Datadog turned down billions. What did it build that the rest of the cloud wave didn't?
 ---
 
 On September 18, 2019, Datadog priced its IPO at $27 a share, above a range it had already raised once. The next morning the stock opened at $40.35. By the close, the New York monitoring company was worth about $10.9 billion, according to Forbes.
