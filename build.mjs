@@ -52,8 +52,10 @@ for (const dd of DD) {
   if (fm.published === false) continue;
   Object.assign(dd, { essay: body, date: fm.date, dek: fm.dek || dd.dek, readUrl: fm.readUrl || '', published: true, minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)) });
 }
-const ordered = [...DD].sort((a, b) => (b.published ? 1 : 0) - (a.published ? 1 : 0) || String(b.date || '').localeCompare(String(a.date || '')));
-const INDUSTRIES = [...new Set(DD.map((d) => d.industry))].sort((a, b) => (a === 'Across companies') - (b === 'Across companies') || a.localeCompare(b));
+// Only published deep dives are built or listed; the rest of deep-dives.json stays a private backlog.
+const DIVES = DD.filter((d) => d.published).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+const SERIES_LIVE = SERIES.filter((s) => DIVES.some((d) => d.series === s.slug));
+const INDUSTRIES = [...new Set(DIVES.map((d) => d.industry))].sort((a, b) => (a === 'Across companies') - (b === 'Across companies') || a.localeCompare(b));
 
 // ------------------------------------------------------------------ figures
 // {{figure:name | caption}} in a deep dive or essay pulls in content/<kind>/<slug>/<name>.html (or .svg).
@@ -68,7 +70,6 @@ const figureFor = (kind, slug) => (name) => {
 
 // ------------------------------------------------------------------ helpers
 const url = (dd) => `/deep-dives/${dd.slug}`;
-const code = (dd) => `${seriesBy[dd.series].short} ${String(dd.number).padStart(2, '0')}`;
 const fmtDate = (d) => (d ? new Date(`${d}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : '');
 const status = (dd) => (dd.published ? fmtDate(dd.date) : 'In research');
 const brandVars = (dd) => `--ep-bg:${dd.brand.bg};--ep-fg:${dd.brand.fg};--ep-ac:${dd.brand.ac}`;
@@ -170,7 +171,7 @@ ${body}
 <footer class="site-foot">
   <div class="wrap foot-grid">
     <div><a class="wordmark" href="/">${e(cfg.name)}</a><p class="foot-tag">${e(cfg.tagline)}</p></div>
-    <div><h2 class="foot-h">The series</h2><ul class="foot-links">${SERIES.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul></div>
+    <div><h2 class="foot-h">The series</h2><ul class="foot-links">${SERIES_LIVE.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul></div>
     <div><h2 class="foot-h">More</h2><ul class="foot-links"><li><a href="/about">About</a></li><li><a href="/advisory">Work with me</a></li></ul></div>
     <div><h2 class="foot-h">Elsewhere</h2><ul class="foot-links">${cfg.linkedin ? `<li><a href="${e(cfg.linkedin)}" rel="noopener">LinkedIn</a></li>` : ''}${cfg.contactEmail ? `<li><a href="mailto:${e(cfg.contactEmail)}">Email</a></li>` : ''}<li><a href="/feed.xml">RSS</a></li></ul></div>
   </div>
@@ -188,7 +189,7 @@ ${body}
   <h2 id="menu-h" class="sr-only">Menu</h2>
   <nav aria-label="Browse">
     <h3>Series</h3>
-    <ul>${SERIES.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul>
+    <ul>${SERIES_LIVE.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul>
     <h3>Industry</h3>
     <ul class="menu-cols">${INDUSTRIES.map((i) => `<li><a href="/?industry=${encodeURIComponent(i)}">${e(i)}</a></li>`).join('')}</ul>
     <h3>More</h3>
@@ -216,7 +217,7 @@ function card(dd) {
   <a href="${url(dd)}" data-preview style="${brandVars(dd)}">
     <span class="tile-stack">
       <span class="tile-page" aria-hidden="true">
-        <span class="page-code">${e(code(dd))}</span>
+        <span class="page-code">${e(status(dd))}</span>
         <span class="page-dek">${e(dd.dek)}</span>
         <span class="page-lines"></span>
       </span>
@@ -256,7 +257,7 @@ function grid() {
     <p>Showing <strong data-active-label></strong> <span data-active-count></span></p>
     <button type="button" class="pill" data-reset>Show all</button>
   </div>
-  <ul class="grid" data-grid>${ordered.map(card).join('')}</ul>
+  <ul class="grid" data-grid>${DIVES.map(card).join('')}</ul>
   <div class="empty" data-empty hidden><p>No deep dives match that search.</p><button type="button" class="pill" data-reset>Show all</button></div>
 </section>`;
 }
@@ -308,7 +309,7 @@ function deepDiveArticle(dd) {
   <header class="dd-head" style="${brandVars(dd)}">
     <div class="dd-head-grid">
       <div>
-        <p class="crumb"><a href="/?series=${dd.series}">${e(code(dd))}</a><span>${e(dd.industry)}</span><span>${e(status(dd))}${dd.published ? `, ${dd.minutes} min read` : ''}</span></p>
+        <p class="crumb"><a href="/?series=${dd.series}">${e(seriesBy[dd.series].short)}</a><span>${e(dd.industry)}</span><span>${e(status(dd))}${dd.published ? `, ${dd.minutes} min read` : ''}</span></p>
         <h1>${e(dd.title)}</h1>
         <p class="dd-dek">${e(dd.dek)}</p>
       </div>
@@ -361,12 +362,12 @@ function essayPage(es) {
 }
 
 function deepDivePage(dd) {
-  const related = DD.filter((d) => d !== dd && (d.series === dd.series || d.industry === dd.industry))
+  const related = DIVES.filter((d) => d !== dd && (d.series === dd.series || d.industry === dd.industry))
     .sort((a, b) => (b.industry === dd.industry) - (a.industry === dd.industry)).slice(0, 6);
   return layout({
     title: dd.title, description: dd.dek, pathName: url(dd),
     body: `<div class="dd-page">${deepDiveArticle(dd)}</div>
-<section class="related"><h2>Related deep dives</h2><ul class="grid">${related.map(card).join('')}</ul></section>`,
+${related.length ? `<section class="related"><h2>Related deep dives</h2><ul class="grid">${related.map(card).join('')}</ul></section>` : ''}`,
   });
 }
 
@@ -404,7 +405,7 @@ const write = (rel, content) => { const p = path.join(DIST, rel); fs.mkdirSync(p
 write('index.html', layout({ body: tabs('deep-dives') + grid(), isHome: true }));
 write('essays.html', layout({ title: 'Essays', pathName: '/essays', description: `Essays on how B2B buyers decide, where pipeline breaks, and what drives growth.`, searchIn: 'essays', body: tabs('essays') + essayList() }));
 ESSAYS.forEach((x) => write(`essays/${x.slug}.html`, essayPage(x)));
-DD.forEach((d) => write(`deep-dives/${d.slug}.html`, deepDivePage(d)));
+DIVES.forEach((d) => write(`deep-dives/${d.slug}.html`, deepDivePage(d)));
 write('about.html', about());
 write('advisory.html', advisory());
 write('subscribe.html', subscribePage());
@@ -412,14 +413,14 @@ write('welcome.html', simple('Subscribed', '/welcome', `<h1>You're subscribed</h
 write('404.html', simple('Page not found', '/404', `<h1>That page doesn't exist</h1><p class="lede">The link may be old, or the deep dive may have moved.</p><p><a class="textlink" href="/">Browse all deep dives</a></p>`));
 write('styles.css', css);
 write('site.js', js);
-const live = [...DD.filter((d) => d.published), ...ESSAYS.filter((x) => x.published).map((x) => ({ ...x, dek: x.dek || x.title, slug: x.slug, isEssay: true }))];
+const live = [...DIVES, ...ESSAYS.filter((x) => x.published).map((x) => ({ ...x, dek: x.dek || x.title, slug: x.slug, isEssay: true }))];
 write('feed.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel><title>${e(cfg.name)}</title><link>${e(cfg.url)}</link><description>${e(cfg.description)}</description>
 ${live.map((d) => `<item><title>${e(d.title)}</title><link>${e(cfg.url + (d.isEssay ? essayUrl(d) : url(d)))}</link><guid>${e(cfg.url + (d.isEssay ? essayUrl(d) : url(d)))}</guid><pubDate>${new Date(`${d.date}T12:00:00Z`).toUTCString()}</pubDate><description>${e(d.dek)}</description></item>`).join('\n')}
 </channel></rss>`);
-const pages = ['', '/essays', '/about', '/advisory', '/subscribe', ...DD.map(url), ...ESSAYS.map(essayUrl)];
+const pages = ['', '/essays', '/about', '/advisory', '/subscribe', ...DIVES.map(url), ...ESSAYS.map(essayUrl)];
 write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map((p) => `<url><loc>${e(cfg.url + p)}</loc></url>`).join('')}</urlset>`);
 write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.url}/sitemap.xml\n`);
 fs.cpSync(path.join(ROOT, 'public'), DIST, { recursive: true });
-const local = DD.filter((d) => d.logoLocal).length, remote = DD.filter((d) => d.logo && !d.logoLocal).length;
-console.log(`Built ${DD.length} deep dives (${live.length} published). Logos: ${local} local, ${remote} from Brandfetch, ${DD.length - local - remote} showing names.`);
+const local = DIVES.filter((d) => d.logoLocal).length, remote = DIVES.filter((d) => d.logo && !d.logoLocal).length;
+console.log(`Built ${DIVES.length} of ${DD.length} deep dives and ${ESSAYS.length} essays. Logos: ${local} local, ${remote} from Brandfetch, ${DIVES.length - local - remote} showing names.`);
