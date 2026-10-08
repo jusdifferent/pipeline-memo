@@ -55,6 +55,17 @@ for (const dd of DD) {
 const ordered = [...DD].sort((a, b) => (b.published ? 1 : 0) - (a.published ? 1 : 0) || String(b.date || '').localeCompare(String(a.date || '')));
 const INDUSTRIES = [...new Set(DD.map((d) => d.industry))].sort((a, b) => (a === 'Across companies') - (b === 'Across companies') || a.localeCompare(b));
 
+// ------------------------------------------------------------------ figures
+// {{figure:name | caption}} in a deep dive or essay pulls in content/<kind>/<slug>/<name>.html (or .svg).
+const figureFor = (kind, slug) => (name) => {
+  for (const ext of ['html', 'svg']) {
+    const f = path.join(ROOT, 'content', kind, slug, `${name}.${ext}`);
+    if (fs.existsSync(f)) return fs.readFileSync(f, 'utf8').replace(/\s*\n\s*/g, ' ').trim();
+  }
+  console.warn(`Missing figure: content/${kind}/${slug}/${name}`);
+  return '';
+};
+
 // ------------------------------------------------------------------ helpers
 const url = (dd) => `/deep-dives/${dd.slug}`;
 const code = (dd) => `${seriesBy[dd.series].short} ${String(dd.number).padStart(2, '0')}`;
@@ -112,6 +123,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>document.documentElement.classList.add('js')</script>
 <title>${e(full)}</title>
 <meta name="description" content="${e(description)}">
 <link rel="canonical" href="${e(canon)}">
@@ -270,7 +282,7 @@ function splitEssay(html) {
 function deepDiveArticle(dd) {
   let sheet;
   if (dd.published) {
-    const { preview, rest } = splitEssay(renderMarkdown(dd.essay).html);
+    const { preview, rest } = splitEssay(renderMarkdown(dd.essay, { figure: figureFor('deep-dives', dd.slug) }).html);
     const mode = dd.readUrl ? 'redirect' : 'unlock';
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${dd.readUrl ? ` data-read-url="${e(dd.readUrl)}"` : ''} style="${brandVars(dd)}">
@@ -310,7 +322,7 @@ function deepDiveArticle(dd) {
 function essayArticle(es) {
   let sheet;
   if (es.published) {
-    const { preview, rest } = splitEssay(renderMarkdown(es.essay).html);
+    const { preview, rest } = splitEssay(renderMarkdown(es.essay, { figure: figureFor('essays', es.slug) }).html);
     const mode = es.readUrl ? 'redirect' : 'unlock';
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${es.readUrl ? ` data-read-url="${e(es.readUrl)}"` : ''} style="${ESSAY_VARS}">

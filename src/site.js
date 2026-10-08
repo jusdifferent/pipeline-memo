@@ -246,4 +246,20 @@
   });
   // Coming back via the back button: restore the thumb to this page's tab.
   window.addEventListener('pageshow', function (e) { if (e.persisted) { tabNav = false; track.setAttribute('data-current', current); } });
+
+})();
+
+// Figures in deep dives and essays animate once when they scroll into view.
+(function () {
+  var figs = document.querySelectorAll('.dd-figure');
+  if (!figs.length) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!('IntersectionObserver' in window) || reduce) {
+    figs.forEach(function (f) { f.classList.add('is-in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+  }, { threshold: 0.25 });
+  figs.forEach(function (f) { io.observe(f); });
 })();

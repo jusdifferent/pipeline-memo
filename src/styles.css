@@ -271,3 +271,105 @@ html.modal-open { overflow: hidden; }
   .tabs a { padding: 10px 16px; font-size: 0.92rem; }
   .head-actions .pill-dark { display: none; }
 }
+
+/* ------------------------------------------------------------ figures in deep dives and essays */
+.dd-figure { margin: 2.4em 0; font-family: var(--sans); }
+.dd-figure p { font-family: var(--sans); margin: 0; }
+.dd-figure figcaption { font-size: 0.84rem; line-height: 1.5; color: var(--muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.fig { --fig-accent: var(--ink); --fig-soft: color-mix(in srgb, var(--fig-accent) 10%, #fff); color: var(--ink); }
+.fig-note { font-size: 0.82rem; color: var(--muted); margin-top: 12px !important; }
+/* animation states: only hidden when JS is on and the figure hasn't scrolled into view */
+.dd-figure .fig-step { transition: opacity 0.6s ease, transform 0.6s ease; transition-delay: calc(var(--i, 0) * 0.32s); }
+.dd-figure .fig-grow { transform-origin: left center; transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: calc(var(--i, 0) * 0.32s + 0.2s); }
+.dd-figure .fig-draw { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.5s ease; transition-delay: calc(var(--i, 0) * 0.32s + 0.25s); }
+html.js .dd-figure:not(.is-in) .fig-step { opacity: 0; transform: translateY(10px); }
+html.js .dd-figure:not(.is-in) .fig-grow { transform: scaleX(0); }
+html.js .dd-figure:not(.is-in) .fig-draw { stroke-dashoffset: 1; }
+.modal-preview .dd-figure .fig-step { opacity: 1; transform: none; }
+.modal-preview .dd-figure .fig-grow { transform: none; }
+.modal-preview .dd-figure .fig-draw { stroke-dashoffset: 0; }
+@media (prefers-reduced-motion: reduce) { .dd-figure .fig-step, .dd-figure .fig-grow, .dd-figure .fig-draw { transition: none !important; } }
+
+/* timeline */
+.fig-timeline ol { list-style: none; margin: 0 0 0 64px; padding: 4px 0 0; border-left: 2px solid var(--rule); }
+.fig-timeline li { position: relative; padding: 0 0 20px 24px; }
+.fig-timeline li:last-child { padding-bottom: 2px; }
+.fig-timeline li::before { content: ""; position: absolute; left: -8px; top: 5px; width: 10px; height: 10px; border-radius: 50%; background: var(--paper); border: 2px solid var(--fig-accent); }
+.fig-timeline li.is-now::before { background: var(--fig-accent); }
+.fig-timeline .yr { position: absolute; left: -66px; top: 1px; width: 48px; text-align: right; font-weight: 600; font-size: 0.9rem; }
+.fig-timeline .hl { font-weight: 600; font-size: 1.08rem; line-height: 1.3; }
+.fig-timeline .sub { font-size: 0.88rem; line-height: 1.4; color: var(--muted); margin-top: 3px; }
+
+/* bars */
+.fig-bars .bar-row { display: grid; grid-template-columns: 220px 1fr; gap: 14px; align-items: center; margin-bottom: 12px; }
+.fig-bars .bar-label { font-size: 0.9rem; line-height: 1.3; }
+.fig-bars .bar-track { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.fig-bars .bar { display: block; height: 26px; width: calc(var(--w) * 0.82); background: var(--fig-accent); border-radius: 3px; flex: none; }
+.fig-bars .is-other .bar, .fig-legend .key.is-other { background: #B9B4AA; }
+.fig-bars .bar-val { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+.fig-bars .bar-group { font-weight: 600; font-size: 0.95rem; margin: 18px 0 8px !important; }
+.fig-legend { font-size: 0.84rem; color: var(--muted); display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.fig-legend .key { display: inline-block; width: 12px; height: 12px; border-radius: 2px; background: var(--fig-accent); margin-left: 6px; }
+.fig-legend .key:first-child { margin-left: 0; }
+
+/* cohort timeline */
+.fig-cohort { --track-x: 120px; --out-w: 210px; }
+.fig-cohort .co-axis { position: relative; height: 20px; margin: 0 var(--out-w) 6px calc(var(--track-x) + 14px); font-size: 0.76rem; color: var(--muted); }
+.fig-cohort .co-axis span { position: absolute; left: var(--x); transform: translateX(-50%); }
+.fig-cohort .co-axis span:first-child { transform: none; }
+.fig-cohort .co-axis span:last-child { transform: translateX(-100%); }
+.fig-cohort .co-row { display: grid; grid-template-columns: var(--track-x) 1fr var(--out-w); gap: 14px; align-items: center; min-height: 40px; border-top: 1px solid var(--rule); }
+.fig-cohort .co-name { font-weight: 600; font-size: 0.92rem; }
+.fig-cohort .co-track { position: relative; height: 18px; }
+.fig-cohort .co-track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px dashed var(--rule); }
+.fig-cohort .co-dot { position: absolute; left: var(--x); top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: #8A857C; }
+.fig-cohort .co-out { font-size: 0.84rem; line-height: 1.35; color: var(--muted); }
+.fig-cohort .is-dd .co-name, .fig-cohort .is-dd .co-out { color: var(--fig-accent); }
+.fig-cohort .is-dd .co-line { position: absolute; left: 0; right: 0; top: 50%; height: 5px; margin-top: -2.5px; background: var(--fig-accent); border-radius: 3px; }
+.fig-cohort .is-dd .co-dot { width: 16px; height: 16px; margin: -8px 0 0 -8px; background: var(--paper); border: 4px solid var(--fig-accent); }
+
+/* engines chart */
+.fig-engines svg { display: block; width: 100%; height: auto; overflow: visible; }
+.fig-engines text { font-family: var(--sans); font-size: 12px; fill: var(--muted); }
+.fig-engines .eng-title { font-size: 13px; font-weight: 600; fill: var(--ink); }
+.fig-engines .eng-ylab text { text-anchor: end; font-size: 11px; }
+.fig-engines .eng-xlab text { text-anchor: middle; }
+.fig-engines .eng-grid line { stroke: var(--rule); stroke-width: 1; }
+.fig-engines .eng-zone { fill: var(--fig-soft); }
+.fig-engines .eng-zone-lab { text-anchor: middle; font-weight: 600; font-size: 12px; fill: var(--fig-accent); }
+.fig-engines .eng-line { fill: none; stroke: var(--fig-accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.fig-engines .eng-floor { fill: none; stroke: var(--fig-accent); stroke-width: 2; stroke-dasharray: 5 5; }
+.fig-engines .eng-pts circle { fill: var(--paper); stroke: var(--fig-accent); stroke-width: 2; }
+.fig-engines .eng-note text { fill: var(--ink); }
+
+/* the machine */
+.fig-machine .m-title { font-weight: 600; font-size: 0.92rem; color: var(--fig-accent); margin-bottom: 10px; }
+.fig-machine .m-title span { font-weight: 400; color: var(--muted); margin-left: 6px; }
+.fig-machine .m-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; list-style: none; margin: 0; padding: 0; }
+.fig-machine .m-flow li { position: relative; border: 1.5px solid var(--fig-accent); background: #fff; border-radius: 8px; padding: 12px 8px; text-align: center; }
+.fig-machine .m-flow li b { display: block; font-size: 0.95rem; line-height: 1.25; }
+.fig-machine .m-flow li span { display: block; font-size: 0.78rem; line-height: 1.3; color: var(--muted); margin-top: 3px; }
+.fig-machine ol.m-flow li:not(:last-child)::after { content: "→"; position: absolute; right: -15px; top: 50%; transform: translateY(-50%); color: var(--fig-accent); font-weight: 700; font-size: 0.95rem; }
+.fig-machine .is-dark .m-flow li { background: var(--fig-accent); color: #fff; }
+.fig-machine .is-dark .m-flow li span { color: rgba(255, 255, 255, 0.82); }
+.fig-machine .m-loop { font-size: 0.82rem; color: var(--muted); margin-top: 10px !important; }
+.fig-machine .m-bridge { font-size: 0.82rem; font-weight: 600; color: var(--fig-accent); text-align: center; margin: 14px 0 !important; }
+.fig-machine .is-limit { margin-top: 24px; }
+.fig-machine .is-limit .m-title { color: var(--ink); }
+.fig-machine .is-limit .m-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.fig-machine .is-limit .m-flow li { border-style: dashed; border-color: var(--ink); background: transparent; }
+
+@media (max-width: 640px) {
+  .fig-bars .bar-row { grid-template-columns: 1fr; gap: 4px; }
+  .fig-cohort { --track-x: 0px; --out-w: 0px; }
+  .fig-cohort .co-axis { margin: 0 0 6px; }
+  .fig-cohort .co-row { grid-template-columns: 1fr; gap: 2px; padding: 8px 0; }
+  .fig-cohort .co-track { order: 3; }
+  .fig-engines text { font-size: 17px; }
+  .fig-engines .eng-title { font-size: 18px; }
+  .fig-engines .eng-ylab text { font-size: 15px; }
+  .fig-engines .eng-note { display: none; }
+  .fig-machine .m-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 22px; }
+  .fig-machine ol.m-flow li:nth-child(2)::after { content: none; }
+  .fig-machine .is-limit .m-flow { grid-template-columns: 1fr; }
+}

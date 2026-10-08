@@ -6,3 +6,4 @@ dist/
 # Unpublished work stays local (repo is public)
 drafts/
 research/
+.claude/

@@ -1,6 +1,7 @@
 // A small Markdown renderer covering what memos use: headings, paragraphs,
 // bold, italic, links, lists, blockquotes (rendered as pull lines), rules,
-// and a {{diagram}} placeholder for the memo's diagram.
+// a {{diagram}} placeholder for the memo's diagram, and {{figure:name | caption}}
+// lines, which pull in a figure through the `figure` resolver.
 
 export function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -31,7 +32,7 @@ export function parseFrontmatter(src) {
   return { data, body: src.slice(m[0].length) };
 }
 
-export function renderMarkdown(src, { diagram = '' } = {}) {
+export function renderMarkdown(src, { diagram = '', figure = null } = {}) {
   const lines = src.split(/\r?\n/);
   const out = [];
   let i = 0;
@@ -44,6 +45,11 @@ export function renderMarkdown(src, { diagram = '' } = {}) {
       i++; continue;
     }
     let m;
+    if ((m = line.trim().match(/^\{\{figure:([a-z0-9-]+)(?:\s*\|\s*(.+?))?\}\}$/i))) {
+      const html = figure ? figure(m[1]) : '';
+      if (html) out.push(`<figure class="dd-figure" data-figure="${m[1]}">${html}${m[2] ? `<figcaption>${inline(m[2])}</figcaption>` : ''}</figure>`);
+      i++; continue;
+    }
     if ((m = line.match(/^(#{2,3})\s+(.*)$/))) {
       const level = m[1].length;
       const id = m[2].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -68,7 +74,7 @@ export function renderMarkdown(src, { diagram = '' } = {}) {
       continue;
     }
     const buf = [];
-    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>|[-*]\s|\d+\.\s|\{\{diagram\}\})/.test(lines[i])) buf.push(lines[i++]);
+    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>|[-*]\s|\d+\.\s|\{\{diagram\}\}|\{\{figure:)/.test(lines[i].trim())) buf.push(lines[i++]);
     out.push(`<p>${inline(buf.join(' '))}</p>`);
   }
   return { html: out.join('\n'), headings: h2s };
