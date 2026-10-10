@@ -1,6 +1,6 @@
 ---
 date: 2026-10-07
-dek: The pricing, product, and sales choices that made Datadog worth more than Cisco's billions, and the two places its model breaks.
+dek: The pricing, product, and sales choices that made Datadog too valuable to sell.
 ---
 
 On September 18, 2019, Datadog priced its IPO at $27 a share, above a range it had already raised once. The next morning the stock opened at $40.35. By the close, the New York monitoring company was worth about $10.9 billion, according to Forbes.
