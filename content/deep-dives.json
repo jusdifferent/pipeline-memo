@@ -699,6 +699,23 @@
    "domain": "databricks.com",
    "label": "Databricks",
    "logoMono": true
+  },
+  {
+   "slug": "how-clay-turned-its-power-users-into-techs-hottest-new-job",
+   "company": "Clay",
+   "title": "How Clay Turned Its Power Users Into Tech's Hottest New Job",
+   "series": "category",
+   "number": 8,
+   "industry": "Revenue tools",
+   "dek": "The product, pricing, and community choices that made Clay the tool a new career is built on.",
+   "featured": false,
+   "brand": {
+    "bg": "#B65A33",
+    "fg": "#FFFFFF",
+    "ac": "#F6C9AE"
+   },
+   "domain": "clay.com",
+   "label": "Clay"
   }
  ],
  "_note": "brand colors are approximate except Wiz (from its Brandfetch profile): verify each at brandfetch.com/<domain>"
