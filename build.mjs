@@ -223,7 +223,7 @@ function card(dd) {
       </span>
       <span class="tile">
         ${logoBox(dd, 'tile-mark')}
-        ${dd.published ? '<span class="tile-new">New</span>' : ''}
+        ${dd === DIVES[0] ? '<span class="tile-new">New</span>' : ''}
       </span>
     </span>
     <span class="card-title">${e(dd.title)}</span>
