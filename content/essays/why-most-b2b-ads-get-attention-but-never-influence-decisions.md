@@ -81,6 +81,10 @@ Once the buyer's interpretation changes, the buying process changes with it. The
 
 It feels like insight, and the buyer leaves believing they reached the conclusion themselves.
 
+People believe what they argue for more than what they're told. In a 1954 study, Irving Janis and Bert King had students take turns giving a short talk for a position while others listened. The students who gave the talk came away more convinced than the ones who heard it (Janis & King, 1954).
+
+Every time a buyer repeats your diagnosis in a meeting, they're giving that talk.
+
 ## Why high-intent buyers respond differently
 
 Who the message attracts matters as much as whether it's remembered.

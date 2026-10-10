@@ -41,6 +41,10 @@ That path can develop during an evaluation. Buyers can explore options while bui
 
 This also changes how we interpret timing signals. A renewal, an executive change, or an expansion gives us a reason to investigate an account. Its buying potential depends on what the company does in response. An approaching renewal can lead to a funded replacement project or another year with the existing vendor because nobody has capacity to switch.
 
+Staying has an advantage that has nothing to do with software. People tend to go with whatever happens if they do nothing, even when the stakes are far higher than a vendor contract. When Eric Johnson and Daniel Goldstein compared organ donation across Europe, countries where people had to opt in had far lower consent rates than countries where people had to opt out. Nearly 60 percentage points separated the two groups (Johnson & Goldstein, *Science*, 2003).
+
+A renewal is a default, too.
+
 The deadline is visible from the outside. The ability to act takes more work to establish.
 
 ## Your Funnel Can Move Faster Than the Buyer

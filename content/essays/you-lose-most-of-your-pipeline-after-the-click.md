@@ -51,6 +51,10 @@ A compelling ad earns attention. Strong positioning creates curiosity. Effective
 
 But none of those things create pipeline on their own. They only create the opportunity for pipeline. What happens next depends on an entirely different system.
 
+The same gap shows up far outside marketing. In a 1965 study, students read a pamphlet about the dangers of tetanus. The scarier the version they read, the more they said they'd get a shot. What made them actually go was something else: a campus map with the health center circled and a request to pick a time (Leventhal, Singer & Jones, 1965).
+
+The pamphlet changed what they intended. The map changed what they did.
+
 Intent has to be routed to the right person, follow-up has to happen while momentum still exists, meetings have to be scheduled without unnecessary delay, context has to survive every handoff.
 
 The buyer's confidence has to increase with every interaction, not reset at each stage of the process.

@@ -111,6 +111,10 @@ Integrations took care of the first. Instead of asking customers to replace what
 
 That mattered in the buying process. Replacing a monitoring tool is a project, with a budget, an owner and a risk someone has to sign off on. Adding one that connects to everything you already run is something an engineer can try on a Tuesday afternoon.
 
+There's a human reason under the budget one. People feel worse about a loss they caused by acting than about the same loss from standing still. In a 1982 paper, Daniel Kahneman and Amos Tversky asked people about two investors who each missed out on $1,200, one because he switched stocks and one because he didn't. Ninety-two percent said the one who switched would regret it more.
+
+Datadog never asked anyone to make the switch.
+
 The homepage advertised "100+ turn-key integrations" by 2015. By the IPO there were more than 350. In October 2025, Datadog announced its 1,000th.
 
 The pricing was also built for how the cloud actually behaved. When Datadog announced its Series B in 2014, it advertised hourly pricing for servers that didn't stay up all month. A customer spinning up 50 machines for an afternoon didn't have to pay for 50 machines for a month.
