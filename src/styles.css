@@ -88,6 +88,12 @@ p { margin: 0 0 1em; }
 .essays-related .essay-list a { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.2rem); }
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(44px, 5vw, 72px) clamp(20px, 3vw, 48px); list-style: none; margin: 0 auto; padding: 0; max-width: 1360px; }
 .card a { display: block; text-decoration: none; }
+/* Desktop: size tiles from the viewport height so the first row and its titles land above the fold
+   (and above the floating email pill). The top padding scales with the tile so the hover page clears the tabs. */
+@media (min-width: 901px) {
+  .episodes { --gx: clamp(20px, 3vw, 48px); --tile: max(240px, min((100vw - 2 * var(--pad) - 2 * var(--gx)) / 3, (100svh - 320px) / 1.31, 440px)); padding-top: calc(var(--tile) * 0.31); }
+  .episodes .grid { column-gap: var(--gx); max-width: calc(3 * var(--tile) + 2 * var(--gx)); }
+}
 .tile-stack { position: relative; display: block; }
 .tile { container-type: inline-size; position: relative; z-index: 1; display: block; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--ep-bg); color: var(--ep-fg); transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease; }
 /* The page tucked behind each tile: on hover it slides up like an essay pulled from a file folder. */
@@ -113,7 +119,7 @@ p { margin: 0 0 1em; }
 /* Logos whose mark is the brand's own color would vanish on the tile: render them in solid white. */
 .is-mono img { filter: brightness(0) invert(1); }
 .tile-new { position: absolute; left: 6%; bottom: 6%; padding: 5px 12px; border-radius: 999px; background: var(--ep-fg); color: var(--ep-bg); font: 600 0.85rem/1.3 var(--sans); }
-.card-title { display: block; margin-top: 16px; font-weight: 600; font-size: clamp(1.02rem, 0.92rem + 0.35vw, 1.22rem); line-height: 1.32; letter-spacing: -0.01em; }
+.card-title { display: block; margin-top: 16px; font-weight: 600; font-size: clamp(1rem, 0.94rem + 0.2vw, 1.1rem); line-height: 1.32; letter-spacing: -0.01em; }
 .card a:hover .card-title { text-decoration: underline; }
 
 .active-filters { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
