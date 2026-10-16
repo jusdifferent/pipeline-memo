@@ -1,6 +1,6 @@
 ---
 date: 2026-10-07
-dek: Most B2B creative is built to win the glance. The ads that change decisions are the ones buyers repeat in meetings you're not in.
+dek: Most B2B ads earn a second of attention. Whether that second ever becomes pipeline depends on what the buyer still remembers when it's finally time to buy.
 ---
 
 Most marketing teams judge advertising by what happens immediately after someone sees it.
