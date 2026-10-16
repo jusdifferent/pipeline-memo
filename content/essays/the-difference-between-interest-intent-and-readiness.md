@@ -1,6 +1,6 @@
 ---
 date: 2026-10-07
-dek: A buyer can agree with everything you say and still never buy. Interest, intent, and readiness are three different things, and your funnel treats them as one.
+dek: A buyer can agree with everything you say and still never buy. Interest, intent, and readiness are three different things, but your funnel treats them as one.
 ---
 
 A buyer can fully agree with your message and still never become pipeline.
