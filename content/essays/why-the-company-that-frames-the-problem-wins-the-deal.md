@@ -1,6 +1,6 @@
 ---
 date: 2026-10-14
-dek: Most deals are shaped by the buyer's explanation of the problem long before anyone compares products. The vendor that improves that explanation writes the scorecard.
+dek: 81% of buyers have a favorite vendor before the first call. Framing the problem is how you take that spot.
 ---
 
 A deal can start slipping away before the buyer compares a single product.
