@@ -1,0 +1,183 @@
+{
+  "slug": "october-2026",
+  "title": "The October Issue",
+  "month": "October",
+  "year": "2026",
+  "number": 1,
+  "theme": "The deal is decided before the deal.",
+  "pages": [
+    {
+      "type": "cover",
+      "dive": "how-clay-turned-its-power-users-into-techs-hottest-new-job",
+      "image": "issue-assets/october-2026/clay-hands.jpg",
+      "star": "Kareem Amin",
+      "starLine": "The founder who turned a job title into a sales channel",
+      "pending": "Cover portrait: press photo requested",
+      "lines": [
+        { "kicker": "Datadog", "text": "Why it said no to Cisco" },
+        { "kicker": "The frame", "text": "Whoever explains the problem writes the scorecard" },
+        { "kicker": "Moodboard", "text": "Clay’s homepage, 2017 to 2023" },
+        { "kicker": "Letter to the CMO", "text": "Three things to do before the next campaign" }
+      ]
+    },
+    {
+      "type": "contents",
+      "polaroids": [
+        { "image": "issue-assets/october-2026/name-badge.jpg", "caption": "the new job" },
+        { "image": "issue-assets/october-2026/frame.jpg", "caption": "the frame" },
+        { "image": "issue-assets/october-2026/servers.jpg", "caption": "every server" }
+      ]
+    },
+    {
+      "type": "note",
+      "toc": "Editor’s note",
+      "tocText": "Three pieces, one pattern",
+      "title": "The deal is decided before the deal",
+      "image": "issue-assets/october-2026/resume.jpg",
+      "caption": "the résumé comes with the tool",
+      "body": "Three pieces went out this month, and they kept arriving at the same place.\n\nClay grew by giving a job title to its best users. By the time a company hires a GTM engineer, the person it hires already knows Clay. **The champion is inside the account before anyone signs.**\n\nDatadog never asked a customer to rip anything out on day one. It plugged into what teams already ran and became the first place they looked when something broke.\n\nThe essay on framing makes the same point from the buyer’s side. In 6sense’s 2024 survey, 81% of buyers already had a preferred vendor when they first made contact.\n\nNone of these companies won the evaluation. **They won the part before it.**",
+      "sign": "The Editor"
+    },
+    {
+      "type": "open",
+      "toc": "Cover story: Clay",
+      "tocText": "How a job title became a sales channel",
+      "dive": "how-clay-turned-its-power-users-into-techs-hottest-new-job",
+      "image": "issue-assets/october-2026/name-badge.jpg",
+      "kicker": "Cover story",
+      "dek": "The product, pricing, and community choices that made Clay the tool a new career is built on."
+    },
+    {
+      "type": "text",
+      "dive": "how-clay-turned-its-power-users-into-techs-hottest-new-job",
+      "kicker": "Clay, continued",
+      "more": "Read the full deep dive",
+      "pull": "Software companies usually pay to train their customers. Clay was paying to train a job title.",
+      "body": "On September 9, 2026, Clay announced a $115 million round at a $7.1 billion valuation. In the same announcement, it said it was putting $1 million into a scholarship fund to train GTM engineers.\n\nThe title had taken off. By early 2026 there were about 3,000 open GTM engineer roles across the major job boards, according to two separate industry analyses. One of them, the State of GTM Engineering Report, analyzed 3,342 postings and found that 69% mentioned Clay by name.\n\nFour and a half years earlier, almost nobody wanted what Clay was selling. As of spring 2022 its revenue was “close to $0,” co-founder and CEO Kareem Amin told First Round Review. By December 2025, Clay said it had crossed $100 million in annual recurring revenue.\n\n**What Clay did was find the people who already did growth work by hand, make them visibly better at it, and give them a name. Then it sold to the companies that hired them.**"
+    },
+    {
+      "type": "profile",
+      "toc": "Who’s that founder?",
+      "tocText": "Kareem Amin, defined",
+      "name": "kareem amin",
+      "pos": "noun",
+      "defs": [
+        "Co-founder and CEO of Clay, which said in December 2025 that it had crossed $100 million in annual recurring revenue.",
+        "A founder who spent years with “the wrong customer,” then committed to the salespeople already using the product.",
+        "One of the two people who gave the GTM engineer its name."
+      ],
+      "quote": "You can take something that is happening and name it.",
+      "pending": "press photo requested"
+    },
+    {
+      "type": "machine",
+      "toc": "The way Clay sells",
+      "tocText": "Six parts, in the order Clay earned them",
+      "title": "The way Clay",
+      "script": "sells",
+      "items": [
+        { "title": "Find the people doing it by hand.", "text": "Cold email agencies with acute, repeated pain. Thirty interviews found them." },
+        { "title": "Sell power, then help them finish.", "text": "Reverse demos and a public Slack made sure users completed what they built." },
+        { "title": "Price so it can spread.", "text": "Credits instead of seats let one builder pull in the whole team." },
+        { "title": "Name the person.", "text": "A job title gives people a better career, and the tool comes with it." },
+        { "title": "Let the enterprise hire its way in.", "text": "The builder already inside the account beat services and platform fees." },
+        { "title": "Know which layer you own.", "text": "The data was never Clay’s. The 2026 repricing moved Clay onto the layer it does own." }
+      ]
+    },
+    {
+      "type": "moodboard",
+      "toc": "Moodboard",
+      "tocText": "What Clay’s homepage said, 2017 to 2023",
+      "image": "issue-assets/october-2026/pinboard.jpg",
+      "title": "Mood",
+      "script": "board",
+      "sub": "What Clay’s homepage said, year by year",
+      "notes": [
+        { "year": "2017", "text": "Cloud Hosted Microservices" },
+        { "year": "2019", "text": "Connect apps and custom code to create automated workflows" },
+        { "year": "2021", "text": "This spreadsheet fills itself." },
+        { "year": "2022", "text": "Create live lists of people, without a line of code." },
+        { "year": "2023", "text": "Not another data provider. All of the data providers." }
+      ],
+      "source": "Internet Archive captures of clay.run and clay.com"
+    },
+    {
+      "type": "quotes",
+      "toc": "On the record",
+      "tocText": "The month in five lines",
+      "title": "On the",
+      "script": "record",
+      "quotes": [
+        { "text": "We had a customer, but it was the wrong customer.", "by": "Kareem Amin, Clay" },
+        { "text": "All the value is in the columns.", "by": "Varun Anand, Clay" },
+        { "text": "Once we committed, it almost worked instantaneously.", "by": "Kareem Amin, Clay" },
+        { "text": "None of the West Coast investors were listening.", "by": "Olivier Pomel, Datadog, to TechCrunch" },
+        { "text": "81% of buyers had a preferred vendor at first contact.", "by": "6sense, 2024 Buyer Experience Report" }
+      ],
+      "note": "Sources for each line are in this month’s deep dives and essay."
+    },
+    {
+      "type": "word",
+      "toc": "Word of the month",
+      "tocText": "frame, noun",
+      "image": "issue-assets/october-2026/frame.jpg",
+      "word": "frame",
+      "pron": "freym",
+      "pos": "noun",
+      "defs": [
+        "The explanation of the problem a buyer settles on before talking to a vendor.",
+        "The thing that decides what counts as a gain and what counts as a risk. Usually written by someone who isn’t you."
+      ],
+      "note": "Same plan, two descriptions. Framed as 200 of 600 people saved, 72% chose it. Framed as 400 of 600 dying, 22% did.",
+      "source": "Tversky & Kahneman, Science, 1981"
+    },
+    {
+      "type": "text",
+      "essay": "why-the-company-that-frames-the-problem-wins-the-deal",
+      "toc": "Essay",
+      "tocText": "Why the company that frames the problem wins the deal",
+      "kicker": "Essay",
+      "title": "Why the Company That Frames the Problem Wins the Deal",
+      "more": "Read the full essay",
+      "body": "A deal can start slipping away before the buyer compares a single product.\n\nBy the time vendors enter the conversation, most buyers have already settled on an explanation for what’s wrong. A team frustrated with slow reporting decides it needs automation, without ever checking why the reports take so long to prepare.\n\nThat explanation shapes the competition. Once reporting speed is the priority, automation features and hours saved become the obvious scorecard.\n\nIn 6sense’s 2024 survey of more than 2,500 B2B buyers, 81% already had a preferred vendor when they first made contact.\n\n**How a buyer explains the problem decides what they shop for. Shape the explanation and you shape the deal.**"
+    },
+    {
+      "type": "open",
+      "toc": "Datadog",
+      "tocText": "The company too valuable to sell",
+      "dive": "how-datadog-won-developers-and-the-enterprise",
+      "image": "issue-assets/october-2026/servers.jpg",
+      "kicker": "Deep dive",
+      "dek": "The pricing, product, and sales choices that made Datadog too valuable to sell."
+    },
+    {
+      "type": "text",
+      "dive": "how-datadog-won-developers-and-the-enterprise",
+      "kicker": "Datadog, continued",
+      "more": "Read the full deep dive",
+      "pull": "It got onto every server, became the first place everyone looked when something broke, and sold them what they found there.",
+      "body": "On September 18, 2019, Datadog priced its IPO at $27 a share. The next morning the stock opened at $40.35. By the close, the New York monitoring company was worth about $10.9 billion, according to Forbes.\n\nIt almost went another way. Weeks earlier, Bloomberg reported, Cisco had approached Datadog with a takeover offer “significantly higher” than the $7 billion valuation it was aiming for. Datadog said no.\n\nNine years earlier, almost nobody wanted Datadog at any price. “None of the West Coast investors were listening,” co-founder and CEO Olivier Pomel told TechCrunch.\n\nThe cloud is the obvious explanation, and it explains a lot. It doesn’t explain why the startups that rode the same wave sold for tens of millions while Datadog turned down billions."
+    },
+    {
+      "type": "photo",
+      "toc": "Letter to the CMO",
+      "tocText": "Three things to do before the next campaign",
+      "image": "issue-assets/october-2026/letter.jpg",
+      "script": "Dear",
+      "title": "CMO,"
+    },
+    {
+      "type": "letter",
+      "title": "Letter to the CMO",
+      "body": "You don’t need a new campaign this month. You need a look at the part of the deal you never see.\n\n**Read five lost deals backwards.** Put the buyer’s first requirements next to their final objections. If the brief was written before you arrived, find out who wrote it.\n\n**Find your hand-builders.** Somewhere in your customer base, people are already doing your product’s job with spreadsheets and workarounds. Clay found its market in thirty interviews. Ask what would make those people look good in public.\n\n**Make the first yes small.** Datadog’s first sale didn’t ask anyone to replace anything. A purchase that adds to what a team already runs is easier to approve than one that replaces it.\n\nNone of this shows up in a dashboard yet. By the time it does, the frame is already set.",
+      "sign": "Buyline"
+    },
+    {
+      "type": "back",
+      "line": "A monthly issue for the people who own pipeline.",
+      "next": "Next issue: November 2026",
+      "cta": "Get the next issue",
+      "href": "/subscribe"
+    }
+  ]
+}

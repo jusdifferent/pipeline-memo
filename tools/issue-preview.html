@@ -1,0 +1,27 @@
+<!doctype html>
+<!-- Dev-only preview of a monthly issue without Node. Serve the repo root over HTTP and open
+     /tools/issue-preview.html?issue=october-2026. It runs the same renderer as build.mjs. -->
+<meta charset="utf-8">
+<title>Issue preview</title>
+<script type="module">
+  import { renderIssue } from '../src/issue.mjs';
+  const get = (p) => fetch(p).then((r) => r.json());
+  const slug = new URLSearchParams(location.search).get('issue') || 'october-2026';
+  const [cfg, data, issue] = await Promise.all([get('../site.config.json'), get('../content/deep-dives.json'), get(`../content/issues/${slug}.json`)]);
+  // Same logo rules as build.mjs: a light logo on dark brand colors, dark on light.
+  const isDark = (hex) => {
+    const n = parseInt(hex.slice(1), 16);
+    const [r, g, b] = [n >> 16, (n >> 8) & 255, n & 255].map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b < 0.35;
+  };
+  const dive = (s) => {
+    const d = data.deepDives.find((x) => x.slug === s);
+    const base = `https://cdn.brandfetch.io/domain/${d.domain}/w/480`, id = `?c=${encodeURIComponent(cfg.brandfetchClientId)}`, type = d.logoType || 'logo';
+    let logo = `${base}/theme/${isDark(d.brand.bg) ? 'light' : 'dark'}/fallback/404/type/${type}${id}`, logoAlt = `${base}/fallback/404/type/${type}${id}`;
+    if (d.logoTheme === false) { logo = logoAlt; logoAlt = ''; }
+    return { ...d, logo, logoAlt, url: `/deep-dives/${d.slug}` };
+  };
+  const essay = (s) => ({ slug: s, url: `/essays/${s}` });
+  const html = renderIssue(issue, { cfg, dive, essay, asset: (p) => `../public/${p}`, css: '../src/issue.css', js: '../src/issue.js' });
+  document.open(); document.write(html); document.close();
+</script>
