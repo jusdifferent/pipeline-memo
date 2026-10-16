@@ -1,4 +1,4 @@
-# Pipeline Memo: site
+# Buyline: site
 
 A static site for Vercel with 39 deep dives across four series. There's no framework and no dependencies: one small build script generates every page, and one serverless function sends signups to Beehiiv.
 
