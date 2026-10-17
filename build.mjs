@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { parseFrontmatter, renderMarkdown, escapeHtml as e } from './src/markdown.mjs';
+import { parseFrontmatter, renderMarkdown, inline, escapeHtml as e } from './src/markdown.mjs';
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const DIST = path.join(ROOT, 'dist');
@@ -50,7 +50,7 @@ for (const dd of DD) {
   if (!fs.existsSync(file)) continue;
   const { data: fm, body } = parseFrontmatter(fs.readFileSync(file, 'utf8'));
   if (fm.published === false) continue;
-  Object.assign(dd, { essay: body, date: fm.date, dek: fm.dek || dd.dek, readUrl: fm.readUrl || '', published: true, minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)) });
+  Object.assign(dd, { essay: body, date: fm.date, dek: fm.dek || dd.dek, readUrl: fm.readUrl || '', design: fm.design || '', published: true, minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)) });
 }
 // Only published deep dives are built or listed; the rest of deep-dives.json stays a private backlog.
 const DIVES = DD.filter((d) => d.published).sort((a, b) => String(b.date).localeCompare(String(a.date)));
@@ -67,6 +67,34 @@ const figureFor = (kind, slug) => (name) => {
   console.warn(`Missing figure: content/${kind}/${slug}/${name}`);
   return '';
 };
+
+// ------------------------------------------------------------------ editorial blocks
+// :::name title / items / ::: in a deep dive or essay. Items use " | " between fields.
+// A title can mark one word *like this*; it's set in script.
+const split = (line) => line.split(/\s+\|\s+/).map((x) => x.trim());
+const blockTitle = (t, fallback) => `<h3 class="bl-title">${inline(t || fallback)}</h3>`;
+function renderBlock(name, title, items) {
+  switch (name) {
+    case 'pull':
+      return `<blockquote class="bl-pull"><p>${inline(items.join(' '))}</p></blockquote>`;
+    case 'record': // quote | who said it
+      return `<section class="bl bl-record">${blockTitle(title, 'On the *record*')}<ul>${items.map((it, i) => { const [q, by] = split(it); return `<li class="clip clip-${(i % 5) + 1}"><q>${inline(q)}</q>${by ? `<span>${inline(by)}</span>` : ''}</li>`; }).join('')}</ul></section>`;
+    case 'machine': // title | text
+      return `<section class="bl bl-machine">${blockTitle(title, 'The *machine*')}<ol>${items.map((it, i) => { const [t, x] = split(it); return `<li><span class="n">${i + 1}.</span><strong>${inline(t)}</strong>${x ? `<p>${inline(x)}</p>` : ''}</li>`; }).join('')}</ol></section>`;
+    case 'moodboard': { // title line is a subtitle; items: year | headline | supporting line; "Source: ..." becomes the caption
+      const src = items.find((x) => /^source:/i.test(x));
+      const notes = items.filter((x) => x !== src);
+      return `<figure class="bl bl-mood">${blockTitle('', 'Mood*board*')}${title ? `<p class="bl-sub">${inline(title)}</p>` : ''}<ul>${notes.map((it, i) => { const [y, h, sub] = split(it); return `<li class="note note-${(i % 7) + 1}"><span class="yr">${e(y)}</span><q>${inline(h)}</q>${sub ? `<small>${inline(sub)}</small>` : ''}</li>`; }).join('')}</ul>${src ? `<figcaption>${inline(src.replace(/^source:\s*/i, 'Source: '))}</figcaption>` : ''}</figure>`;
+    }
+    case 'founder': { // name as title; lines "pos: ...", "def: ...", "quote: ..."
+      const get = (k) => items.filter((x) => x.toLowerCase().startsWith(`${k}:`)).map((x) => x.slice(k.length + 1).trim());
+      return `<aside class="bl bl-founder"><p class="bl-kicker">Who’s that <em>founder?</em></p><p class="bl-name">${e(title)} <span>${e(get('pos')[0] || 'noun')}</span></p><ol>${get('def').map((d) => `<li>${inline(d)}</li>`).join('')}</ol>${get('quote').map((q) => `<p class="bl-said">“${inline(q)}”</p>`).join('')}</aside>`;
+    }
+    default:
+      console.warn(`Unknown block: :::${name}`);
+      return '';
+  }
+}
 
 // ------------------------------------------------------------------ helpers
 const url = (dd) => `/deep-dives/${dd.slug}`;
@@ -116,7 +144,7 @@ function subForm({ id, button = 'Subscribe', mode = 'subscribe', source = 'site'
 </form>`;
 }
 
-function layout({ title, description = cfg.description, pathName = '/', body, isHome = false, searchIn = 'deep-dives' }) {
+function layout({ title, description = cfg.description, pathName = '/', body, isHome = false, searchIn = 'deep-dives', head = '' }) {
   const full = title ? `${title} | ${cfg.name}` : `${cfg.name}: ${cfg.tagline}`;
   const canon = cfg.url + (pathName === '/' ? '' : pathName);
   return `<!doctype html>
@@ -139,8 +167,9 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${cfg.brandfetchClientId ? '<link rel="preconnect" href="https://cdn.brandfetch.io" crossorigin>' : ''}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700..900;1,400..800&family=Pinyon+Script&display=swap">
 <link rel="stylesheet" href="/styles.css?v=${ver}">
+${head}
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -274,7 +303,7 @@ function splitEssay(html) {
   const blocks = html.split('\n');
   let paras = 0, i = 0;
   for (; i < blocks.length; i++) {
-    if (blocks[i].startsWith('<p>')) paras++;
+    if (/^<p[ >]/.test(blocks[i])) paras++;
     if (paras > PREVIEW_PARAGRAPHS || (paras > 0 && blocks[i].startsWith('<h2'))) break;
   }
   return { preview: blocks.slice(0, i).join('\n'), rest: blocks.slice(i).join('\n') };
@@ -283,7 +312,7 @@ function splitEssay(html) {
 function deepDiveArticle(dd) {
   let sheet;
   if (dd.published) {
-    const { preview, rest } = splitEssay(renderMarkdown(dd.essay, { figure: figureFor('deep-dives', dd.slug) }).html);
+    const { preview, rest } = splitEssay(renderMarkdown(dd.essay, { figure: figureFor('deep-dives', dd.slug), block: renderBlock }).html);
     const mode = dd.readUrl ? 'redirect' : 'unlock';
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${dd.readUrl ? ` data-read-url="${e(dd.readUrl)}"` : ''} style="${brandVars(dd)}">
@@ -305,8 +334,8 @@ function deepDiveArticle(dd) {
       <p class="gate-fine">Free. Unsubscribe anytime.</p>
     </div>`;
   }
-  return `<article class="dd" data-dd="${dd.slug}">
-  <header class="dd-head" style="${brandVars(dd)}">
+  return `<article class="dd${dd.design ? ` dd--designed dd--${dd.design}` : ''}" data-dd="${dd.slug}" style="${brandVars(dd)}">
+  <header class="dd-head${dd.design ? ' dd-hero' : ''}" style="${brandVars(dd)}">${dd.design ? '<canvas class="hero-fx" aria-hidden="true"></canvas><span class="hero-shade" aria-hidden="true"></span>' : ''}
     <div class="dd-head-grid">
       <div>
         <p class="crumb"><a href="/?series=${dd.series}">${e(seriesBy[dd.series].short)}</a><span>${e(dd.industry)}</span><span>${e(status(dd))}${dd.published ? `, ${dd.minutes} min read` : ''}</span></p>
@@ -323,7 +352,7 @@ function deepDiveArticle(dd) {
 function essayArticle(es) {
   let sheet;
   if (es.published) {
-    const { preview, rest } = splitEssay(renderMarkdown(es.essay, { figure: figureFor('essays', es.slug) }).html);
+    const { preview, rest } = splitEssay(renderMarkdown(es.essay, { figure: figureFor('essays', es.slug), block: renderBlock }).html);
     const mode = es.readUrl ? 'redirect' : 'unlock';
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${es.readUrl ? ` data-read-url="${e(es.readUrl)}"` : ''} style="${ESSAY_VARS}">
@@ -361,11 +390,25 @@ function essayPage(es) {
   });
 }
 
+// A deep dive with `design: <name>` in its front matter gets src/designs/<name>.css and,
+// if present, <name>.js: a module that draws the hero effect (three.js from a CDN).
+const DESIGN_DIR = path.join(ROOT, 'src/designs');
+const designFile = (name, ext) => path.join(DESIGN_DIR, `${name}.${ext}`);
+const designVer = (name) => crypto.createHash('md5').update(['css', 'js'].map((x) => (fs.existsSync(designFile(name, x)) ? fs.readFileSync(designFile(name, x)) : '')).join('')).digest('hex').slice(0, 8);
+function designHead(name) {
+  if (!name) return '';
+  const v = designVer(name);
+  return [
+    fs.existsSync(designFile(name, 'css')) ? `<link rel="stylesheet" href="/designs/${name}.css?v=${v}">` : '',
+    fs.existsSync(designFile(name, 'js')) ? `<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>\n<script type="module" src="/designs/${name}.js?v=${v}"></script>` : '',
+  ].filter(Boolean).join('\n');
+}
+
 function deepDivePage(dd) {
   const related = DIVES.filter((d) => d !== dd && (d.series === dd.series || d.industry === dd.industry))
     .sort((a, b) => (b.industry === dd.industry) - (a.industry === dd.industry)).slice(0, 6);
   return layout({
-    title: dd.title, description: dd.dek, pathName: url(dd),
+    title: dd.title, description: dd.dek, pathName: url(dd), head: designHead(dd.design),
     body: `<div class="dd-page">${deepDiveArticle(dd)}</div>
 ${related.length ? `<section class="related"><h2>Related deep dives</h2><ul class="grid">${related.map(card).join('')}</ul></section>` : ''}`,
   });
@@ -413,6 +456,7 @@ write('welcome.html', simple('Subscribed', '/welcome', `<h1>You're subscribed</h
 write('404.html', simple('Page not found', '/404', `<h1>That page doesn't exist</h1><p class="lede">The link may be old, or the deep dive may have moved.</p><p><a class="textlink" href="/">Browse all deep dives</a></p>`));
 write('styles.css', css);
 write('site.js', js);
+if (fs.existsSync(DESIGN_DIR)) fs.cpSync(DESIGN_DIR, path.join(DIST, 'designs'), { recursive: true });
 const live = [...DIVES, ...ESSAYS.filter((x) => x.published).map((x) => ({ ...x, dek: x.dek || x.title, slug: x.slug, isEssay: true }))];
 write('feed.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel><title>${e(cfg.name)}</title><link>${e(cfg.url)}</link><description>${e(cfg.description)}</description>

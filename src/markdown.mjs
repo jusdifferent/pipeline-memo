@@ -1,13 +1,20 @@
 // A small Markdown renderer covering what memos use: headings, paragraphs,
 // bold, italic, links, lists, blockquotes (rendered as pull lines), rules,
-// a {{diagram}} placeholder for the memo's diagram, and {{figure:name | caption}}
-// lines, which pull in a figure through the `figure` resolver.
+// a {{diagram}} placeholder for the memo's diagram, {{figure:name | caption}}
+// lines, which pull in a figure through the `figure` resolver, and editorial blocks:
+//
+//   :::name optional title
+//   one item per line
+//   :::
+//
+// which the `block` resolver turns into HTML (see renderBlock in build.mjs).
+// A paragraph that is entirely bold is a section's carrier line and gets class="carrier".
 
 export function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function inline(s) {
+export function inline(s) {
   return escapeHtml(s)
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/(^|[^*])\*(?!\s)(.+?)\*/g, '$1<em>$2</em>')
@@ -32,7 +39,7 @@ export function parseFrontmatter(src) {
   return { data, body: src.slice(m[0].length) };
 }
 
-export function renderMarkdown(src, { diagram = '', figure = null } = {}) {
+export function renderMarkdown(src, { diagram = '', figure = null, block = null } = {}) {
   const lines = src.split(/\r?\n/);
   const out = [];
   let i = 0;
@@ -49,6 +56,15 @@ export function renderMarkdown(src, { diagram = '', figure = null } = {}) {
       const html = figure ? figure(m[1]) : '';
       if (html) out.push(`<figure class="dd-figure" data-figure="${m[1]}">${html}${m[2] ? `<figcaption>${inline(m[2])}</figcaption>` : ''}</figure>`);
       i++; continue;
+    }
+    if ((m = line.trim().match(/^:::([a-z-]+)\s*(.*)$/i))) {
+      const items = [];
+      i++;
+      while (i < lines.length && lines[i].trim() !== ':::') { if (lines[i].trim()) items.push(lines[i].trim()); i++; }
+      i++;
+      const html = block ? block(m[1].toLowerCase(), m[2].trim(), items) : '';
+      if (html) out.push(html.replace(/\s*\n\s*/g, ' '));
+      continue;
     }
     if ((m = line.match(/^(#{2,3})\s+(.*)$/))) {
       const level = m[1].length;
@@ -74,8 +90,10 @@ export function renderMarkdown(src, { diagram = '', figure = null } = {}) {
       continue;
     }
     const buf = [];
-    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>|[-*]\s|\d+\.\s|\{\{diagram\}\}|\{\{figure:)/.test(lines[i].trim())) buf.push(lines[i++]);
-    out.push(`<p>${inline(buf.join(' '))}</p>`);
+    while (i < lines.length && lines[i].trim() && !/^(#{2,3}\s|>|[-*]\s|\d+\.\s|\{\{diagram\}\}|\{\{figure:|:::)/.test(lines[i].trim())) buf.push(lines[i++]);
+    const text = buf.join(' ');
+    const carrier = /^\*\*[^*]+\*\*$/.test(text.trim());
+    out.push(`<p${carrier ? ' class="carrier"' : ''}>${inline(text)}</p>`);
   }
   return { html: out.join('\n'), headings: h2s };
 }

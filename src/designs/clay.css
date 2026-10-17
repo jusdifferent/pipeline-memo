@@ -1,0 +1,38 @@
+/* Clay deep dive: terracotta art direction. The hero canvas (clay.js) sculpts a field of
+   spreadsheet cells; without WebGL, JavaScript or motion, the CSS cell grid below stands in. */
+.dd--clay { --clay: #B65A33; --clay-deep: #7A3517; --clay-light: #F6C9AE; --accent: var(--clay); }
+body:has(.dd--clay) { background: #FBF6F0; }
+
+/* ------------------------------------------------------------ hero */
+.dd--clay .dd-hero { position: relative; overflow: hidden; display: flex; align-items: flex-end; min-height: min(86svh, 860px); padding-top: clamp(96px, 14vh, 160px); padding-bottom: clamp(36px, 6vh, 64px);
+  background: radial-gradient(ellipse 80% 70% at 70% 30%, #C66B41, #A04E2A 70%), var(--clay); }
+.dd--clay .dd-hero::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 236, 220, 0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 236, 220, 0.09) 1px, transparent 1px); background-size: 46px 46px; transform: perspective(900px) rotateX(55deg) scale(1.6); transform-origin: 60% 30%; opacity: 1; transition: opacity 1.2s ease; }
+.dd--clay .hero-fx { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.4s ease; }
+.dd--clay .dd-hero.fx-on .hero-fx { opacity: 1; }
+.dd--clay .dd-hero.fx-on::before { opacity: 0; }
+.dd--clay .hero-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, rgba(60, 22, 8, 0.82), rgba(60, 22, 8, 0.25) 50%, transparent 72%), linear-gradient(to right, rgba(60, 22, 8, 0.6), rgba(60, 22, 8, 0.15) 50%, transparent 65%); }
+.dd--clay .dd-hero .dd-head-grid { position: relative; z-index: 2; width: 100%; grid-template-columns: 1fr; }
+.dd--clay .dd-hero .dd-logo { position: absolute; top: calc(-1 * clamp(56px, 10vh, 110px)); right: 0; min-height: 0; width: clamp(120px, 16vw, 200px); }
+.dd--clay .dd-hero .dd-logo img { filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.25)); }
+.dd--clay .dd-hero h1 { max-width: 13ch; font: 900 clamp(2.7rem, 1.4rem + 4.8vw, 5.6rem)/0.98 var(--didone); letter-spacing: -0.035em; text-shadow: 0 2px 30px rgba(40, 14, 4, 0.35); }
+.dd--clay .dd-hero .dd-dek { max-width: 30em; font-style: italic; font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem); }
+.dd--clay .dd-hero .crumb { position: relative; }
+
+/* ------------------------------------------------------------ the article */
+.dd--clay .dd-sheet { counter-reset: part; }
+.dd--clay .prose a { color: var(--clay-deep); }
+.dd--clay .preview-text > p:first-child::first-letter { float: left; margin: 0.08em 0.1em 0 0; font: 900 4.7em/0.78 var(--didone); color: var(--clay); }
+.dd--clay .prose h2 { counter-increment: part; margin-top: 2.6em; font: 800 clamp(1.9rem, 1.35rem + 1.9vw, 2.65rem)/1.04 var(--didone); letter-spacing: -0.025em; text-wrap: balance; }
+.dd--clay .prose h2::before { content: "Part " counter(part, decimal-leading-zero); display: block; width: max-content; margin-bottom: 16px; padding-top: 10px; border-top: 3px solid var(--clay); font: 600 0.78rem/1 var(--cond); letter-spacing: 0.2em; text-transform: uppercase; color: var(--clay); }
+.dd--clay .prose p.carrier { margin: 1.6em 0; padding-left: 20px; border-left: 3px solid var(--clay); font: italic 600 clamp(1.25rem, 1.1rem + 0.5vw, 1.45rem)/1.32 var(--didone); color: var(--clay-deep); }
+.dd--clay .prose p.carrier strong { font-weight: inherit; }
+.dd--clay .bl-pull { border-top-color: var(--clay); border-bottom-color: var(--clay); }
+.dd--clay .bl-pull p { color: var(--clay-deep); }
+.dd--clay .bl-founder { border-color: var(--clay); background: #FFFBF6; box-shadow: 10px 10px 0 var(--clay-light); }
+.dd--clay .bl-machine li { border-top-color: var(--clay); }
+.dd--clay .clip-5, .dd--clay .note-5 { background: var(--clay-deep); }
+.dd--clay .dd-figure figcaption { border-top-color: rgba(182, 90, 51, 0.3); }
+
+@media (max-width: 900px) {
+  .dd--clay .dd-hero .dd-logo { position: static; order: -1; margin-bottom: 18px; justify-items: start; }
+}

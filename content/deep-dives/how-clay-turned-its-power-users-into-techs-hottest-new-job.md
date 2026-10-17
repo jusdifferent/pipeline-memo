@@ -1,5 +1,6 @@
 ---
 date: 2026-10-11
+design: clay
 dek: The product, pricing, and community choices that made Clay the tool a new career is built on.
 ---
 
@@ -17,11 +18,21 @@ The obvious explanation is AI, and it explains a lot. Clay's research agent runs
 
 But Clay's revenue grew roughly tenfold in 2022, before any of that, according to Contrary Research. And plenty of startups wired GPT into a sales tool without becoming the name in the job ad.
 
-**What Clay did was find the people who already did growth work by hand, make them visibly better at it, and give them a name. Then it sold to the companies that hired them.**
+:::pull
+What Clay did was find the people who already did growth work by hand, make them visibly better at it, and give them a name. Then it sold to the companies that hired them.
+:::
 
 This deep dive is about how that worked: the five years before it did, the agencies that got it first, the pricing that let it spread, the title that turned users into a labor market, and the parts of the business Clay still doesn't own.
 
 A note on numbers: Clay is private. Its figures come from the company, the press, or outside estimates, and each one below says which.
+
+:::founder Kareem Amin
+pos: noun
+def: Co-founder and CEO of Clay. With Nicolae Rusan, he built and sold Frame, a Shopify app, to Sailthru in 2012 before starting Clay in 2017.
+def: A founder who described Clay's early years as "two years of us building, two years of us kind of being confused."
+def: One of the two people who gave the GTM engineer its name.
+quote: You can take something that is happening and name it.
+:::
 
 ## Five Years of the Wrong Customers
 
@@ -49,7 +60,16 @@ The fix wasn't a new idea. It was the decision to stop chasing the biggest versi
 
 **Clay didn't find its market by having a better vision. It found it by noticing who was already using the product and saying yes to them.**
 
-{{figure:positioning | What Clay's homepage said, 2017 to 2026. Source: Internet Archive captures of clay.run and clay.com.}}
+:::moodboard What Clay's homepage said, year by year
+2017 | Create Cloud Hosted Microservices | Tools to build, share and remix Functions as a Service
+2019 | Connect apps and custom code | Create automated workflows and build tools for your team
+2021 | This spreadsheet fills itself. | Automate your prospecting, enrich your customers, and unify your customer data
+2022 | Create live lists of people, without a line of code. | Find, enrich and act on data from any source
+2023 | Not another data provider. All of the data providers. | Creatively find customers from 50+ data sources
+2024 | Scale your most creative outbound ideas | Waterfall enrichment, Claygent, templates
+2026 | Build systems to grow revenue | Data marketplace, signals, agents and workflows in plain language
+Source: Internet Archive captures of clay.run and clay.com.
+:::
 
 ## The Only People Who Got It
 
@@ -233,6 +253,14 @@ Clay's version is a step further. HubSpot named a practice. Clay named the pract
 
 **Every company that names a profession eventually has to earn its place in it again, because the profession doesn't belong to the company that named it.**
 
+:::record On the *record*
+We had a customer, but it was the wrong customer. | Kareem Amin, co-founder and CEO
+Once we committed, it almost worked instantaneously. | Kareem Amin
+All the value is in the columns. | Varun Anand, co-founder
+Let's call our own team go-to-market engineers. | Kareem Amin, to Brian Halligan
+We want to be the system of action. | Kareem Amin, to Sequoia's Alfred Lin
+:::
+
 ## What Transfers
 
 Strip away the AI, the funding and the valuation, and Clay's growth comes down to one rule.
@@ -241,17 +269,14 @@ Strip away the AI, the funding and the valuation, and Clay's growth comes down t
 
 Clay earned that in a specific order, and most of it applies well outside sales tools.
 
-**Find the people already doing the job by hand.** Clay's breakthrough customers weren't the biggest companies. They were cold email agencies with acute, repeated pain and the skills to use a rough product. Thirty interviews found them. Five years of building for everyone didn't.
-
-**Sell power to your first users, then help them finish.** A flexible product creates loyalty only when people complete what they build. Reverse demos, a public Slack and a network of agencies made sure they did.
-
-**Price so the product can spread.** Credits instead of seats, and no seat caps after 2024, meant one builder could pull in the whole team. Enterprise retention above 200% followed.
-
-**Name the person, not the product.** A category asks buyers to adopt your framing. A job title gives people a better version of their own career, and the tool comes with it. Two-thirds of the job ads for that title now name Clay.
-
-**Let the enterprise arrive through the people it hires.** Clay's two attempts at a conventional enterprise sale, services and platform fees, both stalled. What worked was the builder already inside the account, plus a pitch aimed at an existing budget line.
-
-**Know which layer you own.** The data was never Clay's, and the 2026 repricing was Clay paying to move its business onto the layer it does own.
+:::machine The way Clay *sells*
+Find the people already doing the job by hand. | Clay's breakthrough customers weren't the biggest companies. They were cold email agencies with acute, repeated pain and the skills to use a rough product. Thirty interviews found them. Five years of building for everyone didn't.
+Sell power to your first users, then help them finish. | A flexible product creates loyalty only when people complete what they build. Reverse demos, a public Slack and a network of agencies made sure they did.
+Price so the product can spread. | Credits instead of seats, and no seat caps after 2024, meant one builder could pull in the whole team. Enterprise retention above 200% followed.
+Name the person, not the product. | A category asks buyers to adopt your framing. A job title gives people a better version of their own career, and the tool comes with it. Two-thirds of the job ads for that title now name Clay.
+Let the enterprise arrive through the people it hires. | Clay's two attempts at a conventional enterprise sale, services and platform fees, both stalled. What worked was the builder already inside the account, plus a pitch aimed at an existing budget line.
+Know which layer you own. | The data was never Clay's, and the 2026 repricing was Clay paying to move its business onto the layer it does own.
+:::
 
 Some of it doesn't transfer. Clay found its market just as large language models arrived, and the companies building those models became its customers. Its founders survived five years of the wrong customers, with investors patient enough to wait. And its users happened to be people whose jobs involve being seen on LinkedIn.
 
