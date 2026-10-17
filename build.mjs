@@ -70,7 +70,7 @@ const figureFor = (kind, slug) => (name) => {
 
 // ------------------------------------------------------------------ editorial blocks
 // :::name title / items / ::: in a deep dive or essay. Items use " | " between fields.
-// A title can mark one word *like this*; it's set in script.
+// A title can mark one word *like this*; it's set in italic, in the accent color.
 const split = (line) => line.split(/\s+\|\s+/).map((x) => x.trim());
 const blockTitle = (t, fallback) => `<h3 class="bl-title">${inline(t || fallback)}</h3>`;
 function renderBlock(name, title, items) {
@@ -167,7 +167,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${cfg.brandfetchClientId ? '<link rel="preconnect" href="https://cdn.brandfetch.io" crossorigin>' : ''}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700..900;1,400..800&family=Pinyon+Script&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700..900;1,400..800&display=swap">
 <link rel="stylesheet" href="/styles.css?v=${ver}">
 ${head}
 </head>
