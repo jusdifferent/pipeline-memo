@@ -299,6 +299,7 @@ For now, though, Clay is still running the play that turned it around. In Septem
 It's paying to create the people who will buy it.
 
 :::finale
-It's paying to create *the people who will buy it.*
+Clay is paying to create
+*the people who will buy it.*
 logos: anthropic.com, openai.com=OpenAI, intercom.com, notion.so, canva.com, ramp.com, rippling.com, verkada.com
 :::
