@@ -4,6 +4,20 @@ design: datadog
 dek: The pricing, product, and sales choices that made Datadog too valuable to sell.
 ---
 
+:::hero
+D | Every server | $15 a server per month in 2012, free for up to five.
+A | One view | Every team's data, tagged and shared in one place.
+T | 2 a.m. | When something broke, each team found the problem on the other side of the wall.
+A | Integrations | 1,000 by October 2025, up from 100-plus in 2015.
+D | Said no | Turned down Cisco's offer in 2019 and went public instead.
+O | IPO day | Worth about $10.9 billion at the first close.
+G | Growth | Revenue up about 34 times from 2017 to 2025.
+:::
+
+:::manifesto
+The company customers *look at first* gets to sell them *what they find.*
+:::
+
 On September 18, 2019, Datadog priced its IPO at $27 a share, above a range it had already raised once. The next morning the stock opened at $40.35. By the close, the New York monitoring company was worth about $10.9 billion, according to Forbes.
 
 It almost went another way. Weeks earlier, Bloomberg reported, Cisco had approached Datadog with a takeover offer "significantly higher" than the $7 billion valuation it was aiming for. Datadog said no, because it believed it would be worth more as a public company over time.
@@ -100,14 +114,13 @@ And the first buyers had a specific job. According to the founders' letter, the 
 
 A year later, in November 2012, Index Ventures and RTP Ventures co-led a $6.2 million Series A. Infrastructure monitoring was generally available. The next question was how to get it onto as many servers as possible.
 
-:::moodboard What Datadog's homepage said, year by year
-2011 | Graph, Share, Grok! | Brings together metrics and events from your systems, applications and cloud providers
-2012 | See it all in one place | Your servers, your clouds, your metrics, your apps, your team. Together.
-2015 | Cloud monitoring as a service | Monitoring that tracks your dynamic infrastructure
-2017 | Modern monitoring & analytics | Monitoring that tracks your dynamic infrastructure and applications
-2019 | See inside any stack, any app, at any scale, anywhere. | Modern monitoring & analytics
-2026 | The integrated platform for monitoring & security | End-to-end, simplified visibility into your stack's health & performance
-Source: Internet Archive captures of datadoghq.com.
+:::gallery The *archive*
+/media/datadog/home-2011.jpg | datadoghq.com, 2011 | Graph, Share, Grok!
+/media/datadog/home-2012.jpg | datadoghq.com, 2012 | See it all in one place
+/media/datadog/home-2017.jpg | datadoghq.com, 2017 | Cloud-Scale Monitoring
+/media/datadog/home-2019.jpg | datadoghq.com, 2019 | Modern monitoring & analytics
+/media/datadog/home-2026.jpg | datadoghq.com, 2026 | AI-Powered Observability and Security
+Source: Internet Archive captures of datadoghq.com; 2026 from the live site.
 :::
 
 ## Priced to Be Everywhere
@@ -338,7 +351,7 @@ Both can be true today. The risk is that the screen matters less once software r
 
 **Every wave that made software harder to understand made Datadog's market bigger. AI is the first one that might do some of the understanding itself.**
 
-:::record On the *record*
+:::fan On the *record*
 None of the West Coast investors were listening. | Olivier Pomel, to TechCrunch
 When you don't have anything to sell, everybody is super happy to talk to you. | Olivier Pomel, at SaaStr
 I don't think there's an MVP for what we do. I think it's a myth. | Olivier Pomel
@@ -369,3 +382,8 @@ The machine also has limits built in. The meter runs both ways when customers op
 For 16 years, though, Datadog has followed the same idea it pitched at a startup showcase in 2011: pull everything into one place, label it in the customer's own language, and let every team see the same truth.
 
 Everything else it sells is what customers found when they looked.
+
+:::finale
+Everything else it sells is what customers *found when they looked.*
+logos: salesforce.com, google.com, zendesk.com, airbnb.com, samsung.com, coinbase.com
+:::

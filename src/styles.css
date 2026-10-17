@@ -469,3 +469,85 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 @media (max-width: 900px) {
   .dd--designed .dd-hero .dd-logo { position: static; order: -1; margin-bottom: 18px; justify-items: start; }
 }
+
+/* ------------------------------------------------------------ designed pieces: page-level sections
+   Shared by every designed deep dive; each design sets colors and the letter scenes (--scene). */
+
+/* Giant hover letters. Each letter is a window: hovering plays a scene inside its shape. */
+.dd--designed .dd-hero.has-word { flex-direction: column; align-items: stretch; justify-content: flex-end; }
+.dd--designed .dd-hero.has-word h1 { max-width: 24ch; font-size: clamp(1.9rem, 1.2rem + 2.2vw, 3.3rem); }
+.hero-word { position: relative; display: flex; justify-content: space-between; margin: 0 0 clamp(14px, 3vh, 34px); }
+.hl { position: relative; flex: 0 1 auto; display: grid; padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+.hl-ch, .hl::after { grid-area: 1 / 1; font: 700 min(21vw, 32vh)/0.78 var(--cond); letter-spacing: -0.01em; text-transform: uppercase; }
+.hl-ch { color: #F3EDE4; transition: opacity 0.3s ease; }
+.hl::after { content: attr(data-ch); color: transparent; background: var(--scene, var(--accent)); background-size: var(--scene-size, auto); -webkit-background-clip: text; background-clip: text; opacity: 0; transition: opacity 0.35s ease; animation: var(--scene-anim, none); }
+.hl:hover::after, .hl:focus-visible::after, .hl.is-on::after { opacity: 1; }
+.hl:hover .hl-ch, .hl:focus-visible .hl-ch, .hl.is-on .hl-ch { opacity: 0; }
+.hl:focus-visible { outline: none; }
+.hl-cap { position: absolute; left: 50%; bottom: 6%; z-index: 6; width: max-content; max-width: 230px; padding: 9px 12px 10px; border-radius: 10px; background: #fff; color: #141414; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3); font: 400 0.84rem/1.4 var(--sans); text-align: left; opacity: 0; pointer-events: none; transform: translate(-50%, 8px); transition: opacity 0.25s ease, transform 0.25s ease; }
+.hl-cap b { display: block; font: 600 0.72rem/1.2 var(--cond); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
+.hl:hover .hl-cap, .hl:focus-visible .hl-cap, .hl.is-on .hl-cap { opacity: 1; transform: translate(-50%, 0); }
+.hl:first-child .hl-cap { left: 0; transform: translate(0, 8px); }
+.hl:last-child .hl-cap { left: auto; right: 0; transform: translate(0, 8px); }
+.hl:first-child:hover .hl-cap, .hl:first-child.is-on .hl-cap, .hl:first-child:focus-visible .hl-cap,
+.hl:last-child:hover .hl-cap, .hl:last-child.is-on .hl-cap, .hl:last-child:focus-visible .hl-cap { transform: none; }
+@media (prefers-reduced-motion: reduce) { .hl::after { animation: none; } }
+
+/* Manifesto: the thesis as one huge statement; words light up as you scroll. */
+.manifesto { padding: clamp(80px, 14vh, 160px) var(--pad); background: var(--man-bg, var(--ink)); color: var(--man-fg, #fff); }
+.manifesto p { max-width: 1180px; margin: 0 auto; text-align: center; font: 700 clamp(2rem, 0.9rem + 4.4vw, 5.2rem)/1.02 var(--sans); letter-spacing: -0.025em; text-transform: uppercase; text-wrap: balance; }
+.manifesto em, .finale em { font: italic 500 1.06em/1 var(--italic); letter-spacing: -0.01em; text-transform: none; color: var(--accent-hi, var(--accent)); }
+html.js .manifesto .mw { opacity: 0.16; transition: opacity 0.45s ease; }
+html.js .manifesto .mw.on { opacity: 1; }
+
+/* Gallery: artifacts scattered across the full width, drifting at different speeds on scroll. */
+.bl-gallery { position: relative; left: 50%; width: min(1240px, calc(100vw - 32px)); margin: 3.4em 0; transform: translateX(-50%); }
+.bl-gallery > .bl-title { text-align: center; }
+.bl-gallery ul { list-style: none; margin: 34px 0 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 30px 22px; }
+.shot { grid-column: span 4; transform: translateY(calc(var(--py, 0) * var(--sp, 0) * 1px)); will-change: transform; }
+.shot-1 { grid-column: 1 / span 4; } .shot-2 { grid-column: 6 / span 5; margin-top: 70px; } .shot-3 { grid-column: 2 / span 4; margin-top: -10px; }
+.shot-4 { grid-column: 8 / span 5; margin-top: 30px; } .shot-5 { grid-column: 1 / span 5; margin-top: 10px; } .shot-6 { grid-column: 7 / span 6; margin-top: 50px; }
+.shot .cap { display: block; margin-bottom: 8px; font: 600 0.72rem/1 var(--cond); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.shot img { display: block; width: 100%; aspect-ratio: 1280 / 860; object-fit: cover; object-position: top; border-radius: 6px; filter: grayscale(1) contrast(1.04); box-shadow: 0 10px 28px rgba(20, 18, 14, 0.12); transition: filter 0.5s ease, transform 0.5s cubic-bezier(.2, .8, .2, 1), box-shadow 0.5s ease; }
+.shot:hover img { filter: none; transform: translateY(-6px) scale(1.02); box-shadow: 0 22px 44px rgba(20, 18, 14, 0.2); }
+.shot q { display: block; margin-top: 10px; quotes: "“" "”"; font: italic 500 1.1rem/1.3 var(--italic); }
+.bl-gallery figcaption { margin-top: 30px; text-align: center; font-size: 0.84rem; color: var(--muted); }
+
+/* Fan: quote cards that spread apart when they scroll into view. */
+.bl-fan { position: relative; left: 50%; width: min(1120px, calc(100vw - 32px)); margin: 4em 0 3em; transform: translateX(-50%); text-align: center; }
+.bl-fan ul { list-style: none; position: relative; height: 400px; margin: 34px 0 0; padding: 0; }
+.bl-fan li { --c: calc(var(--i) - (var(--n) - 1) / 2); position: absolute; left: 50%; top: 24px; width: 236px; min-height: 300px; margin-left: -118px; padding: 26px 24px 22px; border-radius: 24px; background: #fff; color: #141414; box-shadow: 0 18px 40px rgba(20, 18, 14, 0.16); display: flex; flex-direction: column; justify-content: space-between; text-align: left; transform-origin: 50% 130%; transform: rotate(calc(var(--c) * 2deg)); transition: transform 0.8s cubic-bezier(.2, .8, .2, 1), box-shadow 0.4s ease; z-index: calc(10 - var(--i)); }
+.bl-fan.is-in li { transform: translateX(calc(var(--c) * 212px)) translateY(calc(var(--c) * var(--c) * 10px)) rotate(calc(var(--c) * 4deg)); }
+.bl-fan.is-in li:hover { z-index: 20; transform: translateX(calc(var(--c) * 212px)) translateY(-18px) rotate(0deg) scale(1.05); box-shadow: 0 28px 60px rgba(20, 18, 14, 0.28); }
+.bl-fan li:nth-child(even) { background: var(--accent); color: #fff; }
+.bl-fan li:nth-child(3n) { background: var(--accent-light, #eee); color: #141414; }
+.bl-fan q { display: block; quotes: "“" "”"; font: italic 600 1.28rem/1.25 var(--italic); }
+.bl-fan span { display: block; margin-top: 18px; font: 600 0.72rem/1.3 var(--cond); letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; }
+html:not(.js) .bl-fan li { transform: translateX(calc(var(--c) * 212px)) rotate(calc(var(--c) * 4deg)); }
+
+/* Finale: the closing line, a self-drawing underline, and the companies named in the story. */
+.finale { margin-top: clamp(64px, 9vw, 110px); padding: clamp(90px, 14vh, 150px) var(--pad) 46px; background: var(--man-bg, var(--ink)); color: var(--man-fg, #fff); text-align: center; overflow: hidden; }
+.fin-line { max-width: 1000px; margin: 0 auto; font: 700 clamp(1.8rem, 0.9rem + 3.4vw, 4rem)/1.04 var(--sans); letter-spacing: -0.02em; text-transform: uppercase; text-wrap: balance; }
+.fin-flourish { display: block; width: min(420px, 70vw); height: auto; margin: 6px auto 0; overflow: visible; }
+.fin-flourish path { fill: none; stroke: var(--accent-hi, var(--accent)); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s ease 0.2s; }
+html.js .finale:not(.is-in) .fin-flourish path { stroke-dashoffset: 1; }
+.fin-cta { margin: 40px 0 0; }
+.finale .fin-cta .btn { background: var(--accent-hi, #fff); color: var(--man-bg, #141414); }
+.fin-logos { margin-top: clamp(60px, 10vh, 100px); }
+.fin-logos p { margin: 0 0 22px; font: 600 0.72rem/1 var(--cond); letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.6; }
+.mq { overflow: hidden; -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.mq-track { display: flex; align-items: center; gap: clamp(40px, 6vw, 80px); width: max-content; animation: mq 38s linear infinite; }
+.mq-track img { height: 28px; width: auto; max-width: 150px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.75; }
+@keyframes mq { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .mq-track { animation: none; } }
+
+@media (max-width: 760px) {
+  .bl-gallery ul { grid-template-columns: 1fr 1fr; gap: 22px 14px; }
+  .bl-gallery .shot { grid-column: auto; margin-top: 0; transform: none; }
+  .bl-fan ul { height: auto; display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 10px 4px 24px; }
+  .bl-fan li, .bl-fan.is-in li, .bl-fan.is-in li:hover { position: relative; left: auto; top: auto; margin: 0; flex: 0 0 78%; min-height: 260px; transform: none; scroll-snap-align: center; }
+  .hl-cap { display: none; }
+}
+
+/* A finale already ends the page with a call to subscribe; the footer band sits flush against it. */
+body.designed:has(.finale) .signup-band { margin-top: 0; }

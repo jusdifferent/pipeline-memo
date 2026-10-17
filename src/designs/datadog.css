@@ -1,11 +1,100 @@
-/* Datadog deep dive: deep violet. The hero canvas (datadog.js) lights up a field of server racks
-   and, on scroll, pulls every light into one dashboard. Without WebGL, JavaScript or motion,
-   the CSS dot field below stands in. Shared article treatment: styles.css, .dd--designed. */
-.dd--datadog { --accent: #632CA6; --accent-deep: #3B1670; --accent-light: #DCCBF2; --page: #F8F6FB; }
-.dd--datadog .dd-hero { background: radial-gradient(ellipse 75% 70% at 70% 35%, #3A1A66, #160A2A 72%), #120822; }
-.dd--datadog .dd-hero::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(190, 150, 255, 0.45) 1.2px, transparent 1.8px); background-size: 22px 22px; -webkit-mask: radial-gradient(ellipse 60% 60% at 70% 40%, #000, transparent); mask: radial-gradient(ellipse 60% 60% at 70% 40%, #000, transparent); transition: opacity 1.2s ease; }
-.dd--datadog .dd-hero.fx-on::before { opacity: 0; }
-.dd--datadog .hero-shade { background: linear-gradient(to top, rgba(10, 4, 20, 0.85), rgba(10, 4, 20, 0.2) 50%, transparent 72%), linear-gradient(to right, rgba(10, 4, 20, 0.7), rgba(10, 4, 20, 0.1) 52%, transparent 66%); }
+/* Datadog deep dive: "One place to look."
+   Hero: a 2 a.m. outage seen through four teams' disconnected tools. The cursor is a Datadog lens;
+   inside it, the same night resolves into one tagged, shared view (datadog.hero.html + datadog.js).
+   Over it, the giant DATADOG letters each play a scene from the story when hovered.
+   Shared article and section styles live in styles.css (.dd--designed). No three.js on this page. */
+.dd--datadog { --accent: #632CA6; --accent-deep: #3B1670; --accent-light: #DCCBF2; --accent-hi: #B48CFF; --page: #F8F6FB; --man-bg: #140A26; --man-fg: #EDE6F7; }
 
-/* The dashboard forms top right, so the logo sits above the headline instead. */
-.dd--datadog .dd-hero .dd-logo { position: static; order: -1; justify-items: start; width: clamp(130px, 13vw, 180px); margin-bottom: 18px; }
+/* ------------------------------------------------------------ hero */
+.dd--datadog .dd-hero { min-height: max(640px, 100svh - 64px); background: #120822; }
+.dd--datadog .hero-shade { z-index: auto; background: linear-gradient(to top, rgba(10, 4, 20, 0.92), rgba(10, 4, 20, 0.35) 34%, transparent 55%); pointer-events: none; }
+.dd--datadog .dd-hero .dd-head-grid { z-index: 4; }
+.dd--datadog .dd-hero .dd-logo { position: static; order: -1; justify-items: start; width: clamp(120px, 11vw, 160px); margin-bottom: 14px; }
+
+/* Lens position (--lx, --ly, in px from the hero's corner) is set on the hero by datadog.js.
+   The cream letters are cut away inside the lens; a dark copy of them (.hero-word-ghost) lives
+   inside the unified view, so the letters read on both sides of the lens edge. */
+.dd--datadog .dd-hero { --lx: 70%; --ly: 38%; --lr: clamp(120px, 15vw, 210px); }
+.dd--datadog .hero-word { -webkit-mask: radial-gradient(circle var(--lr) at calc(var(--lx) - var(--wx, 0px)) calc(var(--ly) - var(--wy, 0px)), transparent calc(100% - 1.5px), #000 100%); mask: radial-gradient(circle var(--lr) at calc(var(--lx) - var(--wx, 0px)) calc(var(--ly) - var(--wy, 0px)), transparent calc(100% - 1.5px), #000 100%); }
+.dd--datadog .hero-word-ghost { -webkit-mask: none; mask: none; }
+.hero-word-ghost { position: absolute; left: var(--wx); top: var(--wy); width: var(--ww); margin: 0 !important; pointer-events: none; }
+.hero-word-ghost .hl-ch { color: #2B1A47; }
+.hero-word-ghost .hl::after, .hero-word-ghost .hl-cap { display: none; }
+.lens-scene { position: absolute; inset: 0; overflow: hidden; font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; }
+
+/* The outage: four tools, each telling its own story. */
+.chaos { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 60% 35%, #2A1450, #120822 75%); }
+.tool { position: absolute; padding: 12px 14px; border-radius: 8px; background: rgba(13, 7, 24, 0.92); border: 1px solid rgba(255, 255, 255, 0.08); color: #CFC4E2; font-size: clamp(10px, 0.78vw, 13px); line-height: 1.55; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45); }
+.tool p, .tool ul { margin: 0; padding: 0; list-style: none; }
+.t-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 8px !important; color: #8E80A8; font-size: 0.9em; }
+.t-bar i { width: 8px; height: 8px; border-radius: 50%; background: #E5484D; box-shadow: 0 0 8px #E5484D; animation: dd-blink 1s steps(2) infinite; }
+.t-bar span { margin-left: auto; color: #FF6B6F; }
+.tool-ops { left: 4%; top: 9%; width: 27%; transform: rotate(-2deg); }
+.tool-ops .crit { color: #FF6B6F; } .tool-ops .warn { color: #F5B547; }
+.tool-ops .crit:nth-child(2) { animation: dd-blink 1.4s steps(2) infinite; }
+.tool-logs { left: 36%; top: 5%; width: 30%; height: 36%; transform: rotate(1.5deg); overflow: hidden; }
+.log { height: calc(100% - 26px); overflow: hidden; }
+.log-roll { animation: dd-roll 9s linear infinite; }
+.log b { color: #FF6B6F; font-weight: 600; }
+.tool-net { right: 4%; top: 12%; width: 26%; transform: rotate(-1deg); }
+.tool-net svg { display: block; width: 100%; height: 70px; }
+.tool-net polyline { fill: none; stroke: #FF6B6F; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.t-note { margin-top: 6px !important; color: #F5B547; }
+.tool-chat { right: 8%; top: 44%; width: 25%; transform: rotate(2deg); }
+.tool-chat p { margin: 2px 0 !important; }
+.tool-chat b { color: #F5B547; font-weight: 600; }
+.clock { position: absolute; right: 6%; bottom: 24%; margin: 0; color: #FF6B6F; font-size: clamp(22px, 2.6vw, 40px); font-weight: 600; letter-spacing: 0.06em; text-shadow: 0 0 18px rgba(229, 72, 77, 0.6); animation: dd-blink 2s steps(2) infinite; }
+@keyframes dd-blink { 50% { opacity: 0.35; } }
+@keyframes dd-roll { to { transform: translateY(-50%); } }
+
+/* The same night through Datadog: light, calm, one view. Visible only inside the lens. */
+.unified { position: absolute; inset: 0; color: #2B1A47; background: radial-gradient(circle, rgba(99, 44, 166, 0.12) 1px, transparent 1.5px) 0 0 / 22px 22px, #F7F3FC;
+  -webkit-mask: radial-gradient(circle var(--lr) at var(--lx) var(--ly), #000 calc(100% - 1.5px), transparent 100%);
+  mask: radial-gradient(circle var(--lr) at var(--lx) var(--ly), #000 calc(100% - 1.5px), transparent 100%); }
+.u-top { position: absolute; left: 4%; top: 6%; display: flex; align-items: center; gap: 10px; font-size: clamp(11px, 0.9vw, 14px); font-weight: 600; }
+.u-top em { font-style: normal; font-weight: 400; color: #7A6A96; }
+.u-dot { width: 10px; height: 10px; border-radius: 50%; background: #632CA6; }
+.u-chart { position: absolute; left: 33%; top: 16%; width: 38%; padding: 14px; border-radius: 10px; background: #fff; box-shadow: 0 10px 30px rgba(59, 22, 112, 0.1); }
+.u-chart svg { display: block; width: 100%; height: clamp(90px, 14vh, 150px); }
+.u-area { fill: rgba(99, 44, 166, 0.12); }
+.u-line { fill: none; stroke: #632CA6; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+.u-chart line { stroke: #E5484D; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; }
+.u-ann { margin: 8px 0 0; font-size: clamp(10px, 0.8vw, 12px); color: #E5484D; }
+.u-hosts { position: absolute; left: 6%; top: 22%; width: 22%; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.u-hosts i { aspect-ratio: 1; border-radius: 4px; background: #8F63D2; opacity: 0.85; }
+.u-hosts i:nth-child(3n) { background: #B996EC; } .u-hosts i:nth-child(5n) { background: #6E3BB8; }
+.u-hosts .hot { background: #E5484D !important; box-shadow: 0 0 0 3px rgba(229, 72, 77, 0.25); }
+.u-cause { position: absolute; right: 5%; top: 30%; width: 22%; margin: 0; padding: 12px 14px; border-radius: 10px; background: #2B1A47; color: #fff; font-size: clamp(11px, 0.85vw, 13px); line-height: 1.45; }
+.lens-ring { position: absolute; left: var(--lx); top: var(--ly); width: calc(var(--lr) * 2); height: calc(var(--lr) * 2); transform: translate(-50%, -50%); border-radius: 50%; border: 2px solid #B48CFF; box-shadow: 0 0 0 6px rgba(180, 140, 255, 0.14), 0 0 40px rgba(180, 140, 255, 0.35); pointer-events: none; }
+.lens-ring span { position: absolute; left: 50%; bottom: -13px; transform: translateX(-50%); padding: 3px 10px; border-radius: 999px; background: #632CA6; color: #fff; font: 600 11px/1.4 var(--cond); letter-spacing: 0.14em; text-transform: uppercase; }
+
+/* ------------------------------------------------------------ the seven letters */
+.dd--datadog .hl { --scene-size: 120px 120px; }
+.dd--datadog .hl-1 { --scene: radial-gradient(circle, #E9DDFF 0 2.4px, transparent 3.4px) 0 0 / 13px 13px, radial-gradient(circle, #9B5CF6 0 2px, transparent 3px) 6px 6px / 13px 13px, #2A1450; --scene-size: 13px 13px, 13px 13px, auto; --scene-anim: dd-lights 1.2s steps(3) infinite; }
+.dd--datadog .hl-2 { --scene: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px 14px), linear-gradient(100deg, #3B1670 20%, #B48CFF 45%, #F3EDE4 50%, #B48CFF 55%, #3B1670 80%); --scene-size: 100% 100%, 220% 100%; --scene-anim: dd-sweep 2.4s linear infinite; }
+.dd--datadog .hl-3 { --scene: repeating-linear-gradient(-45deg, #E5484D 0 16px, #1A0606 16px 32px); --scene-size: 45px 45px; --scene-anim: dd-hazard 0.8s linear infinite; }
+.dd--datadog .hl-4 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='44'%3E%3Crect width='70' height='44' fill='%23632CA6'/%3E%3Ctext x='8' y='30' font-family='Arial' font-weight='700' font-size='22' fill='%23F3EDE4'%3E$15%3C/text%3E%3C/svg%3E"); --scene-size: 70px 44px; --scene-anim: dd-drift 3s linear infinite; }
+.dd--datadog .hl-5 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='60'%3E%3Crect width='90' height='60' fill='%23F3EDE4'/%3E%3Ctext x='12' y='42' font-family='Arial' font-weight='900' font-size='34' fill='%23E5484D' transform='rotate(-14 45 30)'%3ENO%3C/text%3E%3C/svg%3E"); --scene-size: 90px 60px; --scene-anim: dd-drift 2.6s linear infinite; }
+.dd--datadog .hl-6 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23140A26'/%3E%3Cpolyline points='0,110 20,96 40,100 60,78 80,82 100,54 120,60 140,30 160,10' fill='none' stroke='%23B48CFF' stroke-width='6'/%3E%3C/svg%3E"); --scene-size: 160px 120px; --scene-anim: dd-ticker 1.8s linear infinite; }
+.dd--datadog .hl-7 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Crect width='36' height='36' fill='%233B1670'/%3E%3Crect x='9' y='9' width='18' height='18' rx='4' fill='%23B48CFF'/%3E%3Crect x='16' y='3' width='4' height='6' fill='%23B48CFF'/%3E%3C/svg%3E"); --scene-size: 36px 36px; --scene-anim: dd-rise 1.4s linear infinite; }
+@keyframes dd-lights { 33% { filter: brightness(1.5); } 66% { filter: brightness(0.8); } }
+@keyframes dd-sweep { from { background-position: 0 0, 120% 0; } to { background-position: 0 0, -120% 0; } }
+@keyframes dd-hazard { to { background-position: 45px 0; } }
+@keyframes dd-drift { to { background-position: 70px 44px; } }
+@keyframes dd-ticker { to { background-position: -160px 0; } }
+@keyframes dd-rise { to { background-position: 0 -36px; } }
+
+@media (max-width: 760px) {
+  .tool { font-size: 9px; }
+  .tool-ops { width: 46%; } .tool-logs { left: 52%; width: 44%; height: 26%; } .tool-net { display: none; } .tool-chat { right: 4%; top: 34%; width: 50%; }
+  .u-chart { left: 30%; width: 62%; } .u-hosts { width: 40%; } .u-cause { width: 50%; top: 36%; }
+  .clock { right: 6%; bottom: auto; top: 46%; }
+}
+@media (prefers-reduced-motion: reduce) { .tool *, .clock, .log-roll { animation: none !important; } }
+.u-traces { position: absolute; left: 22%; top: 50%; width: 46%; margin: 0; padding: 12px 14px; list-style: none; border-radius: 10px; background: #fff; box-shadow: 0 10px 30px rgba(59, 22, 112, 0.1); font-size: clamp(10px, 0.82vw, 13px); }
+.u-traces li { display: grid; grid-template-columns: 9em 1fr 6.5em; align-items: center; gap: 10px; padding: 3px 0; }
+.u-traces b { font-weight: 600; }
+.u-traces span { height: 8px; width: var(--w); border-radius: 4px; background: #8F63D2; }
+.u-traces span.hot { background: #E5484D; }
+.u-traces em { font-style: normal; color: #7A6A96; text-align: right; }
+@media (max-width: 760px) { .u-traces { left: 6%; width: 88%; top: 52%; } }

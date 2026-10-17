@@ -90,6 +90,13 @@ function renderBlock(name, title, items) {
       const get = (k) => items.filter((x) => x.toLowerCase().startsWith(`${k}:`)).map((x) => x.slice(k.length + 1).trim());
       return `<aside class="bl bl-founder"><p class="bl-kicker">Who’s that <em>founder?</em></p><p class="bl-name">${e(title)} <span>${e(get('pos')[0] || 'noun')}</span></p><ol>${get('def').map((d) => `<li>${inline(d)}</li>`).join('')}</ol>${get('quote').map((q) => `<p class="bl-said">“${inline(q)}”</p>`).join('')}</aside>`;
     }
+    case 'gallery': { // full-bleed scattered artifacts: image | caption | headline; "Source: ..." becomes the caption
+      const src = items.find((x) => /^source:/i.test(x));
+      const shots = items.filter((x) => x !== src);
+      return `<figure class="bl bl-gallery" data-gallery>${blockTitle(title, 'The *archive*')}<ul>${shots.map((it, i) => { const [img, cap, head] = split(it); return `<li class="shot shot-${i + 1}" style="--sp:${[0.06, -0.04, 0.09, -0.06, 0.05, -0.08][i % 6]}"><span class="cap">${inline(cap)}</span><img src="${e(img)}" alt="${e(cap)}" loading="lazy" decoding="async">${head ? `<q>${inline(head)}</q>` : ''}</li>`; }).join('')}</ul>${src ? `<figcaption>${inline(src.replace(/^source:\s*/i, 'Source: '))}</figcaption>` : ''}</figure>`;
+    }
+    case 'fan': // quote cards fanned out; same item format as record
+      return `<section class="bl bl-fan" data-fan>${blockTitle(title, 'On the *record*')}<ul style="--n:${items.length}">${items.map((it, i) => { const [q, by] = split(it); return `<li style="--i:${i}"><q>${inline(q)}</q>${by ? `<span>${inline(by)}</span>` : ''}</li>`; }).join('')}</ul></section>`;
     default:
       console.warn(`Unknown block: :::${name}`);
       return '';
@@ -167,7 +174,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${cfg.brandfetchClientId ? '<link rel="preconnect" href="https://cdn.brandfetch.io" crossorigin>' : ''}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,500..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,500..600&display=swap">
 <link rel="stylesheet" href="/styles.css?v=${ver}">
 ${head}
 </head>
@@ -309,10 +316,58 @@ function splitEssay(html) {
   return { preview: blocks.slice(0, i).join('\n'), rest: blocks.slice(i).join('\n') };
 }
 
+// Page-level sections a designed deep dive can declare in its markdown. They render outside the
+// article column and outside the email gate: :::hero (giant hover letters), :::manifesto, :::finale.
+function pullSections(md) {
+  const out = {};
+  const body = md.replace(/^:::(hero|manifesto|finale)[ \t]*(.*)\n([\s\S]*?)\n:::[ \t]*$/gm, (_, name, title, inner) => {
+    out[name] = { title: title.trim(), items: inner.split('\n').map((x) => x.trim()).filter(Boolean) };
+    return '';
+  });
+  return { body, ...out };
+}
+const brandLogo = (domain, theme = 'light') => `https://cdn.brandfetch.io/domain/${domain}/w/400/theme/${theme}/fallback/404/type/logo?c=${encodeURIComponent(cfg.brandfetchClientId || '')}`;
+
+// Words of a manifesto line, so they can light up one by one; *phrases* become italic accents.
+function manifestoWords(text) {
+  let i = 0;
+  return text.split(/(\*[^*]+\*)/).filter(Boolean).map((chunk) => {
+    const accent = chunk.startsWith('*');
+    const words = chunk.replace(/^\*|\*$/g, '').split(/\s+/).filter(Boolean);
+    const html = words.map((w) => `<span class="mw" style="--w:${i++}">${e(w)}</span>`).join(' ');
+    return accent ? `<em>${html}</em>` : html;
+  }).join(' ');
+}
+
+function heroLetters(sec) {
+  if (!sec) return '';
+  const rows = sec.items.map((line) => line.split(/\s+\|\s+/));
+  return `<div class="hero-word" data-hero-word>${rows.map(([ch, head, text], k) => `<button type="button" class="hl hl-${k + 1}" data-ch="${e(ch)}" aria-label="${e(`${head}: ${text}`)}"><span class="hl-ch" aria-hidden="true">${e(ch)}</span><span class="hl-cap" aria-hidden="true"><b>${e(head)}</b>${e(text)}</span></button>`).join('')}</div>`;
+}
+
+function manifestoSection(sec) {
+  if (!sec) return '';
+  return `<section class="manifesto" data-manifesto aria-label="The thesis"><p>${manifestoWords(sec.items.join(' '))}</p></section>`;
+}
+
+function finaleSection(sec) {
+  if (!sec) return '';
+  const logos = (sec.items.find((x) => /^logos:/i.test(x)) || '').replace(/^logos:\s*/i, '').split(/\s*,\s*/).filter(Boolean);
+  const line = sec.items.filter((x) => !/^logos:/i.test(x)).join(' ');
+  const strip = logos.map((d) => `<img src="${e(brandLogo(d))}" alt="${e(d.replace(/\.(com|io|co)$/, ''))}" loading="lazy" decoding="async" onerror="this.remove()">`).join('');
+  return `<section class="finale" data-finale>
+    <p class="fin-line">${manifestoWords(line)}</p>
+    <svg class="fin-flourish" viewBox="0 0 400 40" aria-hidden="true"><path d="M4 30 C 80 6, 160 38, 230 18 S 350 8, 396 22" pathLength="1"/></svg>
+    <p class="fin-cta"><a class="btn" href="/subscribe">Get the next deep dive</a></p>
+    ${logos.length ? `<div class="fin-logos"><p>Named in this story</p><div class="mq"><div class="mq-track">${strip}${strip}</div></div></div>` : ''}
+  </section>`;
+}
+
 function deepDiveArticle(dd) {
   let sheet;
+  const parts = dd.published ? pullSections(dd.essay) : {};
   if (dd.published) {
-    const { preview, rest } = splitEssay(renderMarkdown(dd.essay, { figure: figureFor('deep-dives', dd.slug), block: renderBlock }).html);
+    const { preview, rest } = splitEssay(renderMarkdown(parts.body, { figure: figureFor('deep-dives', dd.slug), block: renderBlock }).html);
     const mode = dd.readUrl ? 'redirect' : 'unlock';
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${dd.readUrl ? ` data-read-url="${e(dd.readUrl)}"` : ''} style="${brandVars(dd)}">
@@ -335,7 +390,8 @@ function deepDiveArticle(dd) {
     </div>`;
   }
   return `<article class="dd${dd.design ? ` dd--designed dd--${dd.design}` : ''}" data-dd="${dd.slug}" style="${brandVars(dd)}">
-  <header class="dd-head${dd.design ? ' dd-hero' : ''}" style="${brandVars(dd)}">${dd.design ? '<canvas class="hero-fx" aria-hidden="true"></canvas><span class="hero-shade" aria-hidden="true"></span>' : ''}
+  <header class="dd-head${dd.design ? ' dd-hero' : ''}${parts.hero ? ' has-word' : ''}" style="${brandVars(dd)}">${dd.design ? `${designPartial(dd.design, 'hero') || '<canvas class="hero-fx" aria-hidden="true"></canvas>'}<span class="hero-shade" aria-hidden="true"></span>` : ''}
+    ${heroLetters(parts.hero)}
     <div class="dd-head-grid">
       <div>
         <p class="crumb"><a href="/?series=${dd.series}">${e(seriesBy[dd.series].short)}</a><span>${e(dd.industry)}</span><span>${e(status(dd))}${dd.published ? `, ${dd.minutes} min read` : ''}</span></p>
@@ -345,7 +401,9 @@ function deepDiveArticle(dd) {
       ${logoBox(dd, 'dd-logo')}
     </div>
   </header>
+  ${manifestoSection(parts.manifesto)}
   <div class="dd-sheet">${sheet}</div>
+  ${finaleSection(parts.finale)}
 </article>`;
 }
 
@@ -395,12 +453,14 @@ function essayPage(es) {
 const DESIGN_DIR = path.join(ROOT, 'src/designs');
 const designFile = (name, ext) => path.join(DESIGN_DIR, `${name}.${ext}`);
 const designVer = (name) => crypto.createHash('md5').update(['css', 'js'].map((x) => (fs.existsSync(designFile(name, x)) ? fs.readFileSync(designFile(name, x)) : '')).join('')).digest('hex').slice(0, 8);
+const designPartial = (name, part) => { const f = path.join(DESIGN_DIR, `${name}.${part}.html`); return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : ''; };
 function designHead(name) {
   if (!name) return '';
   const v = designVer(name);
   return [
     fs.existsSync(designFile(name, 'css')) ? `<link rel="stylesheet" href="/designs/${name}.css?v=${v}">` : '',
-    fs.existsSync(designFile(name, 'js')) ? `<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>\n<script type="module" src="/designs/${name}.js?v=${v}"></script>` : '',
+    fs.existsSync(designFile(name, 'js')) && /from 'three/.test(fs.readFileSync(designFile(name, 'js'), 'utf8')) ? `<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>` : '',
+    fs.existsSync(designFile(name, 'js')) ? `<script type="module" src="/designs/${name}.js?v=${v}"></script>` : '',
   ].filter(Boolean).join('\n');
 }
 

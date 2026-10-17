@@ -275,9 +275,9 @@
 
 })();
 
-// Figures in deep dives and essays animate once when they scroll into view.
+// Figures and designed sections (card fans, galleries, finales) animate once when they scroll into view.
 (function () {
-  var figs = document.querySelectorAll('.dd-figure');
+  var figs = document.querySelectorAll('.dd-figure, .bl-fan, .bl-gallery, .finale');
   if (!figs.length) return;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!('IntersectionObserver' in window) || reduce) {

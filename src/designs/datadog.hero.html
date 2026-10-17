@@ -1,0 +1,53 @@
+<div class="lens-scene" aria-hidden="true" data-lens>
+  <!-- 2:04 a.m.: four teams, four tools, four versions of the truth. -->
+  <div class="chaos">
+    <div class="tool tool-ops">
+      <p class="t-bar"><i></i>ops-monitor <span>3 CRITICAL</span></p>
+      <ul>
+        <li class="crit">CRITICAL db-prod-07 cpu 98%</li>
+        <li class="crit">CRITICAL api-gw-2 latency 4.8s</li>
+        <li class="warn">WARNING queue-orders depth 18k</li>
+        <li class="crit">CRITICAL disk /var 97%</li>
+        <li class="warn">WARNING host i-0a93 unreachable</li>
+      </ul>
+    </div>
+    <div class="tool tool-logs">
+      <p class="t-bar"><i></i>dev-logs · tail -f</p>
+      <div class="log"><div class="log-roll">
+        <p><b>ERROR</b> checkout-svc timeout after 3000ms</p><p>GET /api/cart 500</p><p><b>ERROR</b> retry 3/3 failed</p><p>WARN pool exhausted (max=50)</p><p>GET /api/cart 500</p><p><b>ERROR</b> upstream reset</p>
+        <p><b>ERROR</b> checkout-svc timeout after 3000ms</p><p>GET /api/cart 500</p><p><b>ERROR</b> retry 3/3 failed</p><p>WARN pool exhausted (max=50)</p><p>GET /api/cart 500</p><p><b>ERROR</b> upstream reset</p>
+      </div></div>
+    </div>
+    <div class="tool tool-net">
+      <p class="t-bar"><i></i>netgraph · edge-01</p>
+      <svg viewBox="0 0 200 70" preserveAspectRatio="none"><polyline points="0,50 14,46 26,52 38,30 50,48 62,12 74,58 86,20 98,44 110,8 122,60 134,26 146,40 158,6 170,55 184,18 200,36"/></svg>
+      <p class="t-note">packet loss 23%</p>
+    </div>
+    <div class="tool tool-chat">
+      <p class="t-bar"><i></i>#incident-0412</p>
+      <p><b>dev:</b> it's the database</p>
+      <p><b>ops:</b> db is fine, it's your deploy</p>
+      <p><b>dev:</b> our dashboards are green??</p>
+      <p><b>net:</b> could be the network</p>
+    </div>
+    <p class="clock">02:04 AM</p>
+  </div>
+
+  <!-- The same night, through Datadog: one view, tagged and shared. -->
+  <div class="unified">
+    <div class="u-top"><span class="u-dot"></span>One view <em>service:checkout · env:prod · team:payments</em></div>
+    <div class="u-chart">
+      <svg viewBox="0 0 300 90" preserveAspectRatio="none"><path class="u-area" d="M0,70 C30,66 60,68 90,64 S140,58 160,30 S190,62 220,60 S270,62 300,58 L300,90 L0,90Z"/><path class="u-line" d="M0,70 C30,66 60,68 90,64 S140,58 160,30 S190,62 220,60 S270,62 300,58"/><line x1="152" y1="0" x2="152" y2="90"/></svg>
+      <p class="u-ann">deploy 02:01 · checkout-svc v412</p>
+    </div>
+    <div class="u-hosts"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="hot"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <p class="u-cause">Root cause · db-prod-07 connection pool, after the 02:01 deploy</p>
+    <ul class="u-traces">
+      <li><b>checkout-svc</b><span style="--w:72%"></span><em>3,012 ms</em></li>
+      <li><b>cart-api</b><span style="--w:30%"></span><em>412 ms</em></li>
+      <li><b>db-prod-07</b><span class="hot" style="--w:88%"></span><em>pool 50/50</em></li>
+      <li><b>auth</b><span style="--w:12%"></span><em>88 ms</em></li>
+    </ul>
+  </div>
+  <div class="lens-ring"><span>datadog</span></div>
+</div>
