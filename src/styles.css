@@ -531,8 +531,8 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 html.js .manifesto .mw { opacity: 0.16; transition: opacity 0.45s ease; }
 html.js .manifesto .mw.on { opacity: 1; }
 
-/* On the record. Narrow screens and the preview panel: paper clippings, stacked and dealt in one by one.
-   Wide pages: cards that fan out across the page when they scroll into view. Neither ever scrolls sideways. */
+/* On the record. Phones and small tablets: paper clippings, stacked and dealt in one by one. Laptops and
+   up: cards that fan out across the page when they scroll into view. Neither ever scrolls sideways. */
 .bl-fan ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 14px; filter: drop-shadow(0 5px 12px rgba(20, 18, 14, 0.13)); }
 .bl-fan li { padding: 20px 22px 16px; background: #fff; color: #141414; clip-path: polygon(0 4%, 3% 0, 22% 3%, 41% 0, 63% 4%, 82% 1%, 100% 3%, 99% 97%, 78% 100%, 56% 96%, 34% 100%, 12% 97%, 0 100%); rotate: var(--rot, 0deg); transition: opacity 0.6s ease, translate 0.75s cubic-bezier(.2, .8, .2, 1), rotate 0.75s cubic-bezier(.2, .8, .2, 1); }
 .bl-fan li:nth-child(5n+1) { --rot: -1deg; margin-right: 8%; }
@@ -547,16 +547,19 @@ html.js .manifesto .mw.on { opacity: 1; }
 html.js .bl-fan li:not(.is-in) { opacity: 0; translate: 0 28px; rotate: calc(var(--rot, 0deg) * 4); }
 @media (prefers-reduced-motion: reduce) { .bl-fan li { transition: none; } }
 
-@media (min-width: 1240px) {
-  .dd-page .bl-fan { position: relative; left: 50%; width: min(1120px, 100vw - 32px); margin: 4em 0 3em; transform: translateX(-50%); text-align: center; }
-  .dd-page .bl-fan ul { display: block; position: relative; height: 400px; margin-top: 34px; filter: none; }
-  .dd-page .bl-fan li { --c: calc(var(--i) - (var(--n) - 1) / 2); position: absolute; left: 50%; top: 24px; width: 236px; min-height: 300px; margin: 0 0 0 -118px; padding: 26px 24px 22px; border-radius: 24px; clip-path: none; box-shadow: 0 18px 40px rgba(20, 18, 14, 0.16); display: flex; flex-direction: column; justify-content: space-between; text-align: left; rotate: none; transform-origin: 50% 130%; transform: rotate(calc(var(--c) * 2deg)); transition: transform 0.8s cubic-bezier(.2, .8, .2, 1), box-shadow 0.4s ease; z-index: calc(10 - var(--i)); }
+/* The fan is drawn at full size (cards 236px, about 1190px across) from 1240px up, and scales down
+   with the screen from 860px: --u is one pixel at full size and shrinks in proportion. */
+@media (min-width: 860px) {
+  .dd-page .bl-fan { --u: min(1px, (100vw - 48px) / 1190); position: relative; left: 50%; width: min(1120px, 100vw - 32px); margin: 4em 0 3em; transform: translateX(-50%); text-align: center; }
+  .dd-page .bl-fan ul { display: block; position: relative; height: calc(400 * var(--u)); margin-top: 34px; filter: none; }
+  .dd-page .bl-fan li { --c: calc(var(--i) - (var(--n) - 1) / 2); --x: calc(var(--c) * 212 * var(--u)); position: absolute; left: 50%; top: calc(24 * var(--u)); width: calc(236 * var(--u)); min-height: calc(300 * var(--u)); margin: 0 0 0 calc(-118 * var(--u)); padding: calc(26 * var(--u)) calc(24 * var(--u)) calc(22 * var(--u)); border-radius: calc(24 * var(--u)); clip-path: none; box-shadow: 0 18px 40px rgba(20, 18, 14, 0.16); display: flex; flex-direction: column; justify-content: space-between; text-align: left; rotate: none; transform-origin: 50% 130%; transform: rotate(calc(var(--c) * 2deg)); transition: transform 0.8s cubic-bezier(.2, .8, .2, 1), box-shadow 0.4s ease; z-index: calc(10 - var(--i)); }
   html.js .dd-page .bl-fan li:not(.is-in) { opacity: 1; translate: none; rotate: none; }
-  .dd-page .bl-fan.is-in li { transform: translateX(calc(var(--c) * 212px)) translateY(calc(var(--c) * var(--c) * 10px)) rotate(calc(var(--c) * 4deg)); }
-  .dd-page .bl-fan.is-in li:hover { z-index: 20; transform: translateX(calc(var(--c) * 212px)) translateY(-18px) rotate(0deg) scale(1.05); box-shadow: 0 28px 60px rgba(20, 18, 14, 0.28); }
-  .dd-page .bl-fan q { font-size: 1.28rem; }
-  .dd-page .bl-fan span { margin-top: 18px; }
-  html:not(.js) .dd-page .bl-fan li { transform: translateX(calc(var(--c) * 212px)) rotate(calc(var(--c) * 4deg)); }
+  .dd-page .bl-fan.is-in li { transform: translateX(var(--x)) translateY(calc(var(--c) * var(--c) * 10 * var(--u))) rotate(calc(var(--c) * 4deg)); }
+  .dd-page .bl-fan.is-in li:hover { z-index: 20; transform: translateX(var(--x)) translateY(calc(-18 * var(--u))) rotate(0deg) scale(1.05); box-shadow: 0 28px 60px rgba(20, 18, 14, 0.28); }
+  .dd-page .bl-fan q { font-size: calc(20.5 * var(--u)); }
+  .dd-page .bl-fan span { margin-top: calc(18 * var(--u)); font-size: calc(11.5 * var(--u)); }
+  html:not(.js) .dd-page .bl-fan li { transform: translateX(var(--x)) rotate(calc(var(--c) * 4deg)); }
+}
 }
 
 /* Moodboard with screenshots on wide pages: the linen spans the page, polaroids scattered across it. */
