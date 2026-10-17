@@ -83,20 +83,65 @@
         store.set(localStorage, KEY, '1');
         var mode = form.getAttribute('data-mode');
         var gate = form.closest('[data-gate]');
+        var token = res.body.token;
+        var host = form.closest('dialog'); // read before the form is replaced below
+        // A redirecting gate waits until the profile step closes; everything else finishes behind it.
+        if (mode === 'redirect' && gate) {
+          var go = function () { location.href = gate.getAttribute('data-read-url'); };
+          if (!(token && askProfile(host, data.email, token, go))) go();
+          return;
+        }
         if (mode === 'unlock' && gate) { unlock(gate); }
-        else if (mode === 'redirect' && gate) { location.href = gate.getAttribute('data-read-url'); return; }
         else {
           var msg = mode === 'notify' ? 'You\u2019re on the list. This deep dive arrives in your inbox the day it\u2019s published.' : 'You\u2019re subscribed. Check your inbox for a confirmation.';
           form.outerHTML = '<p class="form-done" role="status">' + msg + '</p>';
         }
         if (float && !form.closest('[data-float]')) { floatAway.subscribed = true; setFloat(); }
         if (float && form.closest('[data-float]')) setTimeout(function () { floatAway.subscribed = true; setFloat(); }, 2600);
+        if (token) askProfile(host, data.email, token);
       })
       .catch(function (err) {
         status.className = 'form-status error';
         status.textContent = err.message && err.message !== 'Failed to fetch' ? err.message : 'That didn\u2019t go through because the connection dropped. Try again.';
         button.disabled = false; button.textContent = button.getAttribute('data-label');
       });
+  });
+
+  // ---------------------------------------------------------- profile step (role, seniority, company)
+  var profile = document.getElementById('profile-modal');
+  var askProfile = function (host, email, token, then) {
+    if (!profile) return false;
+    var f = profile.querySelector('[data-profile-form]');
+    f.reset();
+    f.elements.email.value = email;
+    f.elements.token.value = token;
+    f.querySelector('.form-status').textContent = '';
+    if (host && host.open) host.close();
+    if (then) profile.addEventListener('close', then, { once: true });
+    openDialog(profile);
+    f.elements.role.focus();
+    return true;
+  };
+  document.addEventListener('submit', function (ev) {
+    var f = ev.target.closest('[data-profile-form]');
+    if (!f) return;
+    ev.preventDefault();
+    if (!f.reportValidity()) return;
+    var button = f.querySelector('button[type="submit"]');
+    var status = f.querySelector('.form-status');
+    button.disabled = true; button.textContent = 'Saving…';
+    status.className = 'form-status'; status.textContent = '';
+    fetch(f.action, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(f).entries())) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, body: j }; }); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.body.error || 'That didn’t save. Try again.');
+        profile.close();
+      })
+      .catch(function (err) {
+        status.className = 'form-status error';
+        status.textContent = err.message && err.message !== 'Failed to fetch' ? err.message : 'That didn’t save because the connection dropped. Try again.';
+      })
+      .then(function () { button.disabled = false; button.textContent = button.getAttribute('data-label'); });
   });
 
   // ---------------------------------------------------------- panels

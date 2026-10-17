@@ -1,10 +1,13 @@
 // Vercel serverless function: POST /api/subscribe
 // Adds a subscriber to Beehiiv with name, role and company as custom fields.
+// Replies with a token that lets /api/profile save the reader's role and seniority in the next step.
 // Required environment variables (set in Vercel > Project > Settings > Environment Variables):
 //   BEEHIIV_API_KEY         API key from Beehiiv > Settings > Integrations > API
 //   BEEHIIV_PUBLICATION_ID  Publication ID, starts with "pub_"
 // Optional:
 //   BEEHIIV_SEND_WELCOME    "false" to skip Beehiiv's welcome email (default: sent)
+
+const { sign } = require('./_token');
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -38,7 +41,7 @@ module.exports = async function handler(req, res) {
   // Honeypot: real people never fill the hidden "website" field.
   if (clean(body.website)) return reply(req, res, 200, { ok: true });
 
-  if (!EMAIL.test(email)) return reply(req, res, 400, { error: 'Enter a valid work email address.' });
+  if (!EMAIL.test(email)) return reply(req, res, 400, { error: 'Enter a valid email address.' });
 
   const apiKey = process.env.BEEHIIV_API_KEY;
   const pubId = process.env.BEEHIIV_PUBLICATION_ID;
@@ -70,7 +73,7 @@ module.exports = async function handler(req, res) {
       console.error('Beehiiv error', r.status, await r.text());
       return reply(req, res, 502, { error: 'Your request didn\u2019t go through. Try again in a minute.' });
     }
-    return reply(req, res, 200, { ok: true });
+    return reply(req, res, 200, { ok: true, token: sign(email) });
   } catch (err) {
     console.error('Beehiiv request failed', err);
     return reply(req, res, 502, { error: 'Your request didn\u2019t go through. Try again in a minute.' });

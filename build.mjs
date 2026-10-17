@@ -147,6 +147,40 @@ function subForm({ id, button = 'Subscribe', mode = 'subscribe', source = 'site'
 </form>`;
 }
 
+// The second signup step: opens after any email form succeeds. Answers go to Beehiiv as custom fields,
+// and only totals are ever shared with sponsors.
+const ROLES = ['Founder or CEO', 'Sales', 'Marketing', 'RevOps or operations', 'Customer success', 'Investor', 'Other'];
+const SENIORITY = ['Individual contributor', 'Manager', 'Director', 'VP', 'C-level'];
+const READER_INDUSTRIES = ['Software and SaaS', 'Fintech and financial services', 'Agency or consulting', 'Venture capital or private equity', 'Healthcare and life sciences', 'Manufacturing and industrial', 'Retail and e-commerce', 'Media and publishing', 'Other'];
+const options = (list) => list.map((o) => `<option>${e(o)}</option>`).join('');
+
+function profileDialog() {
+  return `<dialog class="modal modal-sub modal-profile" id="profile-modal" aria-labelledby="profile-h">
+  <button type="button" class="modal-x" data-close aria-label="Close">${CLOSE}</button>
+  <h2 id="profile-h">You’re subscribed</h2>
+  <p>One more step: help us know who’s reading. It takes ten seconds.</p>
+  <form class="profile" action="/api/profile" method="post" data-profile-form>
+    <input type="hidden" name="email">
+    <input type="hidden" name="token">
+    <label><span>Your role</span>
+      <select name="role" required><option value="">Choose one</option>${options(ROLES)}</select>
+    </label>
+    <label><span>Seniority</span>
+      <select name="seniority" required><option value="">Choose one</option>${options(SENIORITY)}</select>
+    </label>
+    <label><span>Industry</span>
+      <select name="industry" required><option value="">Choose one</option>${options(READER_INDUSTRIES)}</select>
+    </label>
+    <div class="profile-actions">
+      <button class="btn" type="submit" data-label="Done">Done</button>
+      <button class="textlink" type="button" data-close>Skip</button>
+    </div>
+    <p class="form-status" role="status" aria-live="polite"></p>
+    <p class="profile-fine">We share only totals, never your name or details.</p>
+  </form>
+</dialog>`;
+}
+
 function layout({ title, description = cfg.description, pathName = '/', body, isHome = false, searchIn = 'deep-dives', head = '', bodyClass = '' }) {
   const full = title ? `${title} | ${cfg.name}` : `${cfg.name}: ${cfg.tagline}`;
   const canon = cfg.url + (pathName === '/' ? '' : pathName);
@@ -235,6 +269,7 @@ ${body}
   <p>${e(cfg.signupText)}</p>
   ${subForm({ id: 'modal-email', source: 'header-modal' })}
 </dialog>
+${profileDialog()}
 <script src="/site.js?v=${ver}" defer></script>
 </body>
 </html>`;
