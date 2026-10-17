@@ -129,8 +129,16 @@
       });
   });
 
-  // ---------------------------------------------------------- profile step (role, seniority, company)
+  // ---------------------------------------------------------- profile step (role, seniority, industry)
+  // No Skip, X, Esc or outside click: it closes only once the answers save. If saving fails for any reason
+  // but a missing answer, it lets the reader go, so our server never traps anyone.
   var profile = document.getElementById('profile-modal');
+  var profileThen = null;
+  var releaseProfile = function () {
+    delete profile.dataset.locked;
+    profile.close();
+    if (profileThen) { var then = profileThen; profileThen = null; then(); }
+  };
   var askProfile = function (host, email, token, then) {
     if (!profile) return false;
     var f = profile.querySelector('[data-profile-form]');
@@ -139,7 +147,8 @@
     f.elements.token.value = token;
     f.querySelector('.form-status').textContent = '';
     if (host && host.open) host.close();
-    if (then) profile.addEventListener('close', then, { once: true });
+    profileThen = then || null;
+    profile.dataset.locked = '1';
     openDialog(profile);
     f.elements.role.focus();
     return true;
@@ -154,23 +163,27 @@
     button.disabled = true; button.textContent = 'Saving…';
     status.className = 'form-status'; status.textContent = '';
     fetch(f.action, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(f).entries())) })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, body: j }; }); })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, body: j }; }); })
       .then(function (res) {
-        if (!res.ok) throw new Error(res.body.error || 'That didn’t save. Try again.');
-        profile.close();
-      })
-      .catch(function (err) {
-        status.className = 'form-status error';
-        status.textContent = err.message && err.message !== 'Failed to fetch' ? err.message : 'That didn’t save because the connection dropped. Try again.';
-      })
+        if (res.status === 400) {
+          status.className = 'form-status error';
+          status.textContent = res.body.error || 'Choose your role, seniority and industry.';
+          return;
+        }
+        releaseProfile();
+      }, releaseProfile)
       .then(function () { button.disabled = false; button.textContent = button.getAttribute('data-label'); });
   });
 
   // ---------------------------------------------------------- panels
   var openDialog = function (d) { if (!d.open) { d.showModal(); root.classList.add('modal-open'); } };
   document.querySelectorAll('dialog').forEach(function (d) {
-    d.addEventListener('close', function () { root.classList.remove('modal-open'); });
-    d.addEventListener('click', function (ev) { if (ev.target === d) d.close(); });
+    d.addEventListener('cancel', function (ev) { if (d.dataset.locked) ev.preventDefault(); });
+    d.addEventListener('close', function () {
+      if (d.dataset.locked) { d.showModal(); return; } // a browser that forces Esc through gets the step back
+      root.classList.remove('modal-open');
+    });
+    d.addEventListener('click', function (ev) { if (ev.target === d && !d.dataset.locked) d.close(); });
   });
   document.addEventListener('click', function (ev) {
     var x = ev.target.closest('[data-close]');
