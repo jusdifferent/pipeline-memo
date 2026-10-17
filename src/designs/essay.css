@@ -13,6 +13,9 @@
 .essay-hero h1 { max-width: 17ch; margin: 0 auto; font: 700 clamp(2.4rem, 1.3rem + 3.6vw, 4.2rem)/1.04 var(--display); letter-spacing: -0.015em; text-wrap: balance; }
 .essay-hero .dd-dek { max-width: 32em; margin: 22px auto 0; font: 400 clamp(1.12rem, 1rem + 0.45vw, 1.38rem)/1.5 var(--display); color: #4A4744; text-wrap: pretty; }
 
+/* Essays open with a normal first letter: no drop cap (the deep dives keep theirs). */
+.dd--essay .preview-text > p:first-child::first-letter { float: none; margin: 0; padding: 0; font: inherit; color: inherit; background: none; }
+
 /* Sections: a short green rule over each heading instead of the deep dives' "Part 01". */
 .dd--essay .prose h2::before { content: ""; width: 36px; padding-top: 0; margin-bottom: 18px; border-top: 4px solid var(--accent); }
 
