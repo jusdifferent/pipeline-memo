@@ -1,0 +1,230 @@
+/* Ramp deep dive: Ramp's own look. A white page with Ramp's dot grid, near-black ink and Solar yellow.
+   Hero: an expenses list that matches its own receipts on a loop (ramp.hero.html), a counter of receipts
+   automated since the page opened (ramp.js), and four giant letters, each playing a scene from the story.
+   Interlude (ramp.run.html): the hero shrinks away, the paperwork piles up, and a yellow card lands on it.
+   The shared article and section styles live in styles.css (.dd--designed). */
+.dd--ramp {
+  --lime: #E4F222; --ramp-ink: #0C0A08; --ramp-gray: #F4F2F0; --ramp-line: #E8E5E1;
+  --accent: #0C0A08; --accent-deep: #0C0A08; --accent-light: #E4F222; --accent-hi: #E4F222; --page: #FFFFFF;
+  --man-bg: #0C0A08; --man-fg: #FFFFFF;
+}
+
+/* ------------------------------------------------------------ hero */
+.dd--ramp .dd-hero { --hx: max(var(--pad), calc((100vw - 1240px) / 2 + 44px)); min-height: max(640px, 100svh - var(--head-h)); color: var(--ramp-ink); background: radial-gradient(circle, #D9D5D0 1px, transparent 1.4px) 0 0 / 18px 18px, #FFFFFF; }
+.dd--ramp .dd-hero h1 { color: var(--ramp-ink); text-shadow: none; }
+/* The title is long: a touch smaller than the other heroes so it sets on two lines. */
+.dd--ramp.dd--designed .dd-hero.has-word h1 { font-size: clamp(2.2rem, 1.1rem + 3.6vw, 4rem); }
+.dd--ramp .dd-hero.has-word .dd-dek { color: #4A4744; opacity: 1; }
+.dd--ramp .dd-hero .dd-head-grid { z-index: 4; }
+/* A white band keeps the title clear of the list; ramp.js sets --tb to the title block's height. */
+.dd--ramp .hero-shade { background: linear-gradient(to top, #FFFFFF 0, #FFFFFF var(--tb, 38%), rgba(255, 255, 255, 0) calc(var(--tb, 38%) + 110px)); }
+
+/* The letters: a heavy grotesk in Ramp's ink. Scenes. R: receipts streaming past. A: spending going down.
+   M: the 7.5% median savings. P: the share-of-payments counter. */
+.dd--ramp .hero-word { justify-content: flex-start; gap: clamp(4px, 1.3vw, 24px); }
+.dd--ramp .hl-ch, .dd--ramp .hl::after { font: 800 min(19vw, 26vh)/0.8 "Inter Tight", var(--sans); letter-spacing: -0.035em; }
+.dd--ramp .hl-ch { color: var(--ramp-ink); }
+.dd--ramp .hl-cap b { display: inline-block; padding: 2px 6px; border-radius: 4px; background: var(--lime); color: var(--ramp-ink); }
+.dd--ramp .hl:focus-visible { outline-color: var(--ramp-ink); }
+.dd--ramp .hl-1 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='80'%3E%3Crect width='60' height='80' fill='%23E4F222'/%3E%3Cpath d='M14 8h32v52l-4 4-4-4-4 4-4-4-4 4-4-4-4 4-4-4z' fill='%23fff'/%3E%3Crect x='19' y='15' width='14' height='3' fill='%230C0A08'/%3E%3Crect x='19' y='23' width='22' height='2' fill='%23B9B3AC'/%3E%3Crect x='19' y='29' width='18' height='2' fill='%23B9B3AC'/%3E%3Crect x='19' y='35' width='22' height='2' fill='%23B9B3AC'/%3E%3Crect x='19' y='46' width='22' height='3' fill='%230C0A08'/%3E%3C/svg%3E"); --scene-size: 60px 80px; --scene-anim: ramp-up 1.4s linear infinite; }
+.dd--ramp .hl-2 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%230C0A08'/%3E%3Cpath d='M20 8v20M11 20l9 9 9-9' stroke='%23E4F222' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); --scene-size: 40px 40px; --scene-anim: ramp-down 0.9s linear infinite; }
+.dd--ramp .hl-3 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Crect width='120' height='60' fill='%23E4F222'/%3E%3Ctext x='10' y='42' font-family='Arial' font-weight='900' font-size='34' fill='%230C0A08'%3E7.5%25%3C/text%3E%3C/svg%3E"); --scene-size: 120px 60px; --scene-anim: ramp-drift 3s linear infinite; }
+.dd--ramp .hl-4 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='50'%3E%3Crect width='150' height='50' fill='%230C0A08'/%3E%3Ctext x='10' y='35' font-family='Courier New, monospace' font-weight='700' font-size='28' fill='%23E4F222'%3E0.93%25%3C/text%3E%3C/svg%3E"); --scene-size: 150px 50px; --scene-anim: ramp-roll 1.2s linear infinite; }
+@keyframes ramp-up { to { background-position: 0 -80px; } }
+@keyframes ramp-down { to { background-position: 0 40px; } }
+@keyframes ramp-drift { to { background-position: 120px 60px; } }
+@keyframes ramp-roll { to { background-position: 0 -50px; } }
+
+.ramp-scene { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+
+/* The counter, set like the counters on Ramp's homepage: a small label and a gray chip of digits. */
+.rx-count { position: absolute; left: var(--hx); top: clamp(26px, 5vh, 56px); display: grid; justify-items: start; gap: 8px; max-width: min(36%, 440px); font: 500 0.7rem/1.35 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: #5E5A55; }
+.rx-chip { padding: 7px 11px 6px; border-radius: 7px; background: var(--ramp-gray); color: var(--ramp-ink); font: 500 clamp(1.5rem, 1rem + 1.3vw, 2.2rem)/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.rx-note { font-size: 0.8rem; letter-spacing: 0; text-transform: none; color: #8B857E; }
+
+/* The expenses list: flat white cards, hairlines and corner handles, like Ramp's product shots. */
+.rx-panel { position: absolute; right: var(--hx); top: clamp(22px, 4.5vh, 52px); width: min(50%, 680px); padding: 6px 18px 10px; border: 1px solid var(--ramp-line); border-radius: 12px; background: #fff; color: var(--ramp-ink); font: 400 clamp(11px, 0.9vw, 14px)/1.25 var(--sans); box-shadow: 0 24px 60px rgba(12, 10, 8, 0.08); }
+.rx-panel::after { content: ""; position: absolute; inset: -4px; pointer-events: none; background: linear-gradient(var(--ramp-ink), var(--ramp-ink)) 0 0 / 7px 7px no-repeat, linear-gradient(var(--ramp-ink), var(--ramp-ink)) 100% 0 / 7px 7px no-repeat, linear-gradient(var(--ramp-ink), var(--ramp-ink)) 0 100% / 7px 7px no-repeat, linear-gradient(var(--ramp-ink), var(--ramp-ink)) 100% 100% / 7px 7px no-repeat; }
+.rx-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 0 12px; border-bottom: 1px solid var(--ramp-line); }
+.rx-bar b { font-size: 1.15em; font-weight: 600; }
+.rx-live { display: flex; align-items: center; gap: 7px; font-size: 0.84em; color: #5E5A55; }
+.rx-live i { width: 8px; height: 8px; border-radius: 50%; background: #A8B61A; box-shadow: 0 0 0 3px rgba(228, 242, 34, 0.55); animation: rx-pulse 1.6s ease-in-out infinite; }
+@keyframes rx-pulse { 50% { box-shadow: 0 0 0 6px rgba(228, 242, 34, 0.2); } }
+.rx-head, .rx-row { display: grid; grid-template-columns: 1.7fr 0.85fr 0.8fr 1.05fr; gap: 10px; align-items: center; }
+.rx-head { padding: 9px 0 7px; font-size: 0.78em; letter-spacing: 0.06em; text-transform: uppercase; color: #8B857E; }
+.rx-row { padding: 8px 0; border-top: 1px solid #F0EEEB; }
+.rx-m { display: flex; align-items: center; gap: 10px; min-width: 0; white-space: nowrap; }
+.rx-m i { flex: none; display: grid; place-items: center; width: 2em; height: 2em; border-radius: 7px; background: var(--ramp-gray); font: 600 0.9em/1 var(--sans); font-style: normal; }
+.rx-a { text-align: right; font-variant-numeric: tabular-nums; }
+.rx-c, .rx-s { position: relative; display: grid; }
+.rx-c em, .rx-s em { grid-area: 1 / 1; font-style: normal; }
+.rx-c .no { color: #B9B3AC; }
+.rx-s { padding-left: 2.3em; }
+.rx-s em { justify-self: start; padding: 3px 8px; border-radius: 999px; font-size: 0.86em; font-weight: 600; white-space: nowrap; transform-origin: left center; }
+.rx-s .no { background: #FBE9E4; color: #B4472F; }
+.rx-s .ok { background: var(--lime); }
+.rx-s .ok::before { content: "✓ " / ""; }
+/* A receipt: a paper slip with a torn edge. In the list it rests as a thumbnail beside the status. */
+.rcpt { position: absolute; left: 0; top: 50%; width: 1.35em; height: 1.75em; margin-top: -0.875em; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 36'%3E%3Cpath d='M1 1h26v30l-3.25 3-3.25-3-3.25 3-3.25-3-3.25 3-3.25-3-3.25 3L1 31z' fill='%23fff' stroke='%23B9B3AC' stroke-width='1.2' stroke-linejoin='round'/%3E%3Crect x='5' y='6' width='11' height='2.4' fill='%230C0A08'/%3E%3Crect x='5' y='12' width='18' height='1.6' fill='%23C9C4BE'/%3E%3Crect x='5' y='16' width='15' height='1.6' fill='%23C9C4BE'/%3E%3Crect x='5' y='20' width='18' height='1.6' fill='%23C9C4BE'/%3E%3Crect x='5' y='25' width='18' height='2.4' fill='%230C0A08'/%3E%3C/svg%3E") center / contain no-repeat; filter: drop-shadow(0 2px 3px rgba(12, 10, 8, 0.18)); }
+
+/* The loop (12s, each row 1.5s after the one above): a receipt drops in, the row turns matched and gets its
+   category, it holds, then clears and waits for the next receipt. */
+.rx-row { --d: calc(0.6s + var(--r, 0) * 1.5s); }
+.rcpt { animation: rx-fly 12s cubic-bezier(.3, .7, .3, 1) var(--d) infinite both; }
+.rx-row .no { animation: rx-no 12s linear var(--d) infinite both; }
+.rx-row .ok { animation: rx-ok 12s cubic-bezier(.2, .8, .2, 1) var(--d) infinite both; }
+@keyframes rx-fly { 0% { opacity: 0; transform: translate(-7em, -9em) rotate(-18deg) scale(3); } 1.5% { opacity: 1; } 7%, 86% { opacity: 1; transform: none; } 90%, 100% { opacity: 0; transform: none; } }
+@keyframes rx-no { 0%, 6.6% { opacity: 1; } 7.6%, 88% { opacity: 0; } 92%, 100% { opacity: 1; } }
+@keyframes rx-ok { 0%, 6.6% { opacity: 0; transform: scale(0.7); } 8% { opacity: 1; transform: scale(1.12); } 9.6%, 86% { opacity: 1; transform: none; } 90%, 100% { opacity: 0; transform: none; } }
+.dd-hero.is-away .rcpt, .dd-hero.is-away .rx-row em, .dd-hero.is-away .rx-live i { animation-play-state: paused; }
+.dd-hero.is-still .rcpt, .dd-hero.is-still .rx-row em, .dd-hero.is-still .rx-live i { animation: none; }
+.dd-hero.is-still .rcpt { opacity: 1; transform: none; }
+.dd-hero.is-still .rx-row .no { opacity: 0; }
+.dd-hero.is-still .rx-row .ok { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .rcpt, .rx-row em, .rx-live i { animation: none; }
+  .rx-row .no { opacity: 0; }
+  .rx-row .ok { opacity: 1; }
+}
+
+/* Short laptop windows: four rows and tighter spacing, so the letters stay clear of the list. */
+@media (min-width: 761px) and (max-height: 820px) {
+  .rx-row:nth-child(n+7) { display: none; }
+  .rx-row { padding: 6px 0; }
+  .rx-bar { padding: 8px 0 10px; }
+}
+
+@media (max-width: 760px) {
+  .dd--ramp .dd-hero { min-height: max(600px, 100svh - var(--head-h)); }
+  .rx-count { top: 16px; max-width: none; gap: 6px; font-size: 0.64rem; }
+  .rx-chip { font-size: 1.35rem; }
+  .rx-note { font-size: 0.72rem; }
+  .rx-panel { left: var(--pad); right: var(--pad); top: 124px; width: auto; padding: 4px 12px 8px; font-size: 11px; }
+  .rx-head, .rx-row { grid-template-columns: 1.6fr 0.8fr 1.1fr; gap: 8px; }
+  .rx-head span:nth-child(2), .rx-c, .rx-row:nth-child(n+7) { display: none; }
+}
+
+/* ------------------------------------------------------------ interlude: the paperwork becomes a card
+   Pinned on wide screens: the hero shrinks and fades into the black, receipts gather in the middle, and the
+   yellow card lands on them. */
+.rr { display: none; }
+@keyframes ramp-shrink { 0% { border-radius: 0; } 55% { transform: scale(0.7); opacity: 1; border-radius: 40px; } 100% { transform: scale(0.62); opacity: 0; border-radius: 40px; } }
+@keyframes rr-gather {
+  0% { opacity: 0; transform: translate(-50%, -50%) translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(1.2); }
+  10% { opacity: 1; }
+  48%, 62% { opacity: 1; transform: translate(-50%, -50%) translate(var(--ex), var(--ey)) rotate(var(--tr)) scale(1); }
+  76%, 100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--tr)) scale(0.55); }
+}
+@keyframes rr-land {
+  0%, 54% { opacity: 0; transform: translate(-50%, 30%) rotate(-12deg) scale(0.8); }
+  57% { opacity: 1; }
+  70% { opacity: 1; transform: translate(-50%, -50%) rotate(-3deg) scale(1.05); }
+  82%, 100% { opacity: 1; transform: translate(-50%, -50%) rotate(-4deg) scale(1); }
+}
+@supports (animation-timeline: view()) {
+  @media (min-width: 761px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+    .dd--ramp .hero-run .run-stage > .dd-hero { animation: ramp-shrink linear both; animation-timeline: --run; animation-range: contain 0% contain 62%; }
+    .rr { display: block; position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+    .rr-slip { position: absolute; left: 50%; top: 50%; width: clamp(76px, 7.4vw, 118px); aspect-ratio: 28 / 36; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 36'%3E%3Cpath d='M1 1h26v30l-3.25 3-3.25-3-3.25 3-3.25-3-3.25 3-3.25-3-3.25 3L1 31z' fill='%23fff' stroke='%23B9B3AC' stroke-width='1.2' stroke-linejoin='round'/%3E%3Crect x='5' y='6' width='11' height='2.4' fill='%230C0A08'/%3E%3Crect x='5' y='12' width='18' height='1.6' fill='%23C9C4BE'/%3E%3Crect x='5' y='16' width='15' height='1.6' fill='%23C9C4BE'/%3E%3Crect x='5' y='20' width='18' height='1.6' fill='%23C9C4BE'/%3E%3Crect x='5' y='25' width='18' height='2.4' fill='%230C0A08'/%3E%3C/svg%3E") center / contain no-repeat; filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.45)); animation: rr-gather linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
+    .rr-card { position: absolute; left: 50%; top: 50%; display: grid; grid-template-rows: auto 1fr auto; width: clamp(260px, 25vw, 380px); aspect-ratio: 1.586; padding: clamp(18px, 1.8vw, 26px); border-radius: clamp(14px, 1.3vw, 20px); background: linear-gradient(135deg, #F1FA6A 0, #E4F222 42%, #CCD915 100%); color: var(--ramp-ink); box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.6); animation: rr-land linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
+    .rr-card b { font: 700 clamp(1.4rem, 1rem + 1vw, 2rem)/1 var(--sans); letter-spacing: -0.04em; }
+    .rr-chip { align-self: center; width: 18%; aspect-ratio: 1.3; border-radius: 6px; background: linear-gradient(135deg, #E9D9A6, #C4A85E); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15); }
+    .rr-card span { font: 500 clamp(0.8rem, 0.6rem + 0.4vw, 1rem)/1 "IBM Plex Mono", ui-monospace, monospace; letter-spacing: 0.08em; }
+  }
+}
+
+/* ------------------------------------------------------------ the article in Ramp's colors */
+.dd--ramp .prose h2::before { border-top: 5px solid var(--lime); }
+.dd--ramp .prose p.carrier { border-left: 6px solid var(--lime); }
+.dd--ramp .preview-text > p:first-child::first-letter { padding: 0.06em 0.1em 0; margin-right: 0.12em; border-radius: 4px; background: var(--lime); color: var(--ramp-ink); }
+.dd--ramp .prose a { color: var(--ramp-ink); text-decoration-color: #B8C41A; text-decoration-thickness: 2px; }
+.dd--ramp .bl-title em { padding: 0 0.06em; background: linear-gradient(transparent 58%, var(--lime) 58%); }
+.dd--ramp .bl-founder { background: #fff; }
+
+/* On the record: Ramp's white, yellow, black and gray cards. */
+.dd--ramp .bl-fan li:nth-child(5n+1) { background: #fff; color: var(--ramp-ink); }
+.dd--ramp .bl-fan li:nth-child(5n+2) { background: var(--lime); color: var(--ramp-ink); }
+.dd--ramp .bl-fan li:nth-child(5n+3) { background: var(--ramp-ink); color: #fff; }
+.dd--ramp .bl-fan li:nth-child(5n+4) { background: var(--ramp-gray); color: var(--ramp-ink); }
+.dd--ramp .bl-fan li:nth-child(5n) { background: var(--lime); color: var(--ramp-ink); }
+
+/* Moodboard on Ramp's dot grid, taped up in yellow; six polaroids, three by three on wide pages. */
+.dd--ramp .bl-mood { background: radial-gradient(circle, #D9D5D0 1px, transparent 1.4px) 0 0 / 18px 18px, #F8F6F4; box-shadow: inset 0 0 0 1px var(--ramp-line); }
+.dd--ramp .note::before { background: rgba(228, 242, 34, 0.8); }
+.dd--ramp .note-3 { background: #F7FBD2; }
+@media (min-width: 900px) {
+  .dd--ramp .bl-mood.has-shots .note-4 { grid-column: 1 / span 4; margin-top: 14px; }
+  .dd--ramp .bl-mood.has-shots .note-5 { grid-column: 5 / span 4; margin-top: 48px; }
+  .dd--ramp .bl-mood.has-shots .note-6 { grid-column: 9 / span 4; margin-top: 0; }
+}
+
+/* ------------------------------------------------------------ figures */
+/* The incentive flip: one company's spending before and after, and the two incentives side by side. */
+.fig-flip { display: grid; gap: 24px; }
+.fl-row { display: grid; gap: 8px; }
+.fl-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.fl-label b { font-size: 1rem; }
+.fl-label span { font-size: 0.86rem; color: var(--muted); }
+.fl-bar { display: flex; height: 46px; border-radius: 8px; overflow: hidden; background: var(--ramp-gray); }
+.fl-bar .seg { flex: 0 0 var(--w); border-right: 2px solid #fff; background: var(--c, #C9C4BE); }
+.fl-bar .seg:last-child { border-right: 0; }
+.fl-bar .is-ramp { display: flex; align-items: center; padding: 0 14px; background: var(--lime); color: var(--ramp-ink); font: 600 0.9rem/1 var(--sans); white-space: nowrap; }
+.fl-bar .is-saved { background: repeating-linear-gradient(-45deg, var(--ramp-ink) 0 2px, #fff 2px 6px); }
+.fl-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; font-size: 0.82rem; color: var(--muted); }
+.fl-key li { display: flex; align-items: center; gap: 6px; }
+.fl-key i { width: 12px; height: 12px; border-radius: 3px; background: var(--c); }
+.fl-key .is-saved i { background: repeating-linear-gradient(-45deg, var(--ramp-ink) 0 1.5px, #fff 1.5px 4px); box-shadow: inset 0 0 0 1px var(--ramp-ink); }
+.fl-vs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fl-vs > div { padding: 14px 16px; border-radius: 10px; background: var(--ramp-gray); }
+.fl-vs b { display: block; margin-bottom: 4px; font-size: 0.95rem; }
+.fl-vs p { font-size: 0.88rem; line-height: 1.45; }
+.fl-vs .is-ramp { background: var(--ramp-ink); color: #fff; }
+.fl-vs .is-ramp b { color: var(--lime); }
+
+/* The scoreboard: the savings rate on Ramp's homepage, and the running totals. */
+.fig-score .sc-head { margin: 0 0 12px; font: 600 0.76rem/1.3 var(--cond); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fig-score .sc-gap { margin-top: 26px; }
+.fig-score .bar-label span { display: block; font-size: 0.78rem; color: var(--muted); }
+.fig-score .bar { height: 24px; background: var(--lime); box-shadow: inset 0 0 0 1.5px var(--ramp-ink); }
+.sc-totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.sc-totals li { padding: 12px 14px; border-radius: 10px; background: var(--ramp-gray); }
+.sc-totals .yr { display: block; font-size: 0.78rem; color: var(--muted); }
+.sc-totals b { display: block; margin: 4px 0 2px; font: 700 clamp(1.3rem, 1rem + 1vw, 1.7rem)/1.05 var(--sans); letter-spacing: -0.02em; }
+.sc-totals span { display: block; font-size: 0.8rem; line-height: 1.35; color: var(--muted); }
+.sc-totals li:last-child { background: var(--ramp-ink); color: #fff; }
+.sc-totals li:last-child b { color: var(--lime); }
+.sc-totals li:last-child .yr, .sc-totals li:last-child span { color: rgba(255, 255, 255, 0.72); }
+
+/* The stunts: a timeline, each tagged with the manual work it put on screen. */
+.fig-stunts ol { margin-left: 96px; }
+.fig-stunts .yr { left: -100px; width: 80px; }
+.fig-stunts li::before { border-color: var(--ramp-ink); }
+.fig-stunts .work { display: inline-block; margin-top: 8px !important; padding: 3px 9px; border-radius: 999px; background: var(--lime); font: 600 0.74rem/1.3 var(--sans); }
+.fig-stunts .is-off .work { background: var(--ramp-gray); color: var(--muted); }
+
+/* The org: no CMO; marketing split four ways. */
+.fig-org { display: grid; justify-items: center; }
+.org-cmo { padding: 12px 22px; border: 1.5px dashed #A8A29B; border-radius: 10px; text-align: center; color: #6F6A64; }
+.org-cmo b { display: block; font-size: 1rem; text-decoration: line-through; text-decoration-thickness: 2px; }
+.org-cmo span { display: block; margin-top: 2px; font-size: 0.84rem; }
+.org-row { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; width: 100%; margin: 36px 0 0; padding: 0; list-style: none; }
+.org-row::before { content: ""; position: absolute; left: 12.5%; right: 12.5%; top: -18px; border-top: 1.5px dashed #A8A29B; }
+.org-row::after { content: ""; position: absolute; left: 50%; top: -36px; height: 18px; border-left: 1.5px dashed #A8A29B; }
+.org-row li { position: relative; padding: 12px 12px 14px; border: 1.5px solid var(--ramp-ink); border-radius: 10px; background: #fff; }
+.org-row li::before { content: ""; position: absolute; left: 50%; top: -19.5px; height: 18px; border-left: 1.5px dashed #A8A29B; }
+.org-row li.is-key { background: var(--lime); }
+.org-row b { display: block; font-size: 0.95rem; }
+.org-row span { display: block; margin-top: 4px; font-size: 0.8rem; line-height: 1.4; color: #4A4744; }
+
+/* The word-of-mouth loop. */
+.fig-loop .m-title { color: var(--ramp-ink); }
+.fig-loop .m-flow li:last-child { background: var(--lime); }
+
+@media (max-width: 640px) {
+  .fl-vs, .org-row { grid-template-columns: 1fr 1fr; }
+  .fl-vs { grid-template-columns: 1fr; }
+  .org-row::before, .org-row::after, .org-row li::before { display: none; }
+  .sc-totals { grid-template-columns: 1fr 1fr; }
+  .fig-stunts ol { margin-left: 6px; }
+  .fig-stunts .yr { position: static; display: block; width: auto; margin-bottom: 2px; text-align: left; }
+}
