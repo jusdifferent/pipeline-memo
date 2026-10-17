@@ -382,10 +382,10 @@ html.js .dd-figure:not(.is-in) .fig-draw { stroke-dashoffset: 1; }
 }
 
 /* ------------------------------------------------------------ editorial blocks (:::name in deep dives and essays) */
-:root { --didone: "Playfair Display", "Bodoni 72", Didot, Georgia, serif; --italic: "Newsreader", "IBM Plex Serif", Georgia, serif; --accent: var(--ep-bg, var(--ink)); }
+:root { --display: "Newsreader", Georgia, serif; --italic: "Newsreader", "IBM Plex Serif", Georgia, serif; --accent: var(--ep-bg, var(--ink)); }
 .dd, .essay { --accent: var(--ep-bg); }
 .bl { margin: 2.6em 0; font-family: var(--sans); }
-.bl-title { margin: 0 0 0.6em; font: 800 clamp(2rem, 1.4rem + 2.4vw, 2.9rem)/1 var(--didone); letter-spacing: -0.03em; }
+.bl-title { margin: 0 0 0.6em; font: 700 clamp(2rem, 1.4rem + 2.4vw, 2.9rem)/1.04 var(--display); letter-spacing: -0.015em; }
 .bl-title em { font: italic 600 1.04em/1 var(--italic); letter-spacing: -0.02em; margin-left: 0.04em; color: var(--accent); }
 
 /* Big pull quote: the thesis line, between heavy rules. */
@@ -429,7 +429,7 @@ html.js .dd-figure:not(.is-in) .fig-draw { stroke-dashoffset: 1; }
 .bl-founder { padding: clamp(22px, 4vw, 32px); border: 1px solid var(--ink); background: #fff; }
 .bl-kicker { margin: 0; font: 600 0.78rem/1 var(--cond); letter-spacing: 0.16em; text-transform: uppercase; }
 .bl-kicker em { font: italic 600 1.5em/1 var(--italic); letter-spacing: 0; text-transform: none; margin-left: 0.15em; }
-.bl-name { margin: 12px 0 14px; font: 800 clamp(2.3rem, 1.6rem + 2.8vw, 3.4rem)/0.98 var(--didone); letter-spacing: -0.025em; }
+.bl-name { margin: 12px 0 14px; font: 700 clamp(2.3rem, 1.6rem + 2.8vw, 3.4rem)/1 var(--display); letter-spacing: -0.015em; }
 .bl-name span { font: italic 400 1.05rem/1 var(--serif); letter-spacing: 0; margin-left: 0.4em; color: var(--muted); }
 .bl-founder ol { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; font: 400 1.02rem/1.55 var(--serif); }
 .bl-founder .bl-said { margin: 22px 0 0; font: italic 500 clamp(1.25rem, 1.1rem + 0.65vw, 1.6rem)/1.3 var(--italic); }
@@ -451,13 +451,13 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 .dd--designed .dd-hero .dd-head-grid { position: relative; z-index: 2; width: 100%; grid-template-columns: 1fr; }
 .dd--designed .dd-hero .dd-logo { position: absolute; top: calc(-1 * clamp(56px, 10vh, 110px)); right: 0; min-height: 0; width: clamp(120px, 16vw, 200px); }
 .dd--designed .dd-hero .dd-logo img { filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.25)); }
-.dd--designed .dd-hero h1 { max-width: 13ch; font: 900 clamp(2.7rem, 1.4rem + 4.8vw, 5.6rem)/0.98 var(--didone); letter-spacing: -0.035em; text-shadow: 0 2px 30px rgba(0, 0, 0, 0.35); }
-.dd--designed .dd-hero .dd-dek { max-width: 30em; font: italic 500 clamp(1.15rem, 1.05rem + 0.45vw, 1.4rem)/1.45 var(--italic); }
+.dd--designed .dd-hero h1 { max-width: 14ch; font: 700 clamp(2.7rem, 1.4rem + 4.8vw, 5.6rem)/1.02 var(--display); letter-spacing: -0.015em; text-shadow: 0 2px 30px rgba(0, 0, 0, 0.35); }
+.dd--designed .dd-hero .dd-dek { max-width: 30em; font: 400 clamp(1.15rem, 1.05rem + 0.45vw, 1.4rem)/1.45 var(--display); }
 .dd--designed .dd-hero .crumb { position: relative; }
 .dd--designed .dd-sheet { counter-reset: part; }
 .dd--designed .prose a { color: var(--accent-deep); }
-.dd--designed .preview-text > p:first-child::first-letter { float: left; margin: 0.08em 0.1em 0 0; font: 900 4.7em/0.78 var(--didone); color: var(--accent); }
-.dd--designed .prose h2 { counter-increment: part; margin-top: 2.6em; font: 800 clamp(1.9rem, 1.35rem + 1.9vw, 2.65rem)/1.04 var(--didone); letter-spacing: -0.025em; text-wrap: balance; }
+.dd--designed .preview-text > p:first-child::first-letter { float: left; margin: 0.08em 0.1em 0 0; font: 700 4.7em/0.78 var(--display); color: var(--accent); }
+.dd--designed .prose h2 { counter-increment: part; margin-top: 2.6em; font: 700 clamp(1.9rem, 1.35rem + 1.9vw, 2.65rem)/1.04 var(--display); letter-spacing: -0.01em; text-wrap: balance; }
 .dd--designed .prose h2::before { content: "Part " counter(part, decimal-leading-zero); display: block; width: max-content; margin-bottom: 16px; padding-top: 10px; border-top: 3px solid var(--accent); font: 600 0.78rem/1 var(--cond); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
 .dd--designed .prose p.carrier { margin: 1.6em 0; padding-left: 20px; border-left: 3px solid var(--accent); font: italic 500 clamp(1.22rem, 1.1rem + 0.45vw, 1.42rem)/1.38 var(--italic); color: var(--accent-deep); }
 .dd--designed .prose p.carrier strong { font-weight: inherit; }

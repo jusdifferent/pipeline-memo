@@ -167,7 +167,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${cfg.brandfetchClientId ? '<link rel="preconnect" href="https://cdn.brandfetch.io" crossorigin>' : ''}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@700..900&family=Newsreader:ital,opsz,wght@1,6..72,500..600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,500..600&display=swap">
 <link rel="stylesheet" href="/styles.css?v=${ver}">
 ${head}
 </head>
