@@ -1,11 +1,69 @@
-/* Clay deep dive: terracotta. The hero canvas (clay.js) sculpts a field of spreadsheet cells;
-   without WebGL, JavaScript or motion, the CSS cell grid below stands in.
-   The shared article treatment lives in styles.css under .dd--designed. */
-.dd--clay { --accent: #B65A33; --accent-deep: #7A3517; --accent-light: #F6C9AE; --page: #FBF6F0; }
+/* Clay deep dive: terracotta, and things made by hand.
+   Hero: a field of spreadsheet cells modeled in clay (clay.js, three.js) under four giant CLAY letters,
+   pressed out of clay, that each play a scene from the story. Interlude: pinned, the clay settles flat and
+   fills column by column ("This spreadsheet fills itself," clay.run, 2021). Without WebGL, JavaScript or
+   motion, the CSS cell grid below stands in.
+   The shared article and section styles live in styles.css (.dd--designed). */
+.dd--clay { --accent: #B65A33; --accent-deep: #7A3517; --accent-light: #F6C9AE; --accent-hi: #F4A97E; --page: #FBF6F0; --man-bg: #2A140B; --man-fg: #F7E9DB; }
 .dd--clay .bl-founder { background: #FFFBF6; }
 
-.dd--clay .dd-hero { background: radial-gradient(ellipse 80% 70% at 70% 30%, #C66B41, #A04E2A 70%), #B65A33; }
+/* ------------------------------------------------------------ hero */
+.dd--clay .dd-hero { min-height: max(640px, 100svh - var(--head-h)); background: radial-gradient(ellipse 80% 70% at 70% 30%, #C66B41, #A04E2A 70%), #B65A33; }
 .dd--clay .dd-hero::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 236, 220, 0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 236, 220, 0.09) 1px, transparent 1px); background-size: 46px 46px; transform: perspective(900px) rotateX(55deg) scale(1.6); transform-origin: 60% 30%; transition: opacity 1.2s ease; }
 .dd--clay .dd-hero.fx-on::before { opacity: 0; }
-.dd--clay .hero-shade { background: linear-gradient(to top, rgba(60, 22, 8, 0.82), rgba(60, 22, 8, 0.25) 50%, transparent 72%), linear-gradient(to right, rgba(60, 22, 8, 0.6), rgba(60, 22, 8, 0.15) 50%, transparent 65%); }
-.dd--clay .dd-hero h1 { text-shadow: 0 2px 30px rgba(40, 14, 4, 0.35); }
+/* A warm dark band behind the title and dek; clay.js sets --tb to the title block's height. */
+.dd--clay .hero-shade { background: linear-gradient(to top, rgba(42, 20, 11, 0.95), rgba(42, 20, 11, 0.86) var(--tb, 40%), rgba(42, 20, 11, 0) calc(var(--tb, 40%) + 190px)); }
+.dd--clay .dd-hero .dd-head-grid { z-index: 4; }
+
+/* The letters: Fredoka (clay.head.html), cream clay with a pressed, extruded edge. */
+.dd--clay .hero-word { justify-content: flex-start; gap: clamp(2px, 0.9vw, 16px); }
+.dd--clay .hl-ch, .dd--clay .hl::after { font: 700 min(28vw, 36vh)/0.86 "Fredoka", var(--cond); letter-spacing: 0; }
+.dd--clay .hl-ch { color: #FBEBDD; text-shadow: 0 2px 0 #EBCDB6, 0 4px 0 #DDB396, 0 6px 0 #CF9A78, 0 9px 0 #B97D5A, 0 18px 30px rgba(60, 22, 8, 0.45); }
+.dd--clay .hl-cap b { color: var(--accent); }
+
+/* Scenes. C: from close to $0 to $100M. L: lookups falling through the waterfall. A: agencies talking.
+   Y: the name badge of a new job title. */
+.dd--clay .hl-1 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='90'%3E%3Crect width='150' height='90' fill='%237A3517'/%3E%3Ctext x='10' y='40' font-family='Arial' font-weight='700' font-size='30' fill='%23F6C9AE'%3E$0%3C/text%3E%3Ctext x='62' y='80' font-family='Arial' font-weight='700' font-size='22' fill='%23FFF3E6'%3E$100M%3C/text%3E%3C/svg%3E"); --scene-size: 150px 90px; --scene-anim: clay-drift 3.2s linear infinite; }
+.dd--clay .hl-2 { --scene: repeating-linear-gradient(90deg, transparent 0 22px, #7A3517 22px 26px), repeating-linear-gradient(180deg, #FBEBDD 0 16px, #F4A97E 16px 20px, #FBEBDD 20px 36px, #C66B41 36px 40px); --scene-size: 26px 100%, 100% 80px; --scene-anim: clay-fall 1.1s linear infinite; }
+.dd--clay .hl-3 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='70'%3E%3Crect width='80' height='70' fill='%232A140B'/%3E%3Cpath d='M12 12h46a8 8 0 0 1 8 8v16a8 8 0 0 1-8 8H32l-11 10V44h-9a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8z' fill='%23F4A97E'/%3E%3Ccircle cx='24' cy='28' r='3.5' fill='%232A140B'/%3E%3Ccircle cx='35' cy='28' r='3.5' fill='%232A140B'/%3E%3Ccircle cx='46' cy='28' r='3.5' fill='%232A140B'/%3E%3C/svg%3E"); --scene-size: 80px 70px; --scene-anim: clay-rise 1.8s linear infinite; }
+.dd--clay .hl-4 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='80'%3E%3Crect width='170' height='80' fill='%23FBEBDD'/%3E%3Crect x='8' y='10' width='154' height='60' rx='8' fill='%23fff' stroke='%23B65A33' stroke-width='3'/%3E%3Crect x='8' y='10' width='154' height='19' rx='8' fill='%23B65A33'/%3E%3Ctext x='85' y='24' text-anchor='middle' font-family='Arial' font-weight='700' font-size='10' fill='%23fff'%3EHELLO, I'M A%3C/text%3E%3Ctext x='85' y='55' text-anchor='middle' font-family='Arial' font-weight='800' font-size='17' fill='%232A140B'%3EGTM ENGINEER%3C/text%3E%3C/svg%3E"); --scene-size: 170px 80px; --scene-anim: clay-slide 3s linear infinite; }
+@keyframes clay-drift { to { background-position: 150px 90px; } }
+@keyframes clay-fall { to { background-position: 0 0, 0 80px; } }
+@keyframes clay-rise { to { background-position: 0 -70px; } }
+@keyframes clay-slide { to { background-position: 170px 0; } }
+
+/* ------------------------------------------------------------ interlude: the spreadsheet fills itself
+   The hero stays full size (no card, unlike Datadog's); the letters, title and band clear away while the
+   clay settles and fills, then the page moves on. */
+@keyframes clay-fade { to { opacity: 0; } }
+@supports (animation-timeline: view()) {
+  @media (min-width: 761px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+    .dd--clay .hero-run .run-stage > .dd-hero { animation: none; border-radius: 0; box-shadow: none; }
+    .dd--clay .hero-run .hero-word, .dd--clay .hero-run .dd-head-grid, .dd--clay .hero-run .hero-shade { animation: clay-fade linear both; animation-timeline: --run; animation-range: contain 4% contain 30%; }
+    .dd--clay .hero-run + .manifesto { padding-top: clamp(80px, 14vh, 160px); }
+  }
+}
+
+/* ------------------------------------------------------------ figure: the waterfall */
+.fig-waterfall { display: grid; gap: 12px; max-width: 540px; margin: 0 auto; font: 400 0.95rem/1.35 var(--sans); }
+.wf-row { display: grid; grid-template-columns: 1fr auto; overflow: hidden; border: 1px solid #E8D5C5; border-radius: 10px; background: #fff; }
+.wf-row span { padding: 12px 14px; }
+.wf-col { border-left: 1px solid #E8D5C5; background: #FBEBDD; font-weight: 600; color: var(--accent-deep); }
+.wf-tries { position: relative; display: grid; gap: 10px; margin: 0; padding: 4px 0 0 26px; list-style: none; }
+.wf-tries::before { content: ""; position: absolute; left: 9px; top: -12px; bottom: 22px; width: 2px; background: linear-gradient(#E8D5C5, var(--accent)); }
+.wf-try { position: relative; display: flex; justify-content: space-between; gap: 12px; padding: 11px 14px; border: 1px solid #EBDDD1; border-radius: 10px; background: #fff; }
+.wf-try::before { content: ""; position: absolute; left: -17px; top: 50%; width: 12px; height: 2px; background: #E8D5C5; }
+.wf-try b { font-weight: 600; }
+.wf-try span { color: var(--muted); }
+.wf-try span::before { content: "✕  " / ""; color: #C4AE9C; }
+.wf-try.is-hit { border-color: var(--accent); background: #FFF4EC; box-shadow: 0 6px 18px rgba(182, 90, 51, 0.15); }
+.wf-try.is-hit::before { background: var(--accent); }
+.wf-try.is-hit span { font-weight: 600; color: var(--accent-deep); }
+.wf-try.is-hit span::before { content: "✓  " / ""; color: var(--accent); }
+
+/* ------------------------------------------------------------ moodboard: six polaroids, three by three */
+@media (min-width: 900px) {
+  .dd--clay .bl-mood.has-shots .note-4 { grid-column: 1 / span 4; margin-top: 14px; }
+  .dd--clay .bl-mood.has-shots .note-5 { grid-column: 5 / span 4; margin-top: 48px; }
+  .dd--clay .bl-mood.has-shots .note-6 { grid-column: 9 / span 4; margin-top: 0; }
+}

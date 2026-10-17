@@ -1,16 +1,26 @@
-// Clay deep dive hero: a field of spreadsheet cells modeled in clay.
+// Clay deep dive hero: a field of spreadsheet cells modeled in clay, under the giant CLAY letters.
 // Untouched, the cells ripple like clay being worked; the cursor presses a dent into them.
 // Scrolling settles the field into a flat, orderly grid that fills column by column:
-// "This spreadsheet fills itself." Phones and reduced-motion get a single still frame.
+// "This spreadsheet fills itself." On wide screens the hero is pinned while that happens (the interlude,
+// styles.css); elsewhere it happens as the hero scrolls away. Phones and reduced motion get still frames.
+// Preview aid: ?fx=<seconds>,<progress> freezes the hero at one moment, e.g. ?fx=2,1 for the filled grid.
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { letters } from './letters.js';
 
-// mount(hero) draws into a hero's canvas; the deep dive page mounts its own hero on load.
 export function mount(hero) {
-  const canvas = hero && hero.querySelector('.hero-fx');
-  if (!canvas || hero.dataset.fx) return;
+  if (!hero || hero.dataset.fx) return;
   hero.dataset.fx = 'on';
-  const scrollPos = () => scrollY;
+  letters(hero);
+  // The dark band behind the title fits the title block.
+  const text = hero.querySelector('.dd-head-grid');
+  const fitBand = () => { if (text) hero.style.setProperty('--tb', `${Math.max(0, hero.clientHeight - text.offsetTop)}px`); };
+  fitBand();
+  if ('ResizeObserver' in window) new ResizeObserver(fitBand).observe(hero);
+  if (document.fonts) document.fonts.ready.then(fitBand);
+
+  const canvas = hero.querySelector('.hero-fx');
+  if (!canvas) return;
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches || innerWidth < 720;
   let renderer;
   try {
@@ -36,7 +46,7 @@ export function mount(hero) {
   cells.receiveShadow = true;
   scene.add(cells);
 
-  const clay = new THREE.Color('#C46C42'), clayDark = new THREE.Color('#A9542F'), cream = new THREE.Color('#F4DFCB');
+  const clay = new THREE.Color('#C46C42'), clayDark = new THREE.Color('#A9542F'), cream = new THREE.Color('#F4DFCB'), header = new THREE.Color('#7A3517');
   const base = [];
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
     const k = (Math.sin(c * 12.9898 + r * 78.233) * 43758.5453) % 1;
@@ -60,7 +70,11 @@ export function mount(hero) {
 
   // Layout: on wide screens the field sits to the right, leaving the headline room.
   const x0 = -(COLS - 1) * STEP / 2, z0 = -(ROWS - 1) * STEP / 2;
+  const run = hero.closest('.hero-run'), stage = hero.closest('.run-stage');
+  let pinned = false, pinTop = 0;
   function frame() {
+    pinned = !!stage && getComputedStyle(stage).position === 'sticky';
+    pinTop = pinned ? parseFloat(getComputedStyle(stage).top) || 0 : 0;
     const w = hero.clientWidth, h = hero.clientHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
@@ -93,28 +107,36 @@ export function mount(hero) {
       const wave = Math.sin(x * 0.42 + t * 0.55) * Math.cos(z * 0.5 - t * 0.38) * 0.6 + Math.sin((x + z) * 0.27 + t * 0.32) * 0.4;
       const d2 = (x - pressNow.x) ** 2 + (z - pressNow.z) ** 2;
       const dent = 0.9 * Math.exp(-d2 / 3.2) * (1 - p * 0.7);
-      const filled = Math.min(1, Math.max(0, (p * 1.25 - c / COLS) * 4));
+      // Columns fill left to right, each top to bottom, like data arriving; the back row is the header.
+      const filled = Math.min(1, Math.max(0, (p * 1.3 - c / COLS - (r / ROWS) * 0.06) * 4));
       const hgt = Math.max(0.12, 0.35 + amp * (0.5 + wave * 0.5) - dent + filled * 0.12);
       m.makeScale(1, hgt, 1).setPosition(x, 0, z);
       cells.setMatrixAt(i, m);
-      cells.setColorAt(i, col.copy(base[i]).lerp(cream, filled * 0.85));
+      cells.setColorAt(i, col.copy(base[i]).lerp(r === 0 ? header : cream, filled * 0.85));
     }
     cells.instanceMatrix.needsUpdate = true;
     cells.instanceColor.needsUpdate = true;
     renderer.render(scene, camera);
   }
 
-  const progress = () => Math.min(1, Math.max(0, scrollPos() / (hero.offsetHeight * 0.75)));
+  // How far the clay has settled: across the pin when pinned, else across the hero scrolling away.
+  const progress = () => {
+    if (pinned) {
+      const r = run.getBoundingClientRect();
+      return Math.min(1, Math.max(0, (pinTop - r.top) / Math.max(1, r.height - stage.offsetHeight)));
+    }
+    return Math.min(1, Math.max(0, scrollY / (hero.offsetHeight * 0.75)));
+  };
   frame();
-  // Preview aid: ?fx=<seconds>,<progress> freezes the hero at one moment, e.g. ?fx=2,1 for the filled grid.
   const freeze = new URLSearchParams(location.search).get('fx');
   if (freeze) { const [ft, fp] = freeze.split(',').map(Number); draw(ft || 2.2, fp || 0); hero.classList.add('fx-on'); return; }
   draw(2.2, progress());
   hero.classList.add('fx-on');
 
   if (still) {
-    const redraw = () => { frame(); draw(2.2, progress()); };
-    addEventListener('resize', redraw);
+    let queued = false;
+    const redraw = () => { if (queued) return; queued = true; requestAnimationFrame(() => { queued = false; draw(2.2, progress()); }); };
+    addEventListener('resize', () => { frame(); redraw(); });
     addEventListener('scroll', redraw, { passive: true });
     return;
   }

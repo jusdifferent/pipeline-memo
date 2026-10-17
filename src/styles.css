@@ -560,7 +560,6 @@ html.js .bl-fan li:not(.is-in) { opacity: 0; translate: 0 28px; rotate: calc(var
   .dd-page .bl-fan span { margin-top: calc(18 * var(--u)); font-size: calc(11.5 * var(--u)); }
   html:not(.js) .dd-page .bl-fan li { transform: translateX(var(--x)) rotate(calc(var(--c) * 4deg)); }
 }
-}
 
 /* Moodboard with screenshots on wide pages: the linen spans the page, polaroids scattered across it. */
 @media (min-width: 900px) {

@@ -4,6 +4,17 @@ design: clay
 dek: The product, pricing, and community choices that made Clay the tool a new career is built on.
 ---
 
+:::hero
+C | Close to $0 | Revenue in spring 2022, five years in. Over $100 million ARR by December 2025, Clay said.
+L | Lookups | Every column is a lookup. When one data provider comes back empty, the waterfall tries the next.
+A | Agencies | Cold email agencies got it first, and their LinkedIn posts became Clay's marketing.
+Y | Your title | About 3,000 open GTM engineer roles in early 2026. In one analysis, 69% named Clay.
+:::
+
+:::manifesto
+Make your users *visibly better* at their jobs, and they'll become *your distribution.*
+:::
+
 On September 9, 2026, Clay announced a $115 million round at a $7.1 billion valuation. In the same announcement, it said it was putting $1 million into a scholarship fund to train GTM engineers.
 
 That second line is the stranger one. Software companies usually pay to train their customers. Clay was paying to train a job title.
@@ -61,14 +72,13 @@ The fix wasn't a new idea. It was the decision to stop chasing the biggest versi
 **Clay didn't find its market by having a better vision. It found it by noticing who was already using the product and saying yes to them.**
 
 :::moodboard What Clay's homepage said, year by year
-2017 | Create Cloud Hosted Microservices | Tools to build, share and remix Functions as a Service
-2019 | Connect apps and custom code | Create automated workflows and build tools for your team
-2021 | This spreadsheet fills itself. | Automate your prospecting, enrich your customers, and unify your customer data
-2022 | Create live lists of people, without a line of code. | Find, enrich and act on data from any source
-2023 | Not another data provider. All of the data providers. | Creatively find customers from 50+ data sources
-2024 | Scale your most creative outbound ideas | Waterfall enrichment, Claygent, templates
-2026 | Build systems to grow revenue | Data marketplace, signals, agents and workflows in plain language
-Source: Internet Archive captures of clay.run and clay.com.
+2017 | Rapid Prototyping for Developers | Create serverless HTTPS functions instantly. | /media/clay/home-2017.jpg
+2021 | This spreadsheet fills itself. | Automate your prospecting, enrich your customers, and unify your customer data. Fast. | /media/clay/home-2021.jpg
+2022 | Create live lists of people for your… | Clay helps you find, enrich and act on data from any source – without a line of code. | /media/clay/home-2022.jpg
+2023 | Not another data provider. All of the data providers. | Creatively find customers from 50+ data sources. | /media/clay/home-2023.jpg
+2024 | Scale personalized outreach with better data enrichment | Help your RevOps & growth teams implement any outreach idea. | /media/clay/home-2024.jpg
+2026 | Build systems to grow revenue | Infrastructure to get any data, run agentic workflows, and launch GTM plays. | /media/clay/home-2026.jpg
+Source: Internet Archive captures of clay.run (2017–2022) and clay.com (2023–2024); 2026 from the live site.
 :::
 
 ## The Only People Who Got It
@@ -106,6 +116,8 @@ The established players sold their own databases. ZoomInfo and Apollo each built
 Clay didn't try to build a better database. It plugged into dozens of them: more than 50 sources by its own count in early 2023, and more than 150 by 2026. Then it let users chain them together.
 
 The best-known version is the waterfall. Ask for someone's work email, and Clay checks one provider. If that one comes back empty, it tries the next, and the next, until one finds it. A single vendor can't offer that, because a single vendor only has its own data.
+
+{{figure:waterfall | How a waterfall finds one work email: Clay asks providers in order and stops at the first match. An illustration; the providers and the person are placeholders.}}
 
 Amin's view is that the market leaders weren't the best sources anyway. Many smaller providers have data that is "better and cheaper than the dominant kind of market players," he told Sequoia's *Training Data* podcast, but customers didn't know they existed.
 
@@ -253,7 +265,7 @@ Clay's version is a step further. HubSpot named a practice. Clay named the pract
 
 **Every company that names a profession eventually has to earn its place in it again, because the profession doesn't belong to the company that named it.**
 
-:::record On the *record*
+:::fan On the *record*
 We had a customer, but it was the wrong customer. | Kareem Amin, co-founder and CEO
 Once we committed, it almost worked instantaneously. | Kareem Amin
 All the value is in the columns. | Varun Anand, co-founder
@@ -285,3 +297,8 @@ The machine also has limits built in. The data belongs to someone else. The wedg
 For now, though, Clay is still running the play that turned it around. In September 2026, it put $1 million into training the next generation of GTM engineers.
 
 It's paying to create the people who will buy it.
+
+:::finale
+It's paying to create *the people who will buy it.*
+logos: anthropic.com, openai.com=OpenAI, intercom.com, notion.so, canva.com, ramp.com, rippling.com, verkada.com
+:::

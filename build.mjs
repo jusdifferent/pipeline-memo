@@ -347,9 +347,11 @@ function finaleSection(sec) {
   if (!sec) return '';
   const logos = (sec.items.find((x) => /^logos:/i.test(x)) || '').replace(/^logos:\s*/i, '').split(/\s*,\s*/).filter(Boolean);
   const lines = sec.items.filter((x) => !/^logos:/i.test(x)); // each line of the closing statement starts a new line
-  const name = (d) => d.replace(/\.[a-z]+$/, '').replace(/^./, (c) => c.toUpperCase());
+  // "domain" or "domain=Name" when the name isn't just the domain capitalized (openai.com=OpenAI).
+  const name = (d) => d.split('=')[1] || d.replace(/\.[a-z]+$/, '').replace(/^./, (c) => c.toUpperCase());
+  const host = (d) => d.split('=')[0];
   // Not every brand has a light logo; the strip whitens logos anyway, so fall back to the standard one.
-  const strip = (copy) => logos.map((d) => `<img src="${e(brandLogo(d))}" data-alt="${e(brandLogo(d, null))}" alt="${copy ? '' : e(name(d))}"${copy ? ' aria-hidden="true"' : ''} loading="lazy" decoding="async" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.removeAttribute('data-alt')}else{this.remove()}">`).join('');
+  const strip = (copy) => logos.map((d) => `<img src="${e(brandLogo(host(d)))}" data-alt="${e(brandLogo(host(d), null))}" alt="${copy ? '' : e(name(d))}"${copy ? ' aria-hidden="true"' : ''} loading="lazy" decoding="async" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.removeAttribute('data-alt')}else{this.remove()}">`).join('');
   return `<section class="finale" data-finale>
     <p class="fin-line">${lines.map(manifestoWords).join('<br>')}</p>
     <svg class="fin-flourish" viewBox="0 0 400 40" aria-hidden="true"><path d="M4 30 C 80 6, 160 38, 230 18 S 350 8, 396 22" pathLength="1"/></svg>
@@ -451,12 +453,13 @@ function essayPage(es) {
 // if present, <name>.js: a module that draws the hero effect (three.js from a CDN).
 const DESIGN_DIR = path.join(ROOT, 'src/designs');
 const designFile = (name, ext) => path.join(DESIGN_DIR, `${name}.${ext}`);
-const designVer = (name) => crypto.createHash('md5').update(['css', 'js'].map((x) => (fs.existsSync(designFile(name, x)) ? fs.readFileSync(designFile(name, x)) : '')).join('')).digest('hex').slice(0, 8);
+const designVer = (name) => crypto.createHash('md5').update([designFile(name, 'css'), designFile(name, 'js'), path.join(DESIGN_DIR, 'letters.js')].map((f) => (fs.existsSync(f) ? fs.readFileSync(f) : '')).join('')).digest('hex').slice(0, 8);
 const designPartial = (name, part) => { const f = path.join(DESIGN_DIR, `${name}.${part}.html`); return fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : ''; };
 function designHead(name) {
   if (!name) return '';
   const v = designVer(name);
   return [
+    designPartial(name, 'head'), // e.g. a display font only this design uses
     fs.existsSync(designFile(name, 'css')) ? `<link rel="stylesheet" href="/designs/${name}.css?v=${v}">` : '',
     fs.existsSync(designFile(name, 'js')) && /from 'three/.test(fs.readFileSync(designFile(name, 'js'), 'utf8')) ? `<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>` : '',
     fs.existsSync(designFile(name, 'js')) ? `<script type="module" src="/designs/${name}.js?v=${v}"></script>` : '',

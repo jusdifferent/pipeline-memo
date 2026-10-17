@@ -224,3 +224,34 @@
 })();
 
 
+
+// Designed deep dives: manifesto words light up as you scroll past them, and moodboard polaroids drift
+// at different speeds ([data-drift] sets --py, the board's distance from the middle of the screen).
+(function () {
+  var manifesto = document.querySelector('[data-manifesto]');
+  var words = manifesto ? manifesto.querySelectorAll('.mw') : [];
+  var boards = document.querySelectorAll('[data-drift]');
+  if (!words.length && !boards.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    words.forEach(function (w) { w.classList.add('on'); });
+    return;
+  }
+  var queued = false;
+  var update = function () {
+    queued = false;
+    var vh = window.innerHeight;
+    if (words.length) {
+      var r = manifesto.getBoundingClientRect();
+      var n = Math.round(Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height * 0.85))) * words.length);
+      words.forEach(function (w, i) { w.classList.toggle('on', i < n); });
+    }
+    boards.forEach(function (g) {
+      var b = g.getBoundingClientRect();
+      g.style.setProperty('--py', String(Math.round(vh / 2 - (b.top + b.height / 2))));
+    });
+  };
+  var onScroll = function () { if (!queued) { queued = true; requestAnimationFrame(update); } };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();

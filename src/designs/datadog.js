@@ -1,20 +1,18 @@
-// Datadog deep dive: the lens hero and the page's scroll moments. Plain DOM, no three.js.
+// Datadog deep dive: the lens hero. Plain DOM, no three.js.
 // - The lens follows the cursor; inside it, the outage resolves into one view. On touch screens,
 //   or until someone moves the cursor, it drifts on its own. It never covers the title.
-// - Hover or tap a giant letter to play its scene. While nobody is interacting, a letter now and then
-//   plays its scene for a moment (and on load the whole word ripples once), so the page shows what it does.
+// - The giant letters (letters.js) get a dark copy inside the lens, which mirrors their hover, taps
+//   and glimpses.
 // - Scrolling on, the hero shrinks into a card for the interlude (pure CSS, styles.css).
-// - Manifesto words light up as you scroll; moodboard polaroids drift at different speeds.
 // Preview aid: ?fx=<x>,<y> freezes the lens at that spot (fractions of the hero), e.g. ?fx=0.3,0.25.
+import { letters as hoverLetters } from './letters.js';
 
 export function mount(hero) {
   if (!hero || hero.dataset.fx) return;
   hero.dataset.fx = 'on';
-  const article = hero.closest('article') || document;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scene = hero.querySelector('[data-lens]');
   const word = hero.querySelector('[data-hero-word]');
-  const letters = word ? [...word.querySelectorAll('.hl')] : [];
   const freeze = new URLSearchParams(location.search).get('fx');
 
   const on = (target, type, fn, opts) => target.addEventListener(type, fn, opts);
@@ -32,22 +30,17 @@ export function mount(hero) {
     unified.appendChild(ghost);
     ghosts = [...ghost.querySelectorAll('.hl')];
   }
+  let letters = [];
   const mirror = () => letters.forEach((b, i) => {
     if (!ghosts[i]) return;
     ghosts[i].classList.toggle('is-on', b.classList.contains('is-on'));
     ghosts[i].classList.toggle('is-hover', b.matches(':hover') && matchMedia('(hover: hover)').matches);
   });
-  const setOn = (target) => {
-    letters.forEach((b) => b.classList.toggle('is-on', b === target && !b.classList.contains('is-on')));
-    mirror();
-  };
+  letters = hoverLetters(hero, { twin: (i) => ghosts[i], onChange: mirror });
   letters.forEach((b) => {
-    on(b, 'click', () => setOn(b));
     on(b, 'pointerenter', mirror);
     on(b, 'pointerleave', () => requestAnimationFrame(mirror));
   });
-  // A tap anywhere else in the hero puts the scene away.
-  on(hero, 'click', (ev) => { if (!ev.target.closest('.hl')) setOn(null); });
 
   // ---- measurements: where the letters and the title sit, so the lens can line up with them
   let W = 1, H = 1, R = 160, yTop = 0.05, yMax = 0.4, placeLens = () => {};
@@ -125,55 +118,6 @@ export function mount(hero) {
       kick();
     }
   }
-
-  // ---- glimpses: the letters show what they do before anyone touches them
-  if (letters.length && !reduce && !freeze) {
-    const glimpse = (i, ms) => {
-      const pair = [letters[i], ghosts[i]].filter(Boolean);
-      pair.forEach((b) => b.classList.add('is-glimpse'));
-      setTimeout(() => pair.forEach((b) => b.classList.remove('is-glimpse')), ms);
-    };
-    let quietUntil = performance.now() + 4000, last = -1;
-    const hush = () => { quietUntil = performance.now() + 5000; }; // someone is exploring; stay out of the way
-    on(hero, 'pointermove', hush, { passive: true });
-    on(hero, 'pointerdown', hush, { passive: true });
-    on(hero, 'focusin', hush);
-    letters.forEach((b, i) => setTimeout(() => glimpse(i, 650), 700 + i * 110)); // the word ripples once
-    const next = () => {
-      setTimeout(next, 2000 + Math.random() * 1200);
-      if (!visible || document.hidden || performance.now() < quietUntil || letters.some((b) => b.classList.contains('is-on'))) return;
-      let i;
-      do { i = Math.floor(Math.random() * letters.length); } while (i === last && letters.length > 1);
-      last = i;
-      glimpse(i, 1100);
-    };
-    setTimeout(next, 3600);
-  }
-
-  // ---- scroll moments
-  const manifesto = article.querySelector('[data-manifesto]');
-  const words = manifesto ? [...manifesto.querySelectorAll('.mw')] : [];
-  const boards = [...article.querySelectorAll('[data-drift]')];
-  if (reduce) { words.forEach((w) => w.classList.add('on')); return; }
-  let queued = false;
-  const vh = () => innerHeight;
-  const update = () => {
-    queued = false;
-    if (words.length) {
-      const r = manifesto.getBoundingClientRect();
-      const p = Math.min(1, Math.max(0, (vh() * 0.85 - r.top) / (r.height * 0.85)));
-      const n = Math.round(p * words.length);
-      words.forEach((w, i) => w.classList.toggle('on', i < n));
-    }
-    boards.forEach((g) => {
-      const r = g.getBoundingClientRect();
-      g.style.setProperty('--py', String(Math.round(vh() / 2 - (r.top + r.height / 2))));
-    });
-  };
-  const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
-  on(window, 'scroll', onScroll, { passive: true });
-  on(window, 'resize', onScroll);
-  update();
 }
 
 const own = document.querySelector('.dd--datadog .dd-hero');
