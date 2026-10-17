@@ -1,6 +1,6 @@
 // Ramp deep dive: a hero that keeps score. An expenses list matches its own receipts on a loop (ramp.hero.html,
 // animated in ramp.css) under the giant RAMP letters (letters.js), and a counter shows how many receipts Ramp
-// would have automated since the page opened, at the 600,000 a day it says it automates. On wide screens the
+// would have automated since the page opened, at its pace of 600,000 a day. On wide screens the
 // receipts pile up and a yellow card lands on them as you scroll into the manifesto (ramp.run.html, CSS).
 // Preview aid: ?fx shows every row matched and the counter still.
 import { letters } from './letters.js';

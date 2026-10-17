@@ -5,9 +5,9 @@ dek: Inside the incentive flip that turned "spend less" into a $60 billion brand
 ---
 
 :::hero
-R | Receipts | 600,000 a day, the number Ramp says it automates. One man in a glass box tried to keep up by hand.
+R | Receipts | Ramp automates 600,000 a day. One man in a glass box tried to keep up by hand.
 A | Aligned | Card companies earn more when you spend more. Ramp launched promising you'd spend less.
-M | Median savings | 7.5% in a customer's first year, Ramp says. About 2% at launch.
+M | Median savings | Ramp's median customer saves 7.5% in year one, up from about 2% at launch.
 P | Payments | Under 1% of US corporate payments, on a counter Ramp puts on its own homepage.
 :::
 
@@ -17,9 +17,9 @@ Promise what your industry *can't,* then *keep score* where everyone can see it.
 
 On October 15, 2025, a man sat in a glass office in Manhattan's Flatiron Plaza filling out expense reports by hand.
 
-He was Brian Baumgartner, who played Kevin, the accountant on *The Office*. Ramp had named him its "CFO" for the day. His job was to try to keep pace with the 600,000 receipts Ramp says it automates every day. A live tracker kept score against Ramp's software. He was never going to win, which was the point.
+He was Brian Baumgartner, who played Kevin, the accountant on *The Office*. Ramp had named him its "CFO" for the day. His job was to try to keep pace with the 600,000 receipts Ramp automates every day. A live tracker kept score against Ramp's software. He was never going to win, which was the point.
 
-Ramp streamed the whole day, with X as its main stage, booked guests between the paperwork and named the date National Expense Report Day. The company says the campaign drew more than 112 million views across platforms.
+Ramp streamed the whole day, with X as its main stage, booked guests between the paperwork and named the date National Expense Report Day. Ramp counted more than 112 million views across platforms.
 
 Exactly one year later, on October 15, 2026, Ramp announced a $1.85 billion round at a $60 billion valuation. It said annualized revenue had passed $2 billion, cash flow was positive and more than 85,000 businesses used it. Twelve months earlier, revenue had been about half that.
 
@@ -139,11 +139,11 @@ Above the headline, a small counter reads "US corporate payments processed by Ra
 
 The counting started inside the product. Ramp's 2021 homepage showed its "Insights" screen, with cards that flagged a "Duplicate subscription" or "Better pricing available," each with a dollar amount, next to a running "Total Savings Identified." Then the totals moved onto the homepage itself: "Over $10,000,000 saved" in 2021, a banner celebrating "four years and $400M+ saved" in 2023, and "over $10 billion and 27.5 million hours" saved by November 2025.
 
-{{figure:scoreboard | What Ramp says it has saved customers, 2020–2026: the savings rate and running totals on its homepage and in its announcements. Company claims; definitions changed over time. Sources: Internet Archive captures of ramp.com; McKinsey (March 2026); Ramp press releases (November 2025, October 2026).}}
+{{figure:scoreboard | The savings Ramp reports for its customers, 2020–2026: the savings rate and running totals on its homepage and in its announcements. Company claims; definitions changed over time. Sources: Internet Archive captures of ramp.com; McKinsey (March 2026); Ramp press releases (November 2025, October 2026).}}
 
 The company counts itself, too. "We track the number of days since the company was incorporated as a reminder that time is finite," Glyman said. When Atiyeh became co-CEO in June 2026, the announcement noted that the two had run the company together for 2,656 days. The October 2026 funding post read like a scoreboard: customers saving more than $1 billion a month; 1.5 million hours saved in September, which Ramp put as 9,000 people each getting a working month back; 476 features launched so far that year. "It's only October," the founders added.
 
-Even the research arm counts. Ramp's Economics Lab turns transaction data from tens of thousands of businesses into public indexes, such as which companies pay for AI and how much. When TechCrunch reported in May 2025 that OpenAI's business adoption was accelerating, its numbers came from Ramp's AI Index: 32.4% of US businesses were paying for OpenAI's tools, according to Ramp's card and bill-pay data. Ramp says its data has also been cited by the New York Times, the Wall Street Journal, the Economist and Reuters, and it's on the Bloomberg Terminal. A reporter writing about AI ends up quoting a corporate card company.
+Even the research arm counts. Ramp's Economics Lab turns transaction data from tens of thousands of businesses into public indexes, such as which companies pay for AI and how much. When TechCrunch reported in May 2025 that OpenAI's business adoption was accelerating, its numbers came from Ramp's AI Index: 32.4% of US businesses were paying for OpenAI's tools, according to Ramp's card and bill-pay data. Ramp counts the New York Times, the Wall Street Journal, the Economist and Reuters among the outlets that have cited its data, and it's on the Bloomberg Terminal. A reporter writing about AI ends up quoting a corporate card company.
 
 The newest scoreboard is about the customers. Ramp's homepage invites visitors to "Join 85,000 of the world's most ambitious companies growing 3.2x faster than the average American business." Ramp's own write-up is careful about that number. It notes that businesses Ramp approved but that didn't sign up also grew about twice as fast as the national average, and it says the analysis "does not prove that Ramp caused faster growth." On the homepage, the line does a simpler job: it tells a buyer what kind of company uses Ramp, and invites them to be one.
 
