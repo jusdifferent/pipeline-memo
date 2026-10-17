@@ -4,7 +4,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { parseFrontmatter, renderMarkdown, escapeHtml as e } from './src/markdown.mjs';
-import { renderIssue } from './src/issue.mjs';
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const DIST = path.join(ROOT, 'dist');
@@ -414,23 +413,6 @@ write('welcome.html', simple('Subscribed', '/welcome', `<h1>You're subscribed</h
 write('404.html', simple('Page not found', '/404', `<h1>That page doesn't exist</h1><p class="lede">The link may be old, or the deep dive may have moved.</p><p><a class="textlink" href="/">Browse all deep dives</a></p>`));
 write('styles.css', css);
 write('site.js', js);
-
-// Monthly issues: unlisted magazine editions built from content/issues/<slug>.json.
-// They stay out of the sitemap and nav, and carry noindex, until they're ready to launch.
-const issueDir = path.join(ROOT, 'content/issues');
-if (fs.existsSync(issueDir)) {
-  const issueCss = fs.readFileSync(path.join(ROOT, 'src/issue.css'), 'utf8');
-  const issueJs = fs.readFileSync(path.join(ROOT, 'src/issue.js'), 'utf8');
-  const iv = crypto.createHash('md5').update(issueCss + issueJs).digest('hex').slice(0, 8);
-  write('issue.css', issueCss);
-  write('issue.js', issueJs);
-  const diveFor = (slug) => { const d = DD.find((x) => x.slug === slug); return { ...d, url: url(d) }; };
-  const essayFor = (slug) => { const x = ALL_ESSAYS.find((y) => y.slug === slug); return { ...x, url: essayUrl(x) }; };
-  for (const f of fs.readdirSync(issueDir).filter((n) => n.endsWith('.json'))) {
-    const issue = JSON.parse(fs.readFileSync(path.join(issueDir, f), 'utf8'));
-    write(`issues/${issue.slug}.html`, renderIssue(issue, { cfg, dive: diveFor, essay: essayFor, css: `/issue.css?v=${iv}`, js: `/issue.js?v=${iv}` }));
-  }
-}
 const live = [...DIVES, ...ESSAYS.filter((x) => x.published).map((x) => ({ ...x, dek: x.dek || x.title, slug: x.slug, isEssay: true }))];
 write('feed.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel><title>${e(cfg.name)}</title><link>${e(cfg.url)}</link><description>${e(cfg.description)}</description>
