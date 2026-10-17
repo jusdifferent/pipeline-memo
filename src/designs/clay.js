@@ -104,6 +104,9 @@ function start() {
 
   const progress = () => Math.min(1, Math.max(0, scrollY / (hero.offsetHeight * 0.75)));
   frame();
+  // Preview aid: ?fx=<seconds>,<progress> freezes the hero at one moment, e.g. ?fx=2,1 for the filled grid.
+  const freeze = new URLSearchParams(location.search).get('fx');
+  if (freeze) { const [ft, fp] = freeze.split(',').map(Number); draw(ft || 2.2, fp || 0); hero.classList.add('fx-on'); return; }
   draw(2.2, progress());
   hero.classList.add('fx-on');
 
