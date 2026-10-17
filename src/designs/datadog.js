@@ -5,9 +5,6 @@
 // follow the scroll position.
 import * as THREE from 'three';
 
-const hero = document.querySelector('.dd--datadog .dd-hero');
-const canvas = hero && hero.querySelector('.hero-fx');
-
 function dotTexture() {
   const c = document.createElement('canvas');
   c.width = c.height = 64;
@@ -21,12 +18,21 @@ function dotTexture() {
   return new THREE.CanvasTexture(c);
 }
 
-function start() {
+// mount(hero) draws into a hero's canvas. The deep dive page mounts its own hero on load; the
+// homepage's preview panel imports this module and mounts the hero it shows.
+export function mount(hero) {
+  const canvas = hero && hero.querySelector('.hero-fx');
+  if (!canvas || hero.dataset.fx) return;
+  hero.dataset.fx = 'on';
+  const scroller = hero.closest('dialog'); // the preview panel scrolls itself; the page scrolls the window
+  const scrollPos = () => (scroller ? scroller.scrollTop : scrollY);
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches || innerWidth < 720;
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
   } catch { return; }
+  // Stop and free the GPU context once the hero leaves the page (e.g. the preview panel is replaced).
+  const alive = () => { if (hero.isConnected) return true; renderer.dispose(); renderer.forceContextLoss(); return false; };
   renderer.setPixelRatio(Math.min(devicePixelRatio, still ? 1.5 : 2));
 
   const scene = new THREE.Scene();
@@ -180,7 +186,7 @@ function start() {
     renderer.render(scene, camera);
   }
 
-  const progress = () => Math.min(1, Math.max(0, scrollY / (hero.offsetHeight * 0.7)));
+  const progress = () => Math.min(1, Math.max(0, scrollPos() / (hero.offsetHeight * 0.7)));
   frame();
   // Preview aid: ?fx=<seconds>,<progress> freezes the hero at one moment, e.g. ?fx=8,1 for the dashboard.
   const freeze = new URLSearchParams(location.search).get('fx');
@@ -189,8 +195,9 @@ function start() {
   hero.classList.add('fx-on');
 
   if (still) {
-    addEventListener('resize', () => { frame(); draw(8, progress()); });
-    addEventListener('scroll', () => draw(8, progress()), { passive: true });
+    const redraw = () => { if (alive()) { frame(); draw(8, progress()); } };
+    addEventListener('resize', redraw);
+    (scroller || window).addEventListener('scroll', redraw, { passive: true });
     return;
   }
 
@@ -201,6 +208,7 @@ function start() {
   const t0 = performance.now();
   const loop = (now) => {
     raf = 0;
+    if (!alive()) return;
     if (!visible || document.hidden) return;
     sxNow += (sx - sxNow) * 0.05;
     scene.rotation.y = sxNow * 0.06;
@@ -210,8 +218,9 @@ function start() {
   const kick = () => { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(loop); };
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; kick(); }).observe(hero);
   document.addEventListener('visibilitychange', kick);
-  addEventListener('resize', frame);
+  addEventListener('resize', () => { if (alive()) frame(); });
   kick();
 }
 
-if (canvas) start();
+const own = document.querySelector('.dd--datadog .dd-hero');
+if (own && !own.closest('dialog')) mount(own);

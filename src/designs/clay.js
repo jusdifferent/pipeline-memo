@@ -5,15 +5,21 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
-const hero = document.querySelector('.dd--clay .dd-hero');
-const canvas = hero && hero.querySelector('.hero-fx');
-
-function start() {
+// mount(hero) draws into a hero's canvas. The deep dive page mounts its own hero on load; the
+// homepage's preview panel imports this module and mounts the hero it shows.
+export function mount(hero) {
+  const canvas = hero && hero.querySelector('.hero-fx');
+  if (!canvas || hero.dataset.fx) return;
+  hero.dataset.fx = 'on';
+  const scroller = hero.closest('dialog'); // the preview panel scrolls itself; the page scrolls the window
+  const scrollPos = () => (scroller ? scroller.scrollTop : scrollY);
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches || innerWidth < 720;
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
   } catch { return; }
+  // Stop and free the GPU context once the hero leaves the page (e.g. the preview panel is replaced).
+  const alive = () => { if (hero.isConnected) return true; renderer.dispose(); renderer.forceContextLoss(); return false; };
   renderer.setPixelRatio(Math.min(devicePixelRatio, still ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -102,7 +108,7 @@ function start() {
     renderer.render(scene, camera);
   }
 
-  const progress = () => Math.min(1, Math.max(0, scrollY / (hero.offsetHeight * 0.75)));
+  const progress = () => Math.min(1, Math.max(0, scrollPos() / (hero.offsetHeight * 0.75)));
   frame();
   // Preview aid: ?fx=<seconds>,<progress> freezes the hero at one moment, e.g. ?fx=2,1 for the filled grid.
   const freeze = new URLSearchParams(location.search).get('fx');
@@ -111,8 +117,9 @@ function start() {
   hero.classList.add('fx-on');
 
   if (still) {
-    addEventListener('resize', () => { frame(); draw(2.2, progress()); });
-    addEventListener('scroll', () => draw(2.2, progress()), { passive: true });
+    const redraw = () => { if (alive()) { frame(); draw(2.2, progress()); } };
+    addEventListener('resize', redraw);
+    (scroller || window).addEventListener('scroll', redraw, { passive: true });
     return;
   }
 
@@ -120,6 +127,7 @@ function start() {
   const t0 = performance.now();
   const loop = (now) => {
     raf = 0;
+    if (!alive()) return;
     if (!visible || document.hidden) return;
     draw((now - t0) / 1000 + 2.2, progress());
     raf = requestAnimationFrame(loop);
@@ -127,8 +135,9 @@ function start() {
   const kick = () => { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(loop); };
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; kick(); }).observe(hero);
   document.addEventListener('visibilitychange', kick);
-  addEventListener('resize', frame);
+  addEventListener('resize', () => { if (alive()) frame(); });
   kick();
 }
 
-if (canvas) start();
+const own = document.querySelector('.dd--clay .dd-hero');
+if (own && !own.closest('dialog')) mount(own);

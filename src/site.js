@@ -109,6 +109,31 @@
     if (ev.target.closest('[data-open-menu]')) openDialog(document.getElementById('menu-modal'));
   });
 
+  // A designed deep dive (front matter `design:`) brings its stylesheet and three.js hero along
+  // into the preview panel, so the panel looks like the page.
+  var importModule = function (u) { return new Function('u', 'return import(u)')(u); };
+  var mountDesign = function (doc, root) {
+    var hero = root.querySelector('.dd--designed .dd-hero');
+    if (!hero) return;
+    var css = doc.querySelector('link[href^="/designs/"]');
+    if (css && !document.querySelector('link[href="' + css.getAttribute('href') + '"]')) {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = css.getAttribute('href');
+      document.head.appendChild(link);
+    }
+    var map = doc.querySelector('script[type="importmap"]');
+    if (map && !document.querySelector('script[type="importmap"]')) {
+      var im = document.createElement('script');
+      im.type = 'importmap';
+      im.textContent = map.textContent;
+      document.head.appendChild(im);
+    }
+    var mod = doc.querySelector('script[type="module"][src^="/designs/"]');
+    if (!mod) return;
+    try { importModule(mod.getAttribute('src')).then(function (m) { if (m && m.mount) m.mount(hero); }).catch(function () {}); } catch (e) { /* no module support: the CSS hero stays */ }
+  };
+
   // Deep-dive preview: fetch the deep-dive page and show its article in a panel.
   var preview = document.getElementById('preview-modal');
   var previewBody = preview && preview.querySelector('[data-preview-body]');
@@ -128,6 +153,7 @@
       more.innerHTML = '<a class="textlink" href="' + href + '">Open as a full page</a>';
       previewBody.appendChild(more);
       applySubscribed(previewBody);
+      mountDesign(doc, previewBody);
       document.title = doc.title;
       if (push) history.pushState({ preview: href }, '', href);
       var h = previewBody.querySelector('h1');
