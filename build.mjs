@@ -81,19 +81,15 @@ function renderBlock(name, title, items) {
       return `<section class="bl bl-record">${blockTitle(title, 'On the *record*')}<ul>${items.map((it, i) => { const [q, by] = split(it); return `<li class="clip clip-${(i % 5) + 1}"><q>${inline(q)}</q>${by ? `<span>${inline(by)}</span>` : ''}</li>`; }).join('')}</ul></section>`;
     case 'machine': // title | text
       return `<section class="bl bl-machine">${blockTitle(title, 'The *machine*')}<ol>${items.map((it, i) => { const [t, x] = split(it); return `<li><span class="n">${i + 1}.</span><strong>${inline(t)}</strong>${x ? `<p>${inline(x)}</p>` : ''}</li>`; }).join('')}</ol></section>`;
-    case 'moodboard': { // title line is a subtitle; items: year | headline | supporting line; "Source: ..." becomes the caption
+    case 'moodboard': { // title line is a subtitle; items: year | headline | supporting line [| screenshot]; "Source: ..." becomes the caption
       const src = items.find((x) => /^source:/i.test(x));
-      const notes = items.filter((x) => x !== src);
-      return `<figure class="bl bl-mood">${blockTitle('', 'Mood*board*')}${title ? `<p class="bl-sub">${inline(title)}</p>` : ''}<ul>${notes.map((it, i) => { const [y, h, sub] = split(it); return `<li class="note note-${(i % 7) + 1}"><span class="yr">${e(y)}</span><q>${inline(h)}</q>${sub ? `<small>${inline(sub)}</small>` : ''}</li>`; }).join('')}</ul>${src ? `<figcaption>${inline(src.replace(/^source:\s*/i, 'Source: '))}</figcaption>` : ''}</figure>`;
+      const notes = items.filter((x) => x !== src).map(split);
+      const shots = notes.some((n) => n[3]);
+      return `<figure class="bl bl-mood${shots ? ' has-shots' : ''}"${shots ? ' data-drift' : ''}>${blockTitle('', 'Mood*board*')}${title ? `<p class="bl-sub">${inline(title)}</p>` : ''}<ul>${notes.map(([y, h, sub, img], i) => `<li class="note note-${(i % 7) + 1}${img ? ' has-shot' : ''}"${shots ? ` style="--sp:${[0.05, -0.04, 0.08, -0.06, 0.04, -0.07, 0.06][i % 7]}"` : ''}>${img ? `<img src="${e(img)}" alt="Screenshot from ${e(y)}" loading="lazy" decoding="async">` : ''}<span class="yr">${e(y)}</span><q>${inline(h)}</q>${sub ? `<small>${inline(sub)}</small>` : ''}</li>`).join('')}</ul>${src ? `<figcaption>${inline(src.replace(/^source:\s*/i, 'Source: '))}</figcaption>` : ''}</figure>`;
     }
     case 'founder': { // name as title; lines "pos: ...", "def: ...", "quote: ..."
       const get = (k) => items.filter((x) => x.toLowerCase().startsWith(`${k}:`)).map((x) => x.slice(k.length + 1).trim());
       return `<aside class="bl bl-founder"><p class="bl-kicker">Who’s that <em>founder?</em></p><p class="bl-name">${e(title)} <span>${e(get('pos')[0] || 'noun')}</span></p><ol>${get('def').map((d) => `<li>${inline(d)}</li>`).join('')}</ol>${get('quote').map((q) => `<p class="bl-said">“${inline(q)}”</p>`).join('')}</aside>`;
-    }
-    case 'gallery': { // full-bleed scattered artifacts: image | caption | headline; "Source: ..." becomes the caption
-      const src = items.find((x) => /^source:/i.test(x));
-      const shots = items.filter((x) => x !== src);
-      return `<figure class="bl bl-gallery" data-gallery>${blockTitle(title, 'The *archive*')}<ul>${shots.map((it, i) => { const [img, cap, head] = split(it); return `<li class="shot shot-${i + 1}" style="--sp:${[0.06, -0.04, 0.09, -0.06, 0.05, -0.08][i % 6]}"><span class="cap">${inline(cap)}</span><img src="${e(img)}" alt="${e(cap)}" loading="lazy" decoding="async">${head ? `<q>${inline(head)}</q>` : ''}</li>`; }).join('')}</ul>${src ? `<figcaption>${inline(src.replace(/^source:\s*/i, 'Source: '))}</figcaption>` : ''}</figure>`;
     }
     case 'fan': // quote cards fanned out; same item format as record
       return `<section class="bl bl-fan" data-fan>${blockTitle(title, 'On the *record*')}<ul style="--n:${items.length}">${items.map((it, i) => { const [q, by] = split(it); return `<li style="--i:${i}"><q>${inline(q)}</q>${by ? `<span>${inline(by)}</span>` : ''}</li>`; }).join('')}</ul></section>`;
@@ -326,7 +322,7 @@ function pullSections(md) {
   });
   return { body, ...out };
 }
-const brandLogo = (domain, theme = 'light') => `https://cdn.brandfetch.io/domain/${domain}/w/400/theme/${theme}/fallback/404/type/logo?c=${encodeURIComponent(cfg.brandfetchClientId || '')}`;
+const brandLogo = (domain, theme = 'light') => `https://cdn.brandfetch.io/domain/${domain}/w/400${theme ? `/theme/${theme}` : ''}/fallback/404/type/logo?c=${encodeURIComponent(cfg.brandfetchClientId || '')}`;
 
 // Words of a manifesto line, so they can light up one by one; *phrases* become italic accents.
 function manifestoWords(text) {
@@ -354,12 +350,14 @@ function finaleSection(sec) {
   if (!sec) return '';
   const logos = (sec.items.find((x) => /^logos:/i.test(x)) || '').replace(/^logos:\s*/i, '').split(/\s*,\s*/).filter(Boolean);
   const line = sec.items.filter((x) => !/^logos:/i.test(x)).join(' ');
-  const strip = logos.map((d) => `<img src="${e(brandLogo(d))}" alt="${e(d.replace(/\.(com|io|co)$/, ''))}" loading="lazy" decoding="async" onerror="this.remove()">`).join('');
+  const name = (d) => d.replace(/\.[a-z]+$/, '').replace(/^./, (c) => c.toUpperCase());
+  // Not every brand has a light logo; the strip whitens logos anyway, so fall back to the standard one.
+  const strip = (copy) => logos.map((d) => `<img src="${e(brandLogo(d))}" data-alt="${e(brandLogo(d, null))}" alt="${copy ? '' : e(name(d))}"${copy ? ' aria-hidden="true"' : ''} loading="lazy" decoding="async" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.removeAttribute('data-alt')}else{this.remove()}">`).join('');
   return `<section class="finale" data-finale>
     <p class="fin-line">${manifestoWords(line)}</p>
     <svg class="fin-flourish" viewBox="0 0 400 40" aria-hidden="true"><path d="M4 30 C 80 6, 160 38, 230 18 S 350 8, 396 22" pathLength="1"/></svg>
     <p class="fin-cta"><a class="btn" href="/subscribe">Get the next deep dive</a></p>
-    ${logos.length ? `<div class="fin-logos"><p>Named in this story</p><div class="mq"><div class="mq-track">${strip}${strip}</div></div></div>` : ''}
+    ${logos.length ? `<div class="fin-logos"><p>Named in this story</p><div class="mq"><div class="mq-track">${strip(false)}${strip(true)}</div></div></div>` : ''}
   </section>`;
 }
 
@@ -389,20 +387,21 @@ function deepDiveArticle(dd) {
       <p class="gate-fine">Free. Unsubscribe anytime.</p>
     </div>`;
   }
+  const crumb = `<p class="crumb"><a href="/?series=${dd.series}">${e(seriesBy[dd.series].short)}</a><span>${e(dd.industry)}</span><span>${e(status(dd))}${dd.published ? `, ${dd.minutes} min read` : ''}</span></p>`;
   return `<article class="dd${dd.design ? ` dd--designed dd--${dd.design}` : ''}" data-dd="${dd.slug}" style="${brandVars(dd)}">
   <header class="dd-head${dd.design ? ' dd-hero' : ''}${parts.hero ? ' has-word' : ''}" style="${brandVars(dd)}">${dd.design ? `${designPartial(dd.design, 'hero') || '<canvas class="hero-fx" aria-hidden="true"></canvas>'}<span class="hero-shade" aria-hidden="true"></span>` : ''}
     ${heroLetters(parts.hero)}
     <div class="dd-head-grid">
       <div>
-        <p class="crumb"><a href="/?series=${dd.series}">${e(seriesBy[dd.series].short)}</a><span>${e(dd.industry)}</span><span>${e(status(dd))}${dd.published ? `, ${dd.minutes} min read` : ''}</span></p>
+        ${dd.design ? '' : crumb}
         <h1>${e(dd.title)}</h1>
         <p class="dd-dek">${e(dd.dek)}</p>
       </div>
-      ${logoBox(dd, 'dd-logo')}
+      ${parts.hero ? '' : logoBox(dd, 'dd-logo')}
     </div>
   </header>
   ${manifestoSection(parts.manifesto)}
-  <div class="dd-sheet">${sheet}</div>
+  <div class="dd-sheet">${dd.design ? crumb.replace('class="crumb"', 'class="crumb dd-meta"') : ''}${sheet}</div>
   ${finaleSection(parts.finale)}
 </article>`;
 }

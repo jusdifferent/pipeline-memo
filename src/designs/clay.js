@@ -18,8 +18,15 @@ export function mount(hero) {
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
   } catch { return; }
-  // Stop and free the GPU context once the hero leaves the page (e.g. the preview panel is replaced).
-  const alive = () => { if (hero.isConnected) return true; renderer.dispose(); renderer.forceContextLoss(); return false; };
+  // Stop, free the GPU context and drop the listeners once the hero leaves the page (e.g. the preview
+  // panel is replaced). This runs once; later calls just answer false.
+  const ac = new AbortController(), signal = ac.signal;
+  let io = null;
+  const alive = () => {
+    if (hero.isConnected) return true;
+    if (!signal.aborted) { ac.abort(); if (io) io.disconnect(); renderer.dispose(); renderer.forceContextLoss(); }
+    return false;
+  };
   renderer.setPixelRatio(Math.min(devicePixelRatio, still ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -84,8 +91,8 @@ export function mount(hero) {
     ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
     ray.ray.intersectPlane(plane, press);
-  });
-  hero.addEventListener('pointerleave', () => press.set(999, 0, 999));
+  }, { signal });
+  hero.addEventListener('pointerleave', () => press.set(999, 0, 999), { signal });
 
   const m = new THREE.Matrix4(), col = new THREE.Color();
   function draw(t, p) {
@@ -118,8 +125,8 @@ export function mount(hero) {
 
   if (still) {
     const redraw = () => { if (alive()) { frame(); draw(2.2, progress()); } };
-    addEventListener('resize', redraw);
-    (scroller || window).addEventListener('scroll', redraw, { passive: true });
+    addEventListener('resize', redraw, { signal });
+    (scroller || window).addEventListener('scroll', redraw, { passive: true, signal });
     return;
   }
 
@@ -133,9 +140,10 @@ export function mount(hero) {
     raf = requestAnimationFrame(loop);
   };
   const kick = () => { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(loop); };
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; kick(); }).observe(hero);
-  document.addEventListener('visibilitychange', kick);
-  addEventListener('resize', () => { if (alive()) frame(); });
+  io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; kick(); });
+  io.observe(hero);
+  document.addEventListener('visibilitychange', kick, { signal });
+  addEventListener('resize', () => { if (alive()) frame(); }, { signal });
   kick();
 }
 

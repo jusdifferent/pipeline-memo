@@ -114,12 +114,12 @@ And the first buyers had a specific job. According to the founders' letter, the 
 
 A year later, in November 2012, Index Ventures and RTP Ventures co-led a $6.2 million Series A. Infrastructure monitoring was generally available. The next question was how to get it onto as many servers as possible.
 
-:::gallery The *archive*
-/media/datadog/home-2011.jpg | datadoghq.com, 2011 | Graph, Share, Grok!
-/media/datadog/home-2012.jpg | datadoghq.com, 2012 | See it all in one place
-/media/datadog/home-2017.jpg | datadoghq.com, 2017 | Cloud-Scale Monitoring
-/media/datadog/home-2019.jpg | datadoghq.com, 2019 | Modern monitoring & analytics
-/media/datadog/home-2026.jpg | datadoghq.com, 2026 | AI-Powered Observability and Security
+:::moodboard What Datadog's homepage said, year by year
+2011 | Graph, Share, Grok! | Brings into one convenient place metrics and events from your systems, applications and cloud providers. | /media/datadog/home-2011.jpg
+2012 | See it all in one place | Your servers, your clouds, your metrics, your apps, your team. Together. | /media/datadog/home-2012.jpg
+2017 | Cloud-Scale Monitoring | Monitoring that tracks your dynamic infrastructure and applications. | /media/datadog/home-2017.jpg
+2019 | Modern monitoring & analytics | See inside any stack, any app, at any scale, anywhere. | /media/datadog/home-2019.jpg
+2026 | AI-Powered Observability and Security | Same subhead as 2019. The headline now leads with AI and security. | /media/datadog/home-2026.jpg
 Source: Internet Archive captures of datadoghq.com; 2026 from the live site.
 :::
 

@@ -1,9 +1,10 @@
 // Datadog deep dive: the lens hero and the page's scroll moments. Plain DOM, no three.js.
 // - The lens follows the cursor; inside it, the outage resolves into one view. On touch screens,
-//   or until someone moves the cursor, it drifts on its own.
+//   or until someone moves the cursor, it drifts on its own. It never covers the title.
 // - Hover or tap a giant letter to play its scene.
-// - Manifesto words light up as you scroll; gallery artifacts drift at different speeds.
+// - Manifesto words light up as you scroll; moodboard polaroids drift at different speeds.
 // mount(hero) is also called by the homepage's preview panel (site.js), with the panel as scroller.
+// Preview aid: ?fx=<x>,<y> freezes the lens at that spot (fractions of the hero), e.g. ?fx=0.3,0.25.
 
 export function mount(hero) {
   if (!hero || hero.dataset.fx) return;
@@ -12,87 +13,151 @@ export function mount(hero) {
   const scroller = hero.closest('dialog');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scene = hero.querySelector('[data-lens]');
+  const word = hero.querySelector('[data-hero-word]');
+  const letters = word ? [...word.querySelectorAll('.hl')] : [];
+
+  // Everything this mount listens to is dropped once the hero leaves the page (e.g. the panel closes).
+  const ac = new AbortController();
+  const on = (target, type, fn, opts) => target.addEventListener(type, fn, { ...opts, signal: ac.signal });
+  const watchers = [];
+  const alive = () => {
+    if (hero.isConnected) return true;
+    ac.abort();
+    watchers.forEach((w) => w.disconnect());
+    return false;
+  };
+
+  // ---- letters: a dark copy for inside the lens; hover and taps are mirrored onto it
+  let ghosts = [];
+  const unified = scene && scene.querySelector('.unified');
+  if (word && unified) {
+    const ghost = word.cloneNode(true);
+    ghost.className = 'hero-word hero-word-ghost';
+    ghost.removeAttribute('data-hero-word');
+    ghost.setAttribute('aria-hidden', 'true');
+    ghost.querySelectorAll('button').forEach((b) => { b.tabIndex = -1; b.removeAttribute('aria-label'); });
+    unified.appendChild(ghost);
+    ghosts = [...ghost.querySelectorAll('.hl')];
+  }
+  const mirror = () => letters.forEach((b, i) => {
+    if (!ghosts[i]) return;
+    ghosts[i].classList.toggle('is-on', b.classList.contains('is-on'));
+    ghosts[i].classList.toggle('is-hover', b.matches(':hover') && matchMedia('(hover: hover)').matches);
+  });
+  const setOn = (target) => {
+    letters.forEach((b) => b.classList.toggle('is-on', b === target && !b.classList.contains('is-on')));
+    mirror();
+  };
+  letters.forEach((b) => {
+    on(b, 'click', () => setOn(b));
+    on(b, 'pointerenter', mirror);
+    on(b, 'pointerleave', () => requestAnimationFrame(mirror));
+  });
+  // A tap anywhere else in the hero puts the scene away.
+  on(hero, 'click', (ev) => { if (!ev.target.closest('.hl')) setOn(null); });
+
+  // ---- measurements: where the letters and the title sit, so the lens can line up with them
+  let W = 1, H = 1, R = 160, yTop = 0.05, yMax = 0.4, placeLens = () => {};
+  const measure = () => {
+    if (!alive()) return;
+    const hr = hero.getBoundingClientRect();
+    W = hr.width || 1; H = hr.height || 1;
+    if (word) {
+      const wr = word.getBoundingClientRect();
+      hero.style.setProperty('--wx', `${wr.left - hr.left}px`);
+      hero.style.setProperty('--wy', `${wr.top - hr.top}px`);
+      hero.style.setProperty('--ww', `${wr.width}px`);
+      letters.forEach((b) => {
+        const r = b.getBoundingClientRect();
+        b.style.setProperty('--ox', `${r.left - hr.left}px`);
+        b.style.setProperty('--oy', `${r.top - hr.top}px`);
+      });
+    }
+    const ring = scene && scene.querySelector('.lens-ring');
+    R = ring ? ring.offsetWidth / 2 : 160;
+    // The title block: the dark band fits it, and the lens stays above it.
+    const text = hero.querySelector('.dd-head-grid');
+    const textTop = text ? text.getBoundingClientRect().top - hr.top : H * 0.6;
+    hero.style.setProperty('--tb', `${Math.max(0, H - textTop)}px`);
+    yTop = Math.min(0.3, (R * 0.85) / H); // keep the ring clear of the hero's top edge
+    yMax = Math.max(yTop, (textTop - R - 14) / H);
+    placeLens();
+  };
+  measure();
+  if ('ResizeObserver' in window) { const ro = new ResizeObserver(measure); ro.observe(hero); watchers.push(ro); }
+  else on(window, 'resize', measure);
+  if (document.fonts) document.fonts.ready.then(measure);
 
   // ---- lens
   if (scene) {
-    // A dark copy of the giant letters lives inside the unified view, so inside the lens they read
-    // dark on light while the real (cream) letters are cut away there.
-    const word = hero.querySelector('[data-hero-word]');
-    const unified = scene.querySelector('.unified');
-    if (word && unified) {
-      const ghost = word.cloneNode(true);
-      ghost.className = 'hero-word hero-word-ghost';
-      ghost.removeAttribute('data-hero-word');
-      ghost.setAttribute('aria-hidden', 'true');
-      ghost.querySelectorAll('button').forEach((b) => { b.tabIndex = -1; });
-      unified.appendChild(ghost);
-      const place = () => {
-        hero.style.setProperty('--wx', `${word.offsetLeft}px`);
-        hero.style.setProperty('--wy', `${word.offsetTop}px`);
-        hero.style.setProperty('--ww', `${word.offsetWidth}px`);
-      };
-      place();
-      addEventListener('resize', place);
-      if (document.fonts) document.fonts.ready.then(place);
-    }
-    let tx = 0.7, ty = 0.38, x = tx, y = ty, user = false, t0 = performance.now();
-    const set = () => { hero.style.setProperty('--lx', `${x * hero.clientWidth}px`); hero.style.setProperty('--ly', `${y * hero.clientHeight}px`); };
-    hero.addEventListener('pointermove', (ev) => {
-      if (ev.pointerType === 'touch') return;
-      const r = hero.getBoundingClientRect();
-      tx = (ev.clientX - r.left) / r.width; ty = (ev.clientY - r.top) / r.height; user = true;
-    });
-    hero.addEventListener('pointerleave', () => { user = false; });
-    hero.addEventListener('pointerdown', (ev) => {
+    let tx = 0.7, ty = 0.3, x = tx, y = ty, user = false, untouch = 0;
+    const t0 = performance.now();
+    const clampY = (v) => Math.min(yMax, Math.max(0, v));
+    const set = () => { hero.style.setProperty('--lx', `${x * W}px`); hero.style.setProperty('--ly', `${clampY(y) * H}px`); };
+    const aim = (ev) => { const r = hero.getBoundingClientRect(); tx = (ev.clientX - r.left) / W; ty = (ev.clientY - r.top) / H; };
+    on(hero, 'pointermove', (ev) => { if (ev.pointerType !== 'touch') { aim(ev); user = true; } });
+    on(hero, 'pointerleave', () => { user = false; });
+    on(hero, 'pointerdown', (ev) => {
       if (ev.pointerType !== 'touch') return;
-      const r = hero.getBoundingClientRect();
-      tx = (ev.clientX - r.left) / r.width; ty = (ev.clientY - r.top) / r.height; user = true;
-      setTimeout(() => { user = false; }, 2500);
+      aim(ev); user = true;
+      clearTimeout(untouch);
+      untouch = setTimeout(() => { user = false; }, 2500);
     });
-    if (reduce) { set(); } else {
-      let visible = true;
-      new IntersectionObserver(([en]) => { visible = en.isIntersecting; if (visible) requestAnimationFrame(tick); }).observe(hero);
-      function tick(now) {
-        if (!visible || !hero.isConnected) return;
-        if (!user) { const t = (now - t0) / 1000; tx = 0.55 + 0.28 * Math.sin(t * 0.42); ty = 0.36 + 0.16 * Math.sin(t * 0.67 + 1); }
-        x += (tx - x) * 0.12; y += (ty - y) * 0.12;
+
+    const freeze = new URLSearchParams(location.search).get('fx');
+    if (freeze) {
+      const [fx, fy] = freeze.split(',').map(Number);
+      x = Number.isFinite(fx) ? fx : x; y = Number.isFinite(fy) ? fy : y;
+      placeLens = set; set();
+    } else if (reduce) {
+      placeLens = set; set();
+    } else {
+      let visible = true, raf = 0;
+      const tick = (now) => {
+        raf = 0;
+        if (!alive() || !visible) return;
+        if (!user) {
+          // Wander over the outage, above the title.
+          const t = (now - t0) / 1000, mid = (yTop + yMax) / 2, amp = (yMax - yTop) / 2;
+          tx = 0.55 + 0.28 * Math.sin(t * 0.42);
+          ty = mid + amp * Math.sin(t * 0.67 + 1);
+        }
+        x += (tx - x) * 0.12; y += (clampY(ty) - y) * 0.12;
         set();
-        requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
+        raf = requestAnimationFrame(tick);
+      };
+      const kick = () => { if (!raf && visible) raf = requestAnimationFrame(tick); };
+      const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); });
+      io.observe(hero);
+      watchers.push(io);
+      kick();
     }
   }
 
-  // ---- letters: tap toggles a letter's scene on touch screens
-  hero.querySelectorAll('.hl').forEach((b) => b.addEventListener('click', () => {
-    const on = !b.classList.contains('is-on');
-    hero.querySelectorAll('.hl.is-on').forEach((o) => o.classList.remove('is-on'));
-    b.classList.toggle('is-on', on);
-  }));
-
   // ---- scroll moments
-  const words = [...article.querySelectorAll('[data-manifesto] .mw')];
   const manifesto = article.querySelector('[data-manifesto]');
-  const galleries = [...article.querySelectorAll('[data-gallery]')];
+  const words = manifesto ? [...manifesto.querySelectorAll('.mw')] : [];
+  const boards = [...article.querySelectorAll('[data-drift]')];
   if (reduce) { words.forEach((w) => w.classList.add('on')); return; }
   let queued = false;
   const vh = () => (scroller ? scroller.clientHeight : innerHeight);
   const update = () => {
     queued = false;
-    if (manifesto && words.length) {
+    if (!alive()) return;
+    if (words.length) {
       const r = manifesto.getBoundingClientRect();
       const p = Math.min(1, Math.max(0, (vh() * 0.85 - r.top) / (r.height * 0.85)));
       const n = Math.round(p * words.length);
       words.forEach((w, i) => w.classList.toggle('on', i < n));
     }
-    galleries.forEach((g) => {
+    boards.forEach((g) => {
       const r = g.getBoundingClientRect();
       g.style.setProperty('--py', String(Math.round(vh() / 2 - (r.top + r.height / 2))));
     });
   };
   const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
-  (scroller || window).addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', onScroll);
+  on(scroller || window, 'scroll', onScroll, { passive: true });
+  on(window, 'resize', onScroll);
   update();
 }
 

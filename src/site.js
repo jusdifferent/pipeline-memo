@@ -27,6 +27,19 @@
     });
   };
 
+  // ---------------------------------------------------------- scroll-in moments
+  // Figures and designed sections (card fans and each of their cards, finales) animate once when they
+  // scroll into view. Runs on the page and again on whatever the preview panel loads.
+  var IN_VIEW = '.dd-figure, .bl-fan, .bl-fan li, .finale';
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var inView = 'IntersectionObserver' in window && !still ? new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); inView.unobserve(en.target); } });
+  }, { threshold: 0.25 }) : null;
+  var watchIn = function (scope) {
+    scope.querySelectorAll(IN_VIEW).forEach(function (el) { if (inView) inView.observe(el); else el.classList.add('is-in'); });
+  };
+  watchIn(document);
+
   // ---------------------------------------------------------- floating signup pill
   var float = document.querySelector('[data-float]');
   var floatAway = {};
@@ -39,17 +52,18 @@
     if (isSubscribed() || store.get(sessionStorage, 'float-dismissed')) float.remove();
     else {
       float.hidden = false;
+      if (document.querySelector('.dd-page .dd-head')) float.classList.add('is-away'); // until the headline scrolls away
       float.querySelector('[data-float-close]').addEventListener('click', function () {
         store.set(sessionStorage, 'float-dismissed', '1');
         floatAway.dismissed = true; setFloat();
       });
-      // Step aside while another signup form is on screen, so they never compete.
+      // Step aside while another signup form, or a deep dive's headline, is on screen.
       if ('IntersectionObserver' in window) {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (en) { floatAway[en.target.dataset.watch] = en.isIntersecting; });
           setFloat();
         }, { rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('[data-band], .dd-page [data-gate]').forEach(function (el, i) { el.dataset.watch = 'w' + i; io.observe(el); });
+        document.querySelectorAll('[data-band], .dd-page [data-gate], .dd-page .dd-head').forEach(function (el, i) { el.dataset.watch = 'w' + i; io.observe(el); });
       }
     }
   }
@@ -153,6 +167,7 @@
       more.innerHTML = '<a class="textlink" href="' + href + '">Open as a full page</a>';
       previewBody.appendChild(more);
       applySubscribed(previewBody);
+      watchIn(previewBody);
       mountDesign(doc, previewBody);
       document.title = doc.title;
       if (push) history.pushState({ preview: href }, '', href);
@@ -275,17 +290,4 @@
 
 })();
 
-// Figures and designed sections (card fans, galleries, finales) animate once when they scroll into view.
-(function () {
-  var figs = document.querySelectorAll('.dd-figure, .bl-fan, .bl-gallery, .finale');
-  if (!figs.length) return;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!('IntersectionObserver' in window) || reduce) {
-    figs.forEach(function (f) { f.classList.add('is-in'); });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
-  }, { threshold: 0.25 });
-  figs.forEach(function (f) { io.observe(f); });
-})();
+
