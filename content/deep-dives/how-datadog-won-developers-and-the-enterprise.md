@@ -1,5 +1,6 @@
 ---
 date: 2026-10-07
+design: datadog
 dek: The pricing, product, and sales choices that made Datadog too valuable to sell.
 ---
 
@@ -17,11 +18,21 @@ By the IPO, it had 8,846 customers. The 594 of them paying more than $100,000 a 
 
 The cloud is the obvious explanation, and it explains a lot. It doesn't explain why the startups that rode the same wave sold for tens of millions while Datadog turned down billions.
 
-**What Datadog did was simpler and harder to copy: it got onto every server, became the first place everyone looked when something broke, and sold them what they found there.**
+:::pull
+What Datadog did was simpler and harder to copy: it got onto every server, became the first place everyone looked when something broke, and sold them what they found there.
+:::
 
 This deep dive is about how that machine was built: what the founders saw, how they priced, why they waited to compete with the tools they started out plugging into, and where the machine stops working.
 
 For anyone who owns pipeline, it's also a 16-year case study in growing a business without asking a single customer to rip anything out on day one.
+
+:::founder Olivier Pomel
+pos: noun
+def: Co-founder and CEO of Datadog. Ran development at Wireless Generation, where co-founder Alexis Lê-Quôc ran operations.
+def: A founder who spent Datadog's first six months interviewing engineers instead of writing code.
+def: The CEO who said no to Cisco in 2019 and took Datadog public instead.
+quote: Bringing dev and ops together is not a feature, it is core.
+:::
 
 ## Every Team Had Its Own Version of the Truth
 
@@ -89,7 +100,15 @@ And the first buyers had a specific job. According to the founders' letter, the 
 
 A year later, in November 2012, Index Ventures and RTP Ventures co-led a $6.2 million Series A. Infrastructure monitoring was generally available. The next question was how to get it onto as many servers as possible.
 
-{{figure:positioning | What Datadog's homepage said, 2011 to 2026. Source: Internet Archive captures of datadoghq.com.}}
+:::moodboard What Datadog's homepage said, year by year
+2011 | Graph, Share, Grok! | Brings together metrics and events from your systems, applications and cloud providers
+2012 | See it all in one place | Your servers, your clouds, your metrics, your apps, your team. Together.
+2015 | Cloud monitoring as a service | Monitoring that tracks your dynamic infrastructure
+2017 | Modern monitoring & analytics | Monitoring that tracks your dynamic infrastructure and applications
+2019 | See inside any stack, any app, at any scale, anywhere. | Modern monitoring & analytics
+2026 | The integrated platform for monitoring & security | End-to-end, simplified visibility into your stack's health & performance
+Source: Internet Archive captures of datadoghq.com.
+:::
 
 ## Priced to Be Everywhere
 
@@ -319,6 +338,14 @@ Both can be true today. The risk is that the screen matters less once software r
 
 **Every wave that made software harder to understand made Datadog's market bigger. AI is the first one that might do some of the understanding itself.**
 
+:::record On the *record*
+None of the West Coast investors were listening. | Olivier Pomel, to TechCrunch
+When you don't have anything to sell, everybody is super happy to talk to you. | Olivier Pomel, at SaaStr
+I don't think there's an MVP for what we do. I think it's a myth. | Olivier Pomel
+A lot of it was luck. | Olivier Pomel, to TechCrunch in 2018
+Love their product, hate their shady billing. | Top Hacker News comment on the IPO filing, 2019
+:::
+
 ## What Transfers
 
 Strip away the products and the numbers, and Datadog's machine comes down to one rule.
@@ -327,15 +354,13 @@ Strip away the products and the numbers, and Datadog's machine comes down to one
 
 Datadog earned that position in a specific order, and most of it applies well outside monitoring.
 
-**Land where the work already happens.** Datadog's first sale didn't ask anyone to replace anything. It connected to the tools customers already had and became the one place where all of them could be seen together. An additive first sale skips the budget fight that a replacement starts.
-
-**Price for footprint when usage tracks value.** $15 a server, no seat fees and free integrations put Datadog on every machine and in front of every team. Usage-based pricing grows with the customer without a new deal. Just plan for the year it shrinks.
-
-**Let the product create the next deal.** Datadog spends more on R&D than on sales and marketing because each new product sells into an installed base that already trusts it. By the time a salesperson shows up, the product has usually done the first part of the job.
-
-**Read the trial like a pipeline.** Datadog treated a support ticket from a trial user as a buying signal and answered it with an engineer. The users who reach out are telling you they care, and that moment is worth more than any nurture sequence.
-
-**Watch the buyer boundary.** Expansion is fastest inside one budget. Crossing to a new buyer, like Datadog's move into security, is a new sale even when the product and the data are the same.
+:::machine The way Datadog *sells*
+Land where the work already happens. | Datadog's first sale didn't ask anyone to replace anything. It connected to the tools customers already had and became the one place where all of them could be seen together. An additive first sale skips the budget fight that a replacement starts.
+Price for footprint when usage tracks value. | $15 a server, no seat fees and free integrations put Datadog on every machine and in front of every team. Usage-based pricing grows with the customer without a new deal. Just plan for the year it shrinks.
+Let the product create the next deal. | Datadog spends more on R&D than on sales and marketing because each new product sells into an installed base that already trusts it. By the time a salesperson shows up, the product has usually done the first part of the job.
+Read the trial like a pipeline. | Datadog treated a support ticket from a trial user as a buying signal and answered it with an engineer. The users who reach out are telling you they care, and that moment is worth more than any nurture sequence.
+Watch the buyer boundary. | Expansion is fastest inside one budget. Crossing to a new buyer, like Datadog's move into security, is a new sale even when the product and the data are the same.
+:::
 
 Some of it doesn't transfer. Datadog started at the moment infrastructure moved to the cloud. Its founders were engineers who had lived the problem for years, and they've now run the company together for 16 years while their closest rival went through repeated leadership changes. It had the patience to turn down Cisco. And Pomel himself credits luck.
 

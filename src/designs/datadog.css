@@ -1,0 +1,11 @@
+/* Datadog deep dive: deep violet. The hero canvas (datadog.js) lights up a field of server racks
+   and, on scroll, pulls every light into one dashboard. Without WebGL, JavaScript or motion,
+   the CSS dot field below stands in. Shared article treatment: styles.css, .dd--designed. */
+.dd--datadog { --accent: #632CA6; --accent-deep: #3B1670; --accent-light: #DCCBF2; --page: #F8F6FB; }
+.dd--datadog .dd-hero { background: radial-gradient(ellipse 75% 70% at 70% 35%, #3A1A66, #160A2A 72%), #120822; }
+.dd--datadog .dd-hero::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(190, 150, 255, 0.45) 1.2px, transparent 1.8px); background-size: 22px 22px; -webkit-mask: radial-gradient(ellipse 60% 60% at 70% 40%, #000, transparent); mask: radial-gradient(ellipse 60% 60% at 70% 40%, #000, transparent); transition: opacity 1.2s ease; }
+.dd--datadog .dd-hero.fx-on::before { opacity: 0; }
+.dd--datadog .hero-shade { background: linear-gradient(to top, rgba(10, 4, 20, 0.85), rgba(10, 4, 20, 0.2) 50%, transparent 72%), linear-gradient(to right, rgba(10, 4, 20, 0.7), rgba(10, 4, 20, 0.1) 52%, transparent 66%); }
+
+/* The dashboard forms top right, so the logo sits above the headline instead. */
+.dd--datadog .dd-hero .dd-logo { position: static; order: -1; justify-items: start; width: clamp(130px, 13vw, 180px); margin-bottom: 18px; }
