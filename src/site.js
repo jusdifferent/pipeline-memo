@@ -249,9 +249,9 @@
 
 })();
 
-// Figures and section breaks in deep dives and essays animate once when they scroll into view.
+// Figures in deep dives and essays animate once when they scroll into view.
 (function () {
-  var figs = document.querySelectorAll('.dd-figure, .part-break');
+  var figs = document.querySelectorAll('.dd-figure');
   if (!figs.length) return;
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!('IntersectionObserver' in window) || reduce) {

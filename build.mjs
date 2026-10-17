@@ -167,7 +167,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${cfg.brandfetchClientId ? '<link rel="preconnect" href="https://cdn.brandfetch.io" crossorigin>' : ''}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700..900;1,400..800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Playfair+Display:wght@700..900&family=Newsreader:ital,opsz,wght@1,6..72,500..600&display=swap">
 <link rel="stylesheet" href="/styles.css?v=${ver}">
 ${head}
 </head>
@@ -304,7 +304,7 @@ function splitEssay(html) {
   let paras = 0, i = 0;
   for (; i < blocks.length; i++) {
     if (/^<p[ >]/.test(blocks[i])) paras++;
-    if (paras > PREVIEW_PARAGRAPHS || (paras > 0 && (blocks[i].startsWith('<h2') || blocks[i].startsWith('<div class="part-break"')))) break;
+    if (paras > PREVIEW_PARAGRAPHS || (paras > 0 && blocks[i].startsWith('<h2'))) break;
   }
   return { preview: blocks.slice(0, i).join('\n'), rest: blocks.slice(i).join('\n') };
 }
@@ -312,9 +312,7 @@ function splitEssay(html) {
 function deepDiveArticle(dd) {
   let sheet;
   if (dd.published) {
-    let html = renderMarkdown(dd.essay, { figure: figureFor('deep-dives', dd.slug), block: renderBlock }).html;
-    if (dd.design) html = html.replace(/^<h2 /gm, `${PART_BREAK}<h2 `);
-    const { preview, rest } = splitEssay(html);
+    const { preview, rest } = splitEssay(renderMarkdown(dd.essay, { figure: figureFor('deep-dives', dd.slug), block: renderBlock }).html);
     const mode = dd.readUrl ? 'redirect' : 'unlock';
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${dd.readUrl ? ` data-read-url="${e(dd.readUrl)}"` : ''} style="${brandVars(dd)}">
@@ -391,9 +389,6 @@ function essayPage(es) {
 <ul class="essay-list">${related.map((x) => `<li><a href="${essayUrl(x)}" data-preview>${e(x.title)}</a></li>`).join('')}</ul></section>`,
   });
 }
-
-// Designed pieces get a small motif before each part; each design styles its cells (src/designs/<name>.css).
-const PART_BREAK = `<div class="part-break" aria-hidden="true">${Array.from({ length: 18 }, (_, k) => `<i style="--k:${k}"></i>`).join('')}</div>`;
 
 // A deep dive with `design: <name>` in its front matter gets src/designs/<name>.css and,
 // if present, <name>.js: a module that draws the hero effect (three.js from a CDN).

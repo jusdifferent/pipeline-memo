@@ -9,12 +9,3 @@
 
 /* The dashboard forms top right, so the logo sits above the headline instead. */
 .dd--datadog .dd-hero .dd-logo { position: static; order: -1; justify-items: start; width: clamp(130px, 13vw, 180px); margin-bottom: 18px; }
-
-/* Part break: the face of a server, its status lights switching on in turn, then blinking. */
-.dd--datadog .part-break { height: 24px; padding: 0 12px; align-items: center; border-radius: 4px; background: #170A2B; box-shadow: inset 0 0 0 1px #3B2366, 0 6px 16px rgba(23, 10, 43, 0.18); }
-.dd--datadog .part-break i { flex: 0 0 8px; height: 8px; border-radius: 50%; background: #3A2864; }
-.dd--datadog .part-break i:nth-child(4n) { --hot: #FFFFFF; }
-.dd--datadog .part-break.is-in i { animation: dd-on 0.35s ease both, dd-blink 2.6s ease-in-out infinite; animation-delay: calc(var(--k) * 60ms), calc(1s + var(--k) * 137ms); }
-@keyframes dd-on { to { background: #B07CFF; box-shadow: 0 0 8px #9B5CF6, 0 0 2px #fff; } }
-@keyframes dd-blink { 0%, 100% { background: #B07CFF; box-shadow: 0 0 8px #9B5CF6; } 50% { background: var(--hot, #7D46DB); box-shadow: 0 0 12px #B07CFF; } }
-@media (prefers-reduced-motion: reduce) { .dd--datadog .part-break i { animation: none !important; background: #B07CFF; } }
