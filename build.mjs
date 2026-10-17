@@ -353,7 +353,7 @@ function finaleSection(sec) {
   return `<section class="finale" data-finale>
     <p class="fin-line">${lines.map(manifestoWords).join('<br>')}</p>
     <svg class="fin-flourish" viewBox="0 0 400 40" aria-hidden="true"><path d="M4 30 C 80 6, 160 38, 230 18 S 350 8, 396 22" pathLength="1"/></svg>
-    <p class="fin-cta"><a class="btn" href="/subscribe">Get the next deep dive</a></p>
+    <p class="fin-cta"><a class="btn" href="/subscribe"><span class="roll"><span>Get the next deep dive</span></span></a></p>
     ${logos.length ? `<div class="fin-logos"><p>Named in this story</p><div class="mq"><div class="mq-track">${strip(false)}${strip(true)}</div></div></div>` : ''}
   </section>`;
 }
@@ -385,8 +385,10 @@ function deepDiveArticle(dd) {
     </div>`;
   }
   const crumb = `<p class="crumb"><a href="/?series=${dd.series}">${e(seriesBy[dd.series].short)}</a><span>${e(dd.industry)}</span><span>${e(status(dd))}${dd.published ? `, ${dd.minutes} min read` : ''}</span></p>`;
+  // Scrolling from the hero into the manifesto, the hero shrinks into a card and the design draws over it.
+  const run = parts.hero && designPartial(dd.design, 'run');
   return `<article class="dd${dd.design ? ` dd--designed dd--${dd.design}` : ''}" data-dd="${dd.slug}" style="${brandVars(dd)}">
-  <header class="dd-head${dd.design ? ' dd-hero' : ''}${parts.hero ? ' has-word' : ''}" style="${brandVars(dd)}">${dd.design ? `${designPartial(dd.design, 'hero') || '<canvas class="hero-fx" aria-hidden="true"></canvas>'}<span class="hero-shade" aria-hidden="true"></span>` : ''}
+  ${run ? '<div class="hero-run"><div class="run-stage">' : ''}<header class="dd-head${dd.design ? ' dd-hero' : ''}${parts.hero ? ' has-word' : ''}" style="${brandVars(dd)}">${dd.design ? `${designPartial(dd.design, 'hero') || '<canvas class="hero-fx" aria-hidden="true"></canvas>'}<span class="hero-shade" aria-hidden="true"></span>` : ''}
     ${heroLetters(parts.hero)}
     <div class="dd-head-grid">
       <div>
@@ -396,7 +398,8 @@ function deepDiveArticle(dd) {
       </div>
       ${parts.hero ? '' : logoBox(dd, 'dd-logo')}
     </div>
-  </header>
+  </header>${run ? `
+  ${run}</div></div>` : ''}
   ${manifestoSection(parts.manifesto)}
   <div class="dd-sheet">${dd.design ? crumb.replace('class="crumb"', 'class="crumb dd-meta"') : ''}${sheet}</div>
   ${finaleSection(parts.finale)}

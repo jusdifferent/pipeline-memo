@@ -1,7 +1,9 @@
 // Datadog deep dive: the lens hero and the page's scroll moments. Plain DOM, no three.js.
 // - The lens follows the cursor; inside it, the outage resolves into one view. On touch screens,
 //   or until someone moves the cursor, it drifts on its own. It never covers the title.
-// - Hover or tap a giant letter to play its scene.
+// - Hover or tap a giant letter to play its scene. While nobody is interacting, a letter now and then
+//   plays its scene for a moment (and on load the whole word ripples once), so the page shows what it does.
+// - Scrolling on, the hero shrinks into a card for the interlude (pure CSS, styles.css).
 // - Manifesto words light up as you scroll; moodboard polaroids drift at different speeds.
 // Preview aid: ?fx=<x>,<y> freezes the lens at that spot (fractions of the hero), e.g. ?fx=0.3,0.25.
 
@@ -13,8 +15,10 @@ export function mount(hero) {
   const scene = hero.querySelector('[data-lens]');
   const word = hero.querySelector('[data-hero-word]');
   const letters = word ? [...word.querySelectorAll('.hl')] : [];
+  const freeze = new URLSearchParams(location.search).get('fx');
 
   const on = (target, type, fn, opts) => target.addEventListener(type, fn, opts);
+  let visible = true; // is the hero on screen
 
   // ---- letters: a dark copy for inside the lens; hover and taps are mirrored onto it
   let ghosts = [];
@@ -47,25 +51,28 @@ export function mount(hero) {
 
   // ---- measurements: where the letters and the title sit, so the lens can line up with them
   let W = 1, H = 1, R = 160, yTop = 0.05, yMax = 0.4, placeLens = () => {};
+  // Sizes are in the hero's own space (k undoes the interlude's scale), so they hold mid-shrink too.
   const measure = () => {
     const hr = hero.getBoundingClientRect();
-    W = hr.width || 1; H = hr.height || 1;
+    W = hero.clientWidth || 1; H = hero.clientHeight || 1;
+    const k = hr.width / W || 1;
+    const at = (el) => { const r = el.getBoundingClientRect(); return { x: (r.left - hr.left) / k, y: (r.top - hr.top) / k, w: r.width / k }; };
     if (word) {
-      const wr = word.getBoundingClientRect();
-      hero.style.setProperty('--wx', `${wr.left - hr.left}px`);
-      hero.style.setProperty('--wy', `${wr.top - hr.top}px`);
-      hero.style.setProperty('--ww', `${wr.width}px`);
+      const wr = at(word);
+      hero.style.setProperty('--wx', `${wr.x}px`);
+      hero.style.setProperty('--wy', `${wr.y}px`);
+      hero.style.setProperty('--ww', `${wr.w}px`);
       letters.forEach((b) => {
-        const r = b.getBoundingClientRect();
-        b.style.setProperty('--ox', `${r.left - hr.left}px`);
-        b.style.setProperty('--oy', `${r.top - hr.top}px`);
+        const r = at(b);
+        b.style.setProperty('--ox', `${r.x}px`);
+        b.style.setProperty('--oy', `${r.y}px`);
       });
     }
     const ring = scene && scene.querySelector('.lens-ring');
     R = ring ? ring.offsetWidth / 2 : 160;
     // The title block: the dark band fits it, and the lens stays above it.
     const text = hero.querySelector('.dd-head-grid');
-    const textTop = text ? text.getBoundingClientRect().top - hr.top : H * 0.6;
+    const textTop = text ? at(text).y : H * 0.6;
     hero.style.setProperty('--tb', `${Math.max(0, H - textTop)}px`);
     yTop = Math.min(0.3, (R * 0.85) / H); // keep the ring clear of the hero's top edge
     yMax = Math.max(yTop, (textTop - R - 14) / H);
@@ -82,7 +89,7 @@ export function mount(hero) {
     const t0 = performance.now();
     const clampY = (v) => Math.min(yMax, Math.max(0, v));
     const set = () => { hero.style.setProperty('--lx', `${x * W}px`); hero.style.setProperty('--ly', `${clampY(y) * H}px`); };
-    const aim = (ev) => { const r = hero.getBoundingClientRect(); tx = (ev.clientX - r.left) / W; ty = (ev.clientY - r.top) / H; };
+    const aim = (ev) => { const r = hero.getBoundingClientRect(); tx = (ev.clientX - r.left) / r.width; ty = (ev.clientY - r.top) / r.height; };
     on(hero, 'pointermove', (ev) => { if (ev.pointerType !== 'touch') { aim(ev); user = true; } });
     on(hero, 'pointerleave', () => { user = false; });
     on(hero, 'pointerdown', (ev) => {
@@ -92,7 +99,6 @@ export function mount(hero) {
       untouch = setTimeout(() => { user = false; }, 2500);
     });
 
-    const freeze = new URLSearchParams(location.search).get('fx');
     if (freeze) {
       const [fx, fy] = freeze.split(',').map(Number);
       x = Number.isFinite(fx) ? fx : x; y = Number.isFinite(fy) ? fy : y;
@@ -100,7 +106,7 @@ export function mount(hero) {
     } else if (reduce) {
       placeLens = set; set();
     } else {
-      let visible = true, raf = 0;
+      let raf = 0;
       const tick = (now) => {
         raf = 0;
         if (!visible) return;
@@ -118,6 +124,30 @@ export function mount(hero) {
       new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); }).observe(hero);
       kick();
     }
+  }
+
+  // ---- glimpses: the letters show what they do before anyone touches them
+  if (letters.length && !reduce && !freeze) {
+    const glimpse = (i, ms) => {
+      const pair = [letters[i], ghosts[i]].filter(Boolean);
+      pair.forEach((b) => b.classList.add('is-glimpse'));
+      setTimeout(() => pair.forEach((b) => b.classList.remove('is-glimpse')), ms);
+    };
+    let quietUntil = performance.now() + 4000, last = -1;
+    const hush = () => { quietUntil = performance.now() + 5000; }; // someone is exploring; stay out of the way
+    on(hero, 'pointermove', hush, { passive: true });
+    on(hero, 'pointerdown', hush, { passive: true });
+    on(hero, 'focusin', hush);
+    letters.forEach((b, i) => setTimeout(() => glimpse(i, 650), 700 + i * 110)); // the word ripples once
+    const next = () => {
+      setTimeout(next, 2000 + Math.random() * 1200);
+      if (!visible || document.hidden || performance.now() < quietUntil || letters.some((b) => b.classList.contains('is-on'))) return;
+      let i;
+      do { i = Math.floor(Math.random() * letters.length); } while (i === last && letters.length > 1);
+      last = i;
+      glimpse(i, 1100);
+    };
+    setTimeout(next, 3600);
   }
 
   // ---- scroll moments

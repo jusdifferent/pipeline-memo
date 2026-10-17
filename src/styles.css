@@ -214,7 +214,7 @@ html.modal-open { overflow: hidden; }
 /* ------------------------------------------------------------ band + footer + pages */
 .signup-band { background: var(--ink); color: var(--paper); padding: clamp(56px, 8vw, 96px) 0; margin-top: clamp(64px, 9vw, 112px); }
 .band-inner { max-width: 760px; text-align: center; }
-.signup-band h2 { font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.8rem); letter-spacing: -0.025em; margin-bottom: 14px; }
+.signup-band h2 { max-width: 15em; margin: 0 auto 14px; font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.8rem); line-height: 1.12; letter-spacing: -0.025em; text-wrap: balance; }
 .signup-band p { font-family: var(--serif); font-size: 1.12rem; opacity: 0.88; margin: 0 auto 26px; max-width: 34em; }
 .signup-band .quick { margin: 0 auto; }
 .signup-band .quick input { border-color: transparent; }
@@ -482,8 +482,8 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 .hl-ch, .hl::after { grid-area: 1 / 1; font: 700 min(19vw, 29vh)/0.78 var(--cond); letter-spacing: -0.01em; text-transform: uppercase; }
 .hl-ch { color: #F3EDE4; transition: opacity 0.3s ease; }
 .hl::after { content: attr(data-ch); color: transparent; background: var(--scene, var(--accent)); background-size: var(--scene-size, auto); -webkit-background-clip: text; background-clip: text; opacity: 0; transition: opacity 0.35s ease; animation: var(--scene-anim, none); }
-.hl.is-on::after, .hl.is-hover::after, .hl:focus-visible::after { opacity: 1; }
-.hl.is-on .hl-ch, .hl.is-hover .hl-ch, .hl:focus-visible .hl-ch { opacity: 0; }
+.hl.is-on::after, .hl.is-hover::after, .hl.is-glimpse::after, .hl:focus-visible::after { opacity: 1; }
+.hl.is-on .hl-ch, .hl.is-hover .hl-ch, .hl.is-glimpse .hl-ch, .hl:focus-visible .hl-ch { opacity: 0; }
 .hl:focus-visible { outline: 2px solid var(--accent-hi, #fff); outline-offset: 6px; }
 .hl-cap { --cx: -50%; position: absolute; left: 50%; bottom: 6%; z-index: 6; width: max-content; max-width: 230px; padding: 9px 12px 10px; border-radius: 10px; background: #fff; color: #141414; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3); font: 400 0.84rem/1.4 var(--sans); text-align: left; opacity: 0; pointer-events: none; transform: translate(var(--cx), 8px); transition: opacity 0.25s ease, transform 0.25s ease; }
 .hl-cap b { display: block; font: 600 0.72rem/1.2 var(--cond); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 3px; }
@@ -502,8 +502,30 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 }
 @media (prefers-reduced-motion: reduce) { .hl::after { animation: none; } }
 
+/* Interlude: the scroll from the hero into the manifesto, for designs with a run partial
+   (src/designs/<name>.run.html). Wide screens pin the hero and shrink it into a card on the manifesto
+   color while the design draws over it. It's scroll-driven CSS, which the browser runs off the main
+   thread. Phones, browsers without scroll-driven animation and reduced motion go straight on. */
+:root { --head-h: 88px; }
+@media (max-width: 900px) { :root { --head-h: 128px; } }
+.run-stage { position: relative; }
+.run-line { display: none; }
+@keyframes run-card { to { transform: scale(0.68); } }
+@keyframes run-draw { from { stroke-dashoffset: 1; } }
+@supports (animation-timeline: view()) {
+  @media (min-width: 761px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+    .hero-run { height: calc(170svh - var(--head-h)); background: var(--man-bg, var(--ink)); view-timeline: --run block; view-timeline-inset: var(--head-h) 0px; }
+    .run-stage { position: sticky; top: var(--head-h); height: calc(100svh - var(--head-h)); overflow: hidden; }
+    .hero-run .run-stage > .dd-hero { position: absolute; inset: 0; min-height: 0; border-radius: 40px; box-shadow: 0 60px 140px rgba(0, 0, 0, 0.55); will-change: transform; animation: run-card linear both; animation-timeline: --run; animation-range: contain 0% contain 55%; }
+    .run-line { display: block; position: absolute; left: 50%; top: 22%; z-index: 3; width: min(54%, 820px); height: auto; aspect-ratio: 800 / 220; overflow: visible; transform: translateX(-50%); }
+    .hero-run + .manifesto { padding-top: 0; }
+    .run-line path { fill: none; stroke: var(--accent-hi, #fff); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; filter: drop-shadow(0 0 12px var(--accent-hi, #fff)); animation: run-draw linear both; animation-timeline: --run; animation-range: contain 35% contain 95%; }
+  }
+}
+
 /* Manifesto: the thesis as one huge statement; words light up as you scroll. */
 .manifesto { padding: clamp(80px, 14vh, 160px) var(--pad); background: var(--man-bg, var(--ink)); color: var(--man-fg, #fff); }
+.hero-run + .manifesto { padding-top: clamp(36px, 6vh, 72px); }
 .manifesto p { max-width: 1180px; margin: 0 auto; text-align: center; font: 700 clamp(2rem, 0.9rem + 4.4vw, 5.2rem)/1.02 var(--sans); letter-spacing: -0.025em; text-transform: uppercase; text-wrap: balance; }
 .manifesto em, .finale em { font: italic 500 1.06em/1 var(--italic); letter-spacing: -0.01em; text-transform: none; color: var(--accent-hi, var(--accent)); }
 html.js .manifesto .mw { opacity: 0.16; transition: opacity 0.45s ease; }
@@ -563,7 +585,12 @@ html.js .bl-fan li:not(.is-in) { opacity: 0; translate: 0 28px; rotate: calc(var
 .fin-flourish path { fill: none; stroke: var(--accent-hi, var(--accent)); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s ease 0.2s; }
 html.js .finale:not(.is-in) .fin-flourish path { stroke-dashoffset: 1; }
 .fin-cta { margin: 40px 0 0; }
-.finale .fin-cta .btn { background: var(--accent-hi, #fff); color: var(--man-bg, #141414); }
+.finale .fin-cta .btn { background: var(--accent-hi, #fff); color: var(--man-bg, #141414); transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease, background-color 0.35s ease; }
+.finale .fin-cta .btn:hover, .finale .fin-cta .btn:focus-visible { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 34px color-mix(in srgb, var(--accent-hi, #fff) 45%, transparent); }
+.roll { display: block; height: 1.25em; overflow: hidden; line-height: 1.25; }
+.roll > span { display: block; text-shadow: 0 1.25em currentColor; transition: transform 0.45s cubic-bezier(.2, .8, .2, 1); }
+.btn:hover .roll > span, .btn:focus-visible .roll > span { transform: translateY(-1.25em); }
+@media (prefers-reduced-motion: reduce) { .roll > span, .finale .fin-cta .btn { transition: none; } .finale .fin-cta .btn:hover { transform: none; } }
 .fin-logos { margin-top: clamp(60px, 10vh, 100px); }
 .fin-logos p { margin: 0 0 22px; font: 600 0.72rem/1 var(--cond); letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.6; }
 .mq { overflow: hidden; -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
