@@ -301,5 +301,4 @@ It's paying to create the people who will buy it.
 :::finale
 Clay is paying to create
 *the people who will buy it.*
-logos: anthropic.com, openai.com=OpenAI, intercom.com, notion.so, canva.com, ramp.com, rippling.com, verkada.com
 :::

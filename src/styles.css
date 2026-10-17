@@ -586,22 +586,17 @@ html.js .bl-fan li:not(.is-in) { opacity: 0; translate: 0 28px; rotate: calc(var
 .fin-flourish { display: block; width: min(420px, 70vw); height: auto; margin: 6px auto 0; overflow: visible; }
 .fin-flourish path { fill: none; stroke: var(--accent-hi, var(--accent)); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s ease 0.2s; }
 html.js .finale:not(.is-in) .fin-flourish path { stroke-dashoffset: 1; }
-.fin-cta { margin: 40px 0 0; }
-.finale .fin-cta .btn { background: var(--accent-hi, #fff); color: var(--man-bg, #141414); transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease, background-color 0.35s ease; }
-.finale .fin-cta .btn:hover, .finale .fin-cta .btn:focus-visible { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 34px color-mix(in srgb, var(--accent-hi, #fff) 45%, transparent); }
-.roll { display: block; height: 1.25em; overflow: hidden; line-height: 1.25; }
-.roll > span { display: block; text-shadow: 0 1.25em currentColor; transition: transform 0.45s cubic-bezier(.2, .8, .2, 1); }
-.btn:hover .roll > span, .btn:focus-visible .roll > span { transform: translateY(-1.25em); }
-@media (prefers-reduced-motion: reduce) { .roll > span, .finale .fin-cta .btn { transition: none; } .finale .fin-cta .btn:hover { transform: none; } }
-.fin-logos { margin-top: clamp(60px, 10vh, 100px); }
-.fin-logos p { margin: 0 0 22px; font: 600 0.72rem/1 var(--cond); letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.6; }
-.mq { overflow: hidden; -webkit-mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
-.mq-track { display: flex; align-items: center; gap: clamp(40px, 6vw, 80px); width: max-content; animation: mq 38s linear infinite; }
-.mq-track img { height: 28px; width: auto; max-width: 150px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.75; }
-@keyframes mq { to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .mq-track { animation: none; } }
+.fin-ask { max-width: 480px; margin: clamp(36px, 6vh, 56px) auto 0; }
+.fin-hook { margin: 0 0 16px; font: 500 clamp(1.05rem, 1rem + 0.3vw, 1.2rem)/1.4 var(--sans); }
+.finale .quick { margin: 0 auto; justify-content: center; }
+.finale .quick input { border-color: transparent; }
+.finale .quick .btn { background: var(--accent-hi, #fff); color: var(--man-bg, #141414); transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease, background-color 0.35s ease; }
+.finale .quick .btn:hover, .finale .quick .btn:focus-visible { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 34px color-mix(in srgb, var(--accent-hi, #fff) 45%, transparent); }
+.finale .form-done { color: var(--man-fg, #fff); font-size: 1.1rem; }
+.fin-fine { margin: 14px 0 0; font-size: 0.84rem; opacity: 0.7; }
+@media (prefers-reduced-motion: reduce) { .finale .quick .btn { transition: none; } .finale .quick .btn:hover { transform: none; } }
 
-/* A finale already ends the page with a call to subscribe; the footer band sits flush against it. */
-body.designed:has(.finale) .signup-band { margin-top: 0; }
+/* A finale already ends the page with the signup form; the footer band would ask a second time. */
+body.designed:has(.finale) .signup-band { display: none; }
 /* Safety net: nothing on a designed page may push it sideways. */
 .dd--designed { overflow-x: clip; }

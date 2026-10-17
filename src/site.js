@@ -60,7 +60,7 @@
           entries.forEach(function (en) { floatAway[en.target.dataset.watch] = en.isIntersecting; });
           setFloat();
         }, { rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('[data-band], .dd-page [data-gate], .dd-page .dd-head').forEach(function (el, i) { el.dataset.watch = 'w' + i; io.observe(el); });
+        document.querySelectorAll('[data-band], [data-finale], .dd-page [data-gate], .dd-page .dd-head').forEach(function (el, i) { el.dataset.watch = 'w' + i; io.observe(el); });
       }
     }
   }

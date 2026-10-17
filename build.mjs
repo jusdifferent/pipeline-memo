@@ -319,7 +319,6 @@ function pullSections(md) {
   });
   return { body, ...out };
 }
-const brandLogo = (domain, theme = 'light') => `https://cdn.brandfetch.io/domain/${domain}/w/400${theme ? `/theme/${theme}` : ''}/fallback/404/type/logo?c=${encodeURIComponent(cfg.brandfetchClientId || '')}`;
 
 // Words of a manifesto line, so they can light up one by one; *phrases* become italic accents.
 function manifestoWords(text) {
@@ -343,20 +342,19 @@ function manifestoSection(sec) {
   return `<section class="manifesto" data-manifesto aria-label="The thesis"><p>${manifestoWords(sec.items.join(' '))}</p></section>`;
 }
 
-function finaleSection(sec) {
+// The finale: the closing line, a self-drawing underline, and the one ask on the page, an email form
+// (designed pages skip the footer signup band, so the reader is asked once, here).
+function finaleSection(sec, dd) {
   if (!sec) return '';
-  const logos = (sec.items.find((x) => /^logos:/i.test(x)) || '').replace(/^logos:\s*/i, '').split(/\s*,\s*/).filter(Boolean);
   const lines = sec.items.filter((x) => !/^logos:/i.test(x)); // each line of the closing statement starts a new line
-  // "domain" or "domain=Name" when the name isn't just the domain capitalized (openai.com=OpenAI).
-  const name = (d) => d.split('=')[1] || d.replace(/\.[a-z]+$/, '').replace(/^./, (c) => c.toUpperCase());
-  const host = (d) => d.split('=')[0];
-  // Not every brand has a light logo; the strip whitens logos anyway, so fall back to the standard one.
-  const strip = (copy) => logos.map((d) => `<img src="${e(brandLogo(host(d)))}" data-alt="${e(brandLogo(host(d), null))}" alt="${copy ? '' : e(name(d))}"${copy ? ' aria-hidden="true"' : ''} loading="lazy" decoding="async" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.removeAttribute('data-alt')}else{this.remove()}">`).join('');
   return `<section class="finale" data-finale>
     <p class="fin-line">${lines.map(manifestoWords).join('<br>')}</p>
     <svg class="fin-flourish" viewBox="0 0 400 40" aria-hidden="true"><path d="M4 30 C 80 6, 160 38, 230 18 S 350 8, 396 22" pathLength="1"/></svg>
-    <p class="fin-cta"><a class="btn" href="/subscribe"><span class="roll"><span>Get the next deep dive</span></span></a></p>
-    ${logos.length ? `<div class="fin-logos"><p>Named in this story</p><div class="mq"><div class="mq-track">${strip(false)}${strip(true)}</div></div></div>` : ''}
+    <div class="fin-ask">
+      <p class="fin-hook">Get the next deep dive the day it comes out.</p>
+      ${subForm({ id: `finale-${dd.slug}`, button: 'Subscribe', source: `${dd.slug}-finale` })}
+      <p class="fin-fine">Free. Unsubscribe anytime.</p>
+    </div>
   </section>`;
 }
 
@@ -404,7 +402,7 @@ function deepDiveArticle(dd) {
   ${run}</div></div>` : ''}
   ${manifestoSection(parts.manifesto)}
   <div class="dd-sheet">${dd.design ? crumb.replace('class="crumb"', 'class="crumb dd-meta"') : ''}${sheet}</div>
-  ${finaleSection(parts.finale)}
+  ${finaleSection(parts.finale, dd)}
 </article>`;
 }
 

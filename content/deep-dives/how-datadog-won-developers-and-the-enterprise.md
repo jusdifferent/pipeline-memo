@@ -386,5 +386,4 @@ Datadog sold one place to look. Customers found everything else there.
 :::finale
 Datadog sold *one place to look.*
 Customers found *everything else* there.
-logos: salesforce.com, google.com, zendesk.com, airbnb.com, samsung.com, coinbase.com
 :::
