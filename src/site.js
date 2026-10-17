@@ -27,6 +27,27 @@
     });
   };
 
+  // ---------------------------------------------------------- personal read links
+  // Adding ?read=<code> to an essay or deep dive link opens that one piece in full, with no email box.
+  // The code comes out of the address bar right away, so a forwarded link asks for an email again; it's
+  // remembered for this piece only (not a subscription), and any signup from the page carries it as its
+  // source, so Beehiiv shows which link brought the reader in.
+  var readCode = (function () {
+    var piece = document.querySelector('[data-dd]');
+    if (!piece) return '';
+    var memo = 'dd-read:' + piece.getAttribute('data-dd');
+    var params = new URLSearchParams(location.search);
+    var code = (params.get('read') || '').toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+    if (params.has('read')) {
+      params.delete('read');
+      var qs = params.toString();
+      try { history.replaceState(history.state, '', location.pathname + (qs ? '?' + qs : '') + location.hash); } catch (e) { /* old browser */ }
+    }
+    if (code) store.set(localStorage, memo, code);
+    return code || store.get(localStorage, memo) || '';
+  })();
+  if (readCode) document.querySelectorAll('[data-gate][data-mode="unlock"]').forEach(unlock);
+
   // ---------------------------------------------------------- scroll-in moments
   // Figures and designed sections (card fans and each of their cards, finales) animate once when they
   // scroll into view.
@@ -74,6 +95,7 @@
     var button = form.querySelector('button[type="submit"]');
     var status = form.querySelector('.form-status');
     var data = Object.fromEntries(new FormData(form).entries());
+    if (readCode) data.source = 'read-' + readCode + '+' + (data.source || 'site'); // which read link brought them (first, so it survives the 100-character cap)
     button.disabled = true; button.textContent = 'Subscribing\u2026';
     status.className = 'form-status'; status.textContent = '';
     fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) })
