@@ -91,7 +91,7 @@ p { margin: 0 0 1em; }
 /* Desktop: size tiles from the viewport height so the first row and its titles land above the fold
    (and above the floating email pill). The top padding scales with the tile so the hover page clears the tabs. */
 @media (min-width: 901px) {
-  .episodes { --gx: clamp(20px, 3vw, 48px); --tile: max(240px, min((100vw - 2 * var(--pad) - 2 * var(--gx)) / 3, (100svh - 320px) / 1.31, 440px)); padding-top: calc(var(--tile) * 0.31); }
+  .episodes { --gx: clamp(20px, 3vw, 48px); --tile: max(240px, min((100vw - 2 * var(--pad) - 2 * var(--gx)) / 3, (100svh - 320px) / 1.345, 440px)); padding-top: calc(var(--tile) * 0.345); }
   .episodes .grid { column-gap: var(--gx); max-width: calc(3 * var(--tile) + 2 * var(--gx)); }
 }
 .tile-stack { position: relative; display: block; }
@@ -99,15 +99,15 @@ p { margin: 0 0 1em; }
 /* The page tucked behind each tile: on hover it slides up like an essay pulled from a file folder. */
 .tile-page {
   position: absolute; z-index: 0; left: 8%; right: 8%; top: 0; height: 72%;
-  padding: 7% 8%; border-radius: 4px; background: #fff; border-top: 5px solid var(--ep-bg);
+  padding: 6% 8%; border-radius: 4px; background: #fff; border-top: 5px solid var(--ep-bg);
   box-shadow: 0 10px 30px rgba(20, 18, 14, 0.18);
-  transform: translateY(0) rotate(0deg); transition: transform 0.45s cubic-bezier(.2, .8, .2, 1); display: flex; flex-direction: column; gap: 8px; overflow: hidden;
+  transform: translateY(0) rotate(0deg); transition: transform 0.45s cubic-bezier(.2, .8, .2, 1); display: flex; flex-direction: column; gap: 6px; overflow: hidden;
 }
-.page-code { font: 500 clamp(0.72rem, 0.6rem + 0.3vw, 0.86rem)/1.2 var(--cond); text-transform: uppercase; letter-spacing: 0.06em; color: #6d6a63; }
-.page-dek { font: 600 clamp(0.8rem, 0.68rem + 0.35vw, 0.98rem)/1.35 var(--serif); color: #1f1d19; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.page-code { font: 500 clamp(0.7rem, 0.6rem + 0.26vw, 0.84rem)/1.2 var(--cond); text-transform: uppercase; letter-spacing: 0.06em; color: #6d6a63; }
+.page-dek { font: 600 clamp(0.78rem, 0.66rem + 0.32vw, 0.95rem)/1.3 var(--serif); color: #1f1d19; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .page-lines { flex: 1; background: repeating-linear-gradient(to bottom, #d9d4ca 0 2px, transparent 2px 14px); -webkit-mask: linear-gradient(to right, #000 88%, transparent); mask: linear-gradient(to right, #000 88%, transparent); }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .card a:hover .tile-page, .card a:focus-visible .tile-page { transform: translateY(-40%) rotate(-2deg); }
+  .card a:hover .tile-page, .card a:focus-visible .tile-page { transform: translateY(-44%) rotate(-2deg); }
   .card a:hover .tile, .card a:focus-visible .tile { transform: translateY(4px); box-shadow: 0 18px 34px rgba(20, 18, 14, 0.2); }
   .card a:hover, .card a:focus-visible { position: relative; z-index: 3; }
 }
