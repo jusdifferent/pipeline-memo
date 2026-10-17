@@ -3,29 +3,18 @@
 //   or until someone moves the cursor, it drifts on its own. It never covers the title.
 // - Hover or tap a giant letter to play its scene.
 // - Manifesto words light up as you scroll; moodboard polaroids drift at different speeds.
-// mount(hero) is also called by the homepage's preview panel (site.js), with the panel as scroller.
 // Preview aid: ?fx=<x>,<y> freezes the lens at that spot (fractions of the hero), e.g. ?fx=0.3,0.25.
 
 export function mount(hero) {
   if (!hero || hero.dataset.fx) return;
   hero.dataset.fx = 'on';
   const article = hero.closest('article') || document;
-  const scroller = hero.closest('dialog');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const scene = hero.querySelector('[data-lens]');
   const word = hero.querySelector('[data-hero-word]');
   const letters = word ? [...word.querySelectorAll('.hl')] : [];
 
-  // Everything this mount listens to is dropped once the hero leaves the page (e.g. the panel closes).
-  const ac = new AbortController();
-  const on = (target, type, fn, opts) => target.addEventListener(type, fn, { ...opts, signal: ac.signal });
-  const watchers = [];
-  const alive = () => {
-    if (hero.isConnected) return true;
-    ac.abort();
-    watchers.forEach((w) => w.disconnect());
-    return false;
-  };
+  const on = (target, type, fn, opts) => target.addEventListener(type, fn, opts);
 
   // ---- letters: a dark copy for inside the lens; hover and taps are mirrored onto it
   let ghosts = [];
@@ -59,7 +48,6 @@ export function mount(hero) {
   // ---- measurements: where the letters and the title sit, so the lens can line up with them
   let W = 1, H = 1, R = 160, yTop = 0.05, yMax = 0.4, placeLens = () => {};
   const measure = () => {
-    if (!alive()) return;
     const hr = hero.getBoundingClientRect();
     W = hr.width || 1; H = hr.height || 1;
     if (word) {
@@ -84,7 +72,7 @@ export function mount(hero) {
     placeLens();
   };
   measure();
-  if ('ResizeObserver' in window) { const ro = new ResizeObserver(measure); ro.observe(hero); watchers.push(ro); }
+  if ('ResizeObserver' in window) new ResizeObserver(measure).observe(hero);
   else on(window, 'resize', measure);
   if (document.fonts) document.fonts.ready.then(measure);
 
@@ -115,7 +103,7 @@ export function mount(hero) {
       let visible = true, raf = 0;
       const tick = (now) => {
         raf = 0;
-        if (!alive() || !visible) return;
+        if (!visible) return;
         if (!user) {
           // Wander over the outage, above the title.
           const t = (now - t0) / 1000, mid = (yTop + yMax) / 2, amp = (yMax - yTop) / 2;
@@ -127,9 +115,7 @@ export function mount(hero) {
         raf = requestAnimationFrame(tick);
       };
       const kick = () => { if (!raf && visible) raf = requestAnimationFrame(tick); };
-      const io = new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); });
-      io.observe(hero);
-      watchers.push(io);
+      new IntersectionObserver(([en]) => { visible = en.isIntersecting; kick(); }).observe(hero);
       kick();
     }
   }
@@ -140,10 +126,9 @@ export function mount(hero) {
   const boards = [...article.querySelectorAll('[data-drift]')];
   if (reduce) { words.forEach((w) => w.classList.add('on')); return; }
   let queued = false;
-  const vh = () => (scroller ? scroller.clientHeight : innerHeight);
+  const vh = () => innerHeight;
   const update = () => {
     queued = false;
-    if (!alive()) return;
     if (words.length) {
       const r = manifesto.getBoundingClientRect();
       const p = Math.min(1, Math.max(0, (vh() * 0.85 - r.top) / (r.height * 0.85)));
@@ -156,10 +141,10 @@ export function mount(hero) {
     });
   };
   const onScroll = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
-  on(scroller || window, 'scroll', onScroll, { passive: true });
+  on(window, 'scroll', onScroll, { passive: true });
   on(window, 'resize', onScroll);
   update();
 }
 
 const own = document.querySelector('.dd--datadog .dd-hero');
-if (own && !own.closest('dialog')) mount(own);
+if (own) mount(own);

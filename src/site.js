@@ -29,16 +29,13 @@
 
   // ---------------------------------------------------------- scroll-in moments
   // Figures and designed sections (card fans and each of their cards, finales) animate once when they
-  // scroll into view. Runs on the page and again on whatever the preview panel loads.
+  // scroll into view.
   var IN_VIEW = '.dd-figure, .bl-fan, .bl-fan li, .finale';
   var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var inView = 'IntersectionObserver' in window && !still ? new IntersectionObserver(function (entries) {
     entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-in'); inView.unobserve(en.target); } });
   }, { threshold: 0.25 }) : null;
-  var watchIn = function (scope) {
-    scope.querySelectorAll(IN_VIEW).forEach(function (el) { if (inView) inView.observe(el); else el.classList.add('is-in'); });
-  };
-  watchIn(document);
+  document.querySelectorAll(IN_VIEW).forEach(function (el) { if (inView) inView.observe(el); else el.classList.add('is-in'); });
 
   // ---------------------------------------------------------- floating signup pill
   var float = document.querySelector('[data-float]');
@@ -123,75 +120,7 @@
     if (ev.target.closest('[data-open-menu]')) openDialog(document.getElementById('menu-modal'));
   });
 
-  // A designed deep dive (front matter `design:`) brings its stylesheet and three.js hero along
-  // into the preview panel, so the panel looks like the page.
-  var importModule = function (u) { return new Function('u', 'return import(u)')(u); };
-  var mountDesign = function (doc, root) {
-    var hero = root.querySelector('.dd--designed .dd-hero');
-    if (!hero) return;
-    var css = doc.querySelector('link[href^="/designs/"]');
-    if (css && !document.querySelector('link[href="' + css.getAttribute('href') + '"]')) {
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = css.getAttribute('href');
-      document.head.appendChild(link);
-    }
-    var map = doc.querySelector('script[type="importmap"]');
-    if (map && !document.querySelector('script[type="importmap"]')) {
-      var im = document.createElement('script');
-      im.type = 'importmap';
-      im.textContent = map.textContent;
-      document.head.appendChild(im);
-    }
-    var mod = doc.querySelector('script[type="module"][src^="/designs/"]');
-    if (!mod) return;
-    try { importModule(mod.getAttribute('src')).then(function (m) { if (m && m.mount) m.mount(hero); }).catch(function () {}); } catch (e) { /* no module support: the CSS hero stays */ }
-  };
-
-  // Deep-dive preview: fetch the deep-dive page and show its article in a panel.
-  var preview = document.getElementById('preview-modal');
-  var previewBody = preview && preview.querySelector('[data-preview-body]');
-  var baseUrl = location.pathname + location.search, baseTitle = document.title;
-  var openPreview = function (href, push) {
-    previewBody.innerHTML = '<p class="loading">Loading\u2026</p>';
-    openDialog(preview);
-    preview.scrollTop = 0;
-    fetch(href).then(function (r) { if (!r.ok) throw new Error(); return r.text(); }).then(function (html) {
-      var doc = new DOMParser().parseFromString(html, 'text/html');
-      var article = doc.querySelector('[data-dd]');
-      if (!article) throw new Error();
-      previewBody.innerHTML = '';
-      previewBody.appendChild(document.importNode(article, true));
-      var more = document.createElement('p');
-      more.className = 'open-page';
-      more.innerHTML = '<a class="textlink" href="' + href + '">Open as a full page</a>';
-      previewBody.appendChild(more);
-      applySubscribed(previewBody);
-      watchIn(previewBody);
-      mountDesign(doc, previewBody);
-      document.title = doc.title;
-      if (push) history.pushState({ preview: href }, '', href);
-      var h = previewBody.querySelector('h1');
-      if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
-    }).catch(function () { location.href = href; });
-  };
-  if (preview) {
-    document.addEventListener('click', function (ev) {
-      var a = ev.target.closest('a[data-preview]');
-      if (!a || ev.defaultPrevented || ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
-      ev.preventDefault();
-      openPreview(a.getAttribute('href'), true);
-    });
-    preview.addEventListener('close', function () {
-      if (history.state && history.state.preview) history.pushState(null, '', baseUrl);
-      document.title = baseTitle;
-    });
-    window.addEventListener('popstate', function (ev) {
-      if (ev.state && ev.state.preview) openPreview(ev.state.preview, false);
-      else if (preview.open) preview.close();
-    });
-  }
-
+  var baseUrl = location.pathname + location.search;
   applySubscribed(document);
   var menu = document.getElementById('menu-modal');
   if (menu) menu.addEventListener('click', function (ev) {
@@ -271,7 +200,11 @@
   var crossDoc = 'onpagereveal' in window;
   var tabNav = false;
   // Only tab switches get the page transition; every other navigation stays instant.
-  window.addEventListener('pageswap', function (e) { if (e.viewTransition && (!tabNav || reduce)) e.viewTransition.skipTransition(); });
+  window.addEventListener('pageswap', function (e) {
+    if (!e.viewTransition || (tabNav && !reduce)) return;
+    e.viewTransition.ready.catch(function () {}); // skipping rejects `ready`; that's expected, not an error
+    e.viewTransition.skipTransition();
+  });
   var track = document.querySelector('.tabs-track');
   if (!track) return;
   var current = track.getAttribute('data-current');

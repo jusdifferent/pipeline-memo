@@ -5,28 +5,17 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
-// mount(hero) draws into a hero's canvas. The deep dive page mounts its own hero on load; the
-// homepage's preview panel imports this module and mounts the hero it shows.
+// mount(hero) draws into a hero's canvas; the deep dive page mounts its own hero on load.
 export function mount(hero) {
   const canvas = hero && hero.querySelector('.hero-fx');
   if (!canvas || hero.dataset.fx) return;
   hero.dataset.fx = 'on';
-  const scroller = hero.closest('dialog'); // the preview panel scrolls itself; the page scrolls the window
-  const scrollPos = () => (scroller ? scroller.scrollTop : scrollY);
+  const scrollPos = () => scrollY;
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches || innerWidth < 720;
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
   } catch { return; }
-  // Stop, free the GPU context and drop the listeners once the hero leaves the page (e.g. the preview
-  // panel is replaced). This runs once; later calls just answer false.
-  const ac = new AbortController(), signal = ac.signal;
-  let io = null;
-  const alive = () => {
-    if (hero.isConnected) return true;
-    if (!signal.aborted) { ac.abort(); if (io) io.disconnect(); renderer.dispose(); renderer.forceContextLoss(); }
-    return false;
-  };
   renderer.setPixelRatio(Math.min(devicePixelRatio, still ? 1.5 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -91,8 +80,8 @@ export function mount(hero) {
     ndc.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
     ray.ray.intersectPlane(plane, press);
-  }, { signal });
-  hero.addEventListener('pointerleave', () => press.set(999, 0, 999), { signal });
+  });
+  hero.addEventListener('pointerleave', () => press.set(999, 0, 999));
 
   const m = new THREE.Matrix4(), col = new THREE.Color();
   function draw(t, p) {
@@ -124,9 +113,9 @@ export function mount(hero) {
   hero.classList.add('fx-on');
 
   if (still) {
-    const redraw = () => { if (alive()) { frame(); draw(2.2, progress()); } };
-    addEventListener('resize', redraw, { signal });
-    (scroller || window).addEventListener('scroll', redraw, { passive: true, signal });
+    const redraw = () => { frame(); draw(2.2, progress()); };
+    addEventListener('resize', redraw);
+    addEventListener('scroll', redraw, { passive: true });
     return;
   }
 
@@ -134,18 +123,16 @@ export function mount(hero) {
   const t0 = performance.now();
   const loop = (now) => {
     raf = 0;
-    if (!alive()) return;
     if (!visible || document.hidden) return;
     draw((now - t0) / 1000 + 2.2, progress());
     raf = requestAnimationFrame(loop);
   };
   const kick = () => { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(loop); };
-  io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; kick(); });
-  io.observe(hero);
-  document.addEventListener('visibilitychange', kick, { signal });
-  addEventListener('resize', () => { if (alive()) frame(); }, { signal });
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; kick(); }).observe(hero);
+  document.addEventListener('visibilitychange', kick);
+  addEventListener('resize', frame);
   kick();
 }
 
 const own = document.querySelector('.dd--clay .dd-hero');
-if (own && !own.closest('dialog')) mount(own);
+if (own) mount(own);

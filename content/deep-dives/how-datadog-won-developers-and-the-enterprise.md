@@ -381,9 +381,10 @@ The machine also has limits built in. The meter runs both ways when customers op
 
 For 16 years, though, Datadog has followed the same idea it pitched at a startup showcase in 2011: pull everything into one place, label it in the customer's own language, and let every team see the same truth.
 
-Everything else it sells is what customers found when they looked.
+Datadog sold one place to look. Customers found everything else there.
 
 :::finale
-Everything else it sells is what customers *found when they looked.*
+Datadog sold *one place to look.*
+Customers found *everything else* there.
 logos: salesforce.com, google.com, zendesk.com, airbnb.com, samsung.com, coinbase.com
 :::

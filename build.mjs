@@ -172,6 +172,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 ${cfg.brandfetchClientId ? '<link rel="preconnect" href="https://cdn.brandfetch.io" crossorigin>' : ''}
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,500..600&display=swap">
 <link rel="stylesheet" href="/styles.css?v=${ver}">
+<script type="speculationrules">{"prefetch":[{"where":{"href_matches":["/deep-dives/*","/essays/*"]},"eagerness":"moderate"}]}</script>
 ${head}
 </head>
 <body${bodyClass ? ` class="${bodyClass}"` : ''}>
@@ -234,10 +235,6 @@ ${body}
   <p>${e(cfg.signupText)}</p>
   ${subForm({ id: 'modal-email', source: 'header-modal' })}
 </dialog>
-<dialog class="modal modal-preview" id="preview-modal" aria-label="Deep dive preview">
-  <button type="button" class="modal-x" data-close aria-label="Close">${CLOSE}</button>
-  <div data-preview-body></div>
-</dialog>
 <script src="/site.js?v=${ver}" defer></script>
 </body>
 </html>`;
@@ -246,7 +243,7 @@ ${body}
 function card(dd) {
   const hay = `${dd.company} ${dd.title} ${dd.industry} ${seriesBy[dd.series].name}`.toLowerCase();
   return `<li class="card" data-series="${dd.series}" data-industry="${e(dd.industry)}" data-search="${e(hay)}">
-  <a href="${url(dd)}" data-preview style="${brandVars(dd)}">
+  <a href="${url(dd)}" style="${brandVars(dd)}">
     <span class="tile-stack">
       <span class="tile-page" aria-hidden="true">
         <span class="page-code">${e(status(dd))}</span>
@@ -276,7 +273,7 @@ function essayList() {
     <p>Showing <strong data-active-label></strong> <span data-active-count></span></p>
     <button type="button" class="pill" data-reset>Show all</button>
   </div>
-  <ul class="essay-list">${ESSAYS.map((x) => `<li data-search="${e(x.title.toLowerCase())}"><a href="${essayUrl(x)}" data-preview>${e(x.title)}</a>${x.published ? `<span class="essay-status">${e(fmtDate(x.date))}</span>` : ''}</li>`).join('')}</ul>
+  <ul class="essay-list">${ESSAYS.map((x) => `<li data-search="${e(x.title.toLowerCase())}"><a href="${essayUrl(x)}">${e(x.title)}</a>${x.published ? `<span class="essay-status">${e(fmtDate(x.date))}</span>` : ''}</li>`).join('')}</ul>
   <div class="empty" data-empty hidden><p>No essays match that search.</p><button type="button" class="pill" data-reset>Show all</button></div>
 </section>`;
 }
@@ -349,12 +346,12 @@ function manifestoSection(sec) {
 function finaleSection(sec) {
   if (!sec) return '';
   const logos = (sec.items.find((x) => /^logos:/i.test(x)) || '').replace(/^logos:\s*/i, '').split(/\s*,\s*/).filter(Boolean);
-  const line = sec.items.filter((x) => !/^logos:/i.test(x)).join(' ');
+  const lines = sec.items.filter((x) => !/^logos:/i.test(x)); // each line of the closing statement starts a new line
   const name = (d) => d.replace(/\.[a-z]+$/, '').replace(/^./, (c) => c.toUpperCase());
   // Not every brand has a light logo; the strip whitens logos anyway, so fall back to the standard one.
   const strip = (copy) => logos.map((d) => `<img src="${e(brandLogo(d))}" data-alt="${e(brandLogo(d, null))}" alt="${copy ? '' : e(name(d))}"${copy ? ' aria-hidden="true"' : ''} loading="lazy" decoding="async" onerror="if(this.dataset.alt){this.src=this.dataset.alt;this.removeAttribute('data-alt')}else{this.remove()}">`).join('');
   return `<section class="finale" data-finale>
-    <p class="fin-line">${manifestoWords(line)}</p>
+    <p class="fin-line">${lines.map(manifestoWords).join('<br>')}</p>
     <svg class="fin-flourish" viewBox="0 0 400 40" aria-hidden="true"><path d="M4 30 C 80 6, 160 38, 230 18 S 350 8, 396 22" pathLength="1"/></svg>
     <p class="fin-cta"><a class="btn" href="/subscribe">Get the next deep dive</a></p>
     ${logos.length ? `<div class="fin-logos"><p>Named in this story</p><div class="mq"><div class="mq-track">${strip(false)}${strip(true)}</div></div></div>` : ''}
@@ -443,7 +440,7 @@ function essayPage(es) {
     title: es.title, description: es.dek || `${es.title}: an essay from ${cfg.name}.`, pathName: essayUrl(es), searchIn: 'essays',
     body: `<div class="dd-page">${essayArticle(es)}</div>
 <section class="related essays-related"><h2>More essays</h2>
-<ul class="essay-list">${related.map((x) => `<li><a href="${essayUrl(x)}" data-preview>${e(x.title)}</a></li>`).join('')}</ul></section>`,
+<ul class="essay-list">${related.map((x) => `<li><a href="${essayUrl(x)}">${e(x.title)}</a></li>`).join('')}</ul></section>`,
   });
 }
 
