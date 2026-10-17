@@ -11,7 +11,7 @@
 @media (max-width: 900px) { .dd--datadog .dd-hero { min-height: max(540px, 100svh - 128px); } }
 /* A calm dark band behind the title and dek: the outage fades out above it. datadog.js sets --tb to the
    height of the title block, so the band always fits the text, whatever the screen. */
-.dd--datadog .hero-shade { z-index: auto; background: linear-gradient(to top, rgba(10, 4, 20, 0.97), rgba(10, 4, 20, 0.9) var(--tb, 42%), rgba(10, 4, 20, 0) calc(var(--tb, 42%) + 160px)); pointer-events: none; }
+.dd--datadog .hero-shade { z-index: auto; background: linear-gradient(to top, rgba(22, 12, 44, 0.97), rgba(22, 12, 44, 0.9) var(--tb, 42%), rgba(22, 12, 44, 0) calc(var(--tb, 42%) + 160px)); pointer-events: none; }
 .dd--datadog .dd-hero .dd-head-grid { z-index: 4; }
 
 /* Lens position (--lx, --ly, in px from the hero's corner) is set on the hero by datadog.js, which keeps

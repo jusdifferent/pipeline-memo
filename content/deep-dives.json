@@ -710,9 +710,9 @@
    "dek": "The product, pricing, and community choices that made Clay the tool a new career is built on.",
    "featured": false,
    "brand": {
-    "bg": "#B65A33",
+    "bg": "#1C6B48",
     "fg": "#FFFFFF",
-    "ac": "#F6C9AE"
+    "ac": "#D7E34B"
    },
    "domain": "clay.com",
    "label": "Clay"
