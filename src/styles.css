@@ -228,6 +228,10 @@ html.modal-open { overflow: hidden; }
 .signup-band .quick { margin: 0 auto; }
 .signup-band .quick input { border-color: transparent; }
 .signup-band .btn { background: var(--paper); color: var(--ink); }
+/* The band's button lifts and glows on hover, like the finale's. */
+.signup-band .btn { transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease, background-color 0.35s ease; }
+.signup-band .btn:hover, .signup-band .btn:focus-visible { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 34px rgba(250, 248, 243, 0.28); }
+@media (prefers-reduced-motion: reduce) { .signup-band .btn { transition: none; } .signup-band .btn:hover, .signup-band .btn:focus-visible { transform: none; } }
 .signup-band .form-done { color: var(--paper); }
 .site-foot { background: var(--ink); color: var(--paper); padding: clamp(40px, 6vw, 56px) 0 calc(96px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid rgba(250, 248, 243, 0.14); }
 .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; }
