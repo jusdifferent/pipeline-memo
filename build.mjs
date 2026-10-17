@@ -122,7 +122,7 @@ for (const es of ALL_ESSAYS) {
   if (!fs.existsSync(file)) continue;
   const { data: fm, body } = parseFrontmatter(fs.readFileSync(file, 'utf8'));
   if (fm.published === false) continue;
-  Object.assign(es, { essay: body, date: fm.date, dek: fm.dek || '', readUrl: fm.readUrl || '', published: true, minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)) });
+  Object.assign(es, { essay: body, date: fm.date, dek: fm.dek || '', readUrl: fm.readUrl || '', design: fm.design || '', published: true, minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)) });
 }
 // Only published essays are built or listed; the rest of essays.json stays a private backlog.
 // Newest first by date; essays with the same date keep their order in essays.json.
@@ -379,14 +379,14 @@ function manifestoSection(sec) {
 
 // The finale: the closing line, a self-drawing underline, and the one ask on the page, an email form
 // (designed pages skip the footer signup band, so the reader is asked once, here).
-function finaleSection(sec, dd) {
+function finaleSection(sec, dd, { hook = 'Get the next deep dive the day it comes out.', lit = false } = {}) {
   if (!sec) return '';
   const lines = sec.items.filter((x) => !/^logos:/i.test(x)); // each line of the closing statement starts a new line
-  return `<section class="finale" data-finale>
+  return `<section class="finale" data-finale${lit ? ' data-manifesto' : ''}>
     <p class="fin-line">${lines.map(manifestoWords).join('<br>')}</p>
     <svg class="fin-flourish" viewBox="0 0 400 40" aria-hidden="true"><path d="M4 30 C 80 6, 160 38, 230 18 S 350 8, 396 22" pathLength="1"/></svg>
     <div class="fin-ask">
-      <p class="fin-hook">Get the next deep dive the day it comes out.</p>
+      <p class="fin-hook">${e(hook)}</p>
       ${subForm({ id: `finale-${dd.slug}`, button: 'Subscribe', source: `${dd.slug}-finale` })}
       <p class="fin-fine">Free. Unsubscribe anytime.</p>
     </div>
@@ -441,7 +441,34 @@ function deepDiveArticle(dd) {
 </article>`;
 }
 
+// A designed essay (front matter `design: essay`): a title-first header on the house paper, the series line
+// at the top of the article, figures between sections, and a finale that ends on the essay's rule, its
+// words lighting up as you scroll, with the one signup form.
+function designedEssay(es) {
+  const parts = pullSections(es.essay);
+  const { preview, rest } = splitEssay(renderMarkdown(parts.body, { figure: figureFor('essays', es.slug), block: renderBlock }).html);
+  const mode = es.readUrl ? 'redirect' : 'unlock';
+  return `<article class="dd essay dd--designed dd--${es.design}" data-dd="${es.slug}" style="${ESSAY_VARS}">
+  <header class="essay-hero">
+    <h1>${e(es.title)}</h1>
+    ${es.dek ? `<p class="dd-dek">${e(es.dek)}</p>` : ''}
+  </header>
+  <div class="dd-sheet"><p class="crumb dd-meta"><a href="/essays">Essays</a><span>${e(fmtDate(es.date))}, ${es.minutes} min read</span></p>
+    <div class="prose preview-text">${preview}</div>
+    <div class="gate" data-gate data-mode="${mode}"${es.readUrl ? ` data-read-url="${e(es.readUrl)}"` : ''} style="${ESSAY_VARS}">
+      <h2>Keep reading</h2>
+      <p>Enter your email to read the rest of this essay. You'll also get every new essay and deep dive the day it comes out.</p>
+      ${subForm({ id: `gate-${es.slug}`, button: 'Read the rest', mode, source: `essay-${es.slug}` })}
+      <p class="gate-fine">Free. Unsubscribe anytime.</p>
+    </div>
+    ${es.readUrl ? '' : `<div class="prose essay-rest" data-rest hidden>${rest}</div>`}
+  </div>
+  ${finaleSection(parts.finale, { slug: `essay-${es.slug}` }, { hook: 'Get the next essay the day it comes out.', lit: true })}
+</article>`;
+}
+
 function essayArticle(es) {
+  if (es.published && es.design) return designedEssay(es);
   let sheet;
   if (es.published) {
     const { preview, rest } = splitEssay(renderMarkdown(es.essay, { figure: figureFor('essays', es.slug), block: renderBlock }).html);
@@ -476,6 +503,7 @@ function essayPage(es) {
   const related = ESSAYS.filter((x) => x !== es).slice(0, 6);
   return layout({
     title: es.title, description: es.dek || `${es.title}: an essay from ${cfg.name}.`, pathName: essayUrl(es), searchIn: 'essays',
+    head: designHead(es.design), bodyClass: es.design ? `designed design-${es.design}` : '',
     body: `<div class="dd-page">${essayArticle(es)}</div>
 <section class="related essays-related"><h2>More essays</h2>
 <ul class="essay-list">${related.map((x) => `<li><a href="${essayUrl(x)}">${e(x.title)}</a></li>`).join('')}</ul></section>`,

@@ -1,0 +1,74 @@
+/* Designed essays: the house look, shared by every essay with `design: essay`. Paper, ink and one green
+   accent (the claude-motion-v2 palette): a title-first header, figures between sections that follow the
+   motion rules (one thing at a time, data never overshoots), and a finale on the green tint that ends on the
+   essay's rule, its words lighting up as you scroll. The animated figure lives in essay.js. */
+.dd.dd--essay {
+  --accent: #3B7A57; --accent-deep: #2C5E42; --accent-light: #DCEBE2; --accent-hi: #3B7A57; --page: #FAF8F3;
+  --man-bg: #DCEBE2; --man-fg: #141414; --essay-gray: #B9B3AC;
+}
+
+/* ------------------------------------------------------------ header: the title leads */
+.essay-hero { max-width: 1000px; margin: 0 auto; padding: clamp(56px, 9vh, 104px) var(--pad) clamp(4px, 1vh, 12px); text-align: center; }
+.essay-hero::before { content: ""; display: block; width: 44px; height: 4px; margin: 0 auto 26px; border-radius: 2px; background: var(--accent); }
+.essay-hero h1 { max-width: 17ch; margin: 0 auto; font: 700 clamp(2.4rem, 1.3rem + 3.6vw, 4.2rem)/1.04 var(--display); letter-spacing: -0.015em; text-wrap: balance; }
+.essay-hero .dd-dek { max-width: 32em; margin: 22px auto 0; font: 400 clamp(1.12rem, 1rem + 0.45vw, 1.38rem)/1.5 var(--display); color: #4A4744; text-wrap: pretty; }
+
+/* Sections: a short green rule over each heading instead of the deep dives' "Part 01". */
+.dd--essay .prose h2::before { content: ""; width: 36px; padding-top: 0; margin-bottom: 18px; border-top: 4px solid var(--accent); }
+
+/* ------------------------------------------------------------ figures */
+.dd--essay .dd-figure { margin: 2.8em 0; }
+.dd--essay .fig { font-family: var(--sans); }
+
+/* Pattern: how fast intent cools. Each circle's area is the chance of qualifying the lead. */
+.fig-cool .fc-head, .fig-cost .cost-head { margin-bottom: 18px !important; font-size: 0.95rem; font-weight: 600; line-height: 1.35; }
+.fc-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; text-align: center; }
+.fc-row li { display: grid; justify-items: center; gap: 4px; }
+.fc-well { display: grid; place-items: center; width: clamp(84px, 13vw, 120px); aspect-ratio: 1; margin-bottom: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1px #E6E1D9; }
+.fc-dot { width: calc(var(--r) * 100%); aspect-ratio: 1; border-radius: 50%; background: var(--essay-gray); transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i, 0) * 0.32s + 0.15s); }
+.fc-dot.is-hot { background: var(--accent); }
+.fc-row b { font-size: 0.95rem; }
+.fc-row li > span:last-child { font-size: 0.84rem; line-height: 1.35; color: var(--muted); }
+html.js .dd-figure:not(.is-in) .fc-dot { transform: scale(0); }
+.fc-audit { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--rule); }
+.fc-sub { margin-bottom: 10px !important; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.fc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fc-stats p { padding: 12px 14px; border-radius: 10px; background: #F1EEE7; }
+.fc-stats b { display: block; font-size: 1.35rem; letter-spacing: -0.01em; }
+.fc-stats span { display: block; margin-top: 2px; font-size: 0.84rem; line-height: 1.4; color: var(--muted); }
+
+/* Mechanism: momentum leaks at every handoff (drawn by essay.js). */
+.fig-leak { position: relative; }
+.leak-svg { display: block; width: 100%; overflow: visible; }
+.leak-svg text { font: 500 13px var(--sans); fill: #141414; }
+.leak-svg .leak-lost { font-size: 12.5px; fill: #6F6A64; }
+.leak-svg .leak-reach { font-size: 12.5px; font-weight: 600; fill: var(--accent); }
+.leak-lanes rect { fill: #ECE8E0; }
+.leak-replay { display: block; margin: 6px 0 0 auto; padding: 4px 10px; border: 1px solid var(--rule); border-radius: 999px; background: none; color: var(--muted); font: 500 0.8rem/1.2 var(--sans); cursor: pointer; }
+.leak-replay:hover { border-color: var(--accent); color: var(--accent); }
+.leak-replay::before { content: "↻ " / ""; }
+
+/* Consequence: what the leak costs at $500k a month. The bar is $6M; green is 10%, hatched is up to 15%. */
+.cost-bar { position: relative; display: flex; height: 40px; overflow: hidden; border-radius: 8px; background: #F1EEE7; box-shadow: inset 0 0 0 1.5px #141414; }
+.cost-win { flex: 0 0 10%; background: var(--accent); }
+.cost-range { flex: 0 0 5%; background: repeating-linear-gradient(-45deg, var(--accent) 0 2px, transparent 2px 6px); box-shadow: inset -1.5px 0 0 var(--accent); }
+.dd-figure .cost-range { transition-delay: calc(var(--i, 0) * 0.32s + 0.45s); }
+.cost-scale { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.8rem; color: var(--muted); }
+.cost-note { margin-top: 14px !important; padding-left: 14px; border-left: 4px solid var(--accent); }
+.cost-note b { display: block; font-size: 1.25rem; color: var(--accent-deep); }
+.cost-note span { display: block; margin-top: 2px; font-size: 0.88rem; line-height: 1.45; color: #4A4744; }
+
+@media (max-width: 640px) {
+  .fc-stats { grid-template-columns: 1fr; }
+  .fc-row b { font-size: 0.86rem; }
+}
+
+/* ------------------------------------------------------------ finale on the green tint */
+.dd--essay .finale { margin-top: clamp(56px, 8vw, 96px); }
+html.js .dd--essay .finale .mw { opacity: 0.18; transition: opacity 0.45s ease; }
+html.js .dd--essay .finale .mw.on { opacity: 1; }
+.dd--essay .finale .quick input { border-color: rgba(20, 20, 20, 0.16); }
+.dd--essay .finale .quick .btn { background: #141414; color: #FAF8F3; }
+.dd--essay .finale .quick .btn:hover, .dd--essay .finale .quick .btn:focus-visible { background: var(--accent); color: #fff; box-shadow: 0 12px 30px rgba(59, 122, 87, 0.3); }
+.dd--essay .fin-fine { opacity: 0.75; }
+@media (prefers-reduced-motion: reduce) { .fc-dot { transition: none; } }

@@ -1,5 +1,6 @@
 ---
 date: 2026-10-07
+design: essay
 dek: Marketing creates the moment of intent. Whether it becomes pipeline depends on what your company does in the hours after someone raises their hand.
 ---
 
@@ -30,6 +31,8 @@ But if nobody follows up until the next morning, or a competitor gets there firs
 When response time drops, contact rates improve, meetings increase, and pipeline follows. In a study of 1.25 million web leads, companies that tried to reach a lead within an hour were nearly 7x as likely to qualify it as companies that waited even one hour longer, and more than 60x as likely as companies that waited a day or more (Oldroyd, McElheran & Elkington, *Harvard Business Review*, 2011).
 
 Most teams can’t respond to every lead in minutes. But the same researchers audited 2,241 U.S. companies and found that, among those that replied within a month, the average first response took 42 hours. Nearly a quarter never replied at all.
+
+{{figure:cooling | The chance of qualifying a web lead by how fast a company first responds, relative to responding within an hour, and how 2,241 U.S. companies actually responded. Source: Oldroyd, McElheran & Elkington, Harvard Business Review, 2011.}}
 
 The gap between minutes, hours, and days is where deals are won and lost.
 
@@ -97,6 +100,8 @@ The more times they have to be recreated, the harder the buying process becomes.
 
 And that friction compounds.
 
+{{figure:leak | An illustration: buyer momentum moves through each handoff, and a little of it falls through at every one.}}
+
 This is why pipeline leakage is rarely caused by one catastrophic failure. It's usually the accumulation of small delays, repeated explanations, lost context, scheduling bottlenecks, and moments where buyer momentum slowly fades.
 
 **They lose pipeline one handoff at a time.**
@@ -140,6 +145,13 @@ Every function is working toward the same objective: preserving buyer momentum f
 
 The math gets big quickly. At $500k a month in spend, $6M a year depends on what happens after the click. Recovering even 10–15% of the intent that leaks out along the way is roughly the same as adding $600k–$900k in annual spend, without buying a single extra impression.
 
+{{figure:cost | The essay's example: $500k a month in spend, and what recovering 10–15% of the intent that leaks out is worth.}}
+
 Top teams stop asking how to generate more demand and start asking where demand is slowing down. Instead of celebrating lead volume, they examine every stage where buyers lose confidence, urgency, or clarity.
 
 Momentum becomes something they intentionally protect.
+
+:::finale
+Buyer intent is an asset,
+but most companies manage it *like an event.*
+:::
