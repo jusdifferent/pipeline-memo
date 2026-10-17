@@ -468,3 +468,9 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 @media (max-width: 900px) {
   .dd--designed .dd-hero .dd-logo { position: static; order: -1; margin-bottom: 18px; justify-items: start; }
 }
+
+/* Part breaks in designed pieces: a row of cells before each part; each design draws its own
+   (src/designs/<name>.css) and animates them when .is-in is added on scroll. */
+.dd--designed .part-break { display: flex; justify-content: space-between; align-items: flex-end; gap: 6px; height: 26px; margin: 3.2em 0 1.6em; }
+.dd--designed .part-break i { display: block; flex: 1; }
+.dd--designed .part-break + h2 { margin-top: 0; }

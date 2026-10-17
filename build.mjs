@@ -144,7 +144,7 @@ function subForm({ id, button = 'Subscribe', mode = 'subscribe', source = 'site'
 </form>`;
 }
 
-function layout({ title, description = cfg.description, pathName = '/', body, isHome = false, searchIn = 'deep-dives', head = '' }) {
+function layout({ title, description = cfg.description, pathName = '/', body, isHome = false, searchIn = 'deep-dives', head = '', bodyClass = '' }) {
   const full = title ? `${title} | ${cfg.name}` : `${cfg.name}: ${cfg.tagline}`;
   const canon = cfg.url + (pathName === '/' ? '' : pathName);
   return `<!doctype html>
@@ -171,7 +171,7 @@ ${cfg.brandfetchClientId ? '<link rel="preconnect" href="https://cdn.brandfetch.
 <link rel="stylesheet" href="/styles.css?v=${ver}">
 ${head}
 </head>
-<body>
+<body${bodyClass ? ` class="${bodyClass}"` : ''}>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-head">
   <div class="head-row">
@@ -304,7 +304,7 @@ function splitEssay(html) {
   let paras = 0, i = 0;
   for (; i < blocks.length; i++) {
     if (/^<p[ >]/.test(blocks[i])) paras++;
-    if (paras > PREVIEW_PARAGRAPHS || (paras > 0 && blocks[i].startsWith('<h2'))) break;
+    if (paras > PREVIEW_PARAGRAPHS || (paras > 0 && (blocks[i].startsWith('<h2') || blocks[i].startsWith('<div class="part-break"')))) break;
   }
   return { preview: blocks.slice(0, i).join('\n'), rest: blocks.slice(i).join('\n') };
 }
@@ -312,7 +312,9 @@ function splitEssay(html) {
 function deepDiveArticle(dd) {
   let sheet;
   if (dd.published) {
-    const { preview, rest } = splitEssay(renderMarkdown(dd.essay, { figure: figureFor('deep-dives', dd.slug), block: renderBlock }).html);
+    let html = renderMarkdown(dd.essay, { figure: figureFor('deep-dives', dd.slug), block: renderBlock }).html;
+    if (dd.design) html = html.replace(/^<h2 /gm, `${PART_BREAK}<h2 `);
+    const { preview, rest } = splitEssay(html);
     const mode = dd.readUrl ? 'redirect' : 'unlock';
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${dd.readUrl ? ` data-read-url="${e(dd.readUrl)}"` : ''} style="${brandVars(dd)}">
@@ -390,6 +392,9 @@ function essayPage(es) {
   });
 }
 
+// Designed pieces get a small motif before each part; each design styles its cells (src/designs/<name>.css).
+const PART_BREAK = `<div class="part-break" aria-hidden="true">${Array.from({ length: 18 }, (_, k) => `<i style="--k:${k}"></i>`).join('')}</div>`;
+
 // A deep dive with `design: <name>` in its front matter gets src/designs/<name>.css and,
 // if present, <name>.js: a module that draws the hero effect (three.js from a CDN).
 const DESIGN_DIR = path.join(ROOT, 'src/designs');
@@ -408,7 +413,7 @@ function deepDivePage(dd) {
   const related = DIVES.filter((d) => d !== dd && (d.series === dd.series || d.industry === dd.industry))
     .sort((a, b) => (b.industry === dd.industry) - (a.industry === dd.industry)).slice(0, 6);
   return layout({
-    title: dd.title, description: dd.dek, pathName: url(dd), head: designHead(dd.design),
+    title: dd.title, description: dd.dek, pathName: url(dd), head: designHead(dd.design), bodyClass: dd.design ? `designed design-${dd.design}` : '',
     body: `<div class="dd-page">${deepDiveArticle(dd)}</div>
 ${related.length ? `<section class="related"><h2>Related deep dives</h2><ul class="grid">${related.map(card).join('')}</ul></section>` : ''}`,
   });

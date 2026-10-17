@@ -9,3 +9,12 @@
 .dd--clay .dd-hero.fx-on::before { opacity: 0; }
 .dd--clay .hero-shade { background: linear-gradient(to top, rgba(60, 22, 8, 0.82), rgba(60, 22, 8, 0.25) 50%, transparent 72%), linear-gradient(to right, rgba(60, 22, 8, 0.6), rgba(60, 22, 8, 0.15) 50%, transparent 65%); }
 .dd--clay .dd-hero h1 { text-shadow: 0 2px 30px rgba(40, 14, 4, 0.35); }
+
+/* Part break: clay cells. Each starts raised, then presses down in turn. */
+.dd--clay .part-break i { height: 22px; border-radius: 5px; background: linear-gradient(#E0875B, #B65A33 60%, #8E3D1C); box-shadow: 0 4px 0 #7A3517, 0 8px 12px rgba(122, 53, 23, 0.22); transform-origin: bottom; }
+.dd--clay .part-break i:nth-child(3n) { background: linear-gradient(#EFA47C, #C46C42 60%, #9A4422); }
+.dd--clay .part-break i:nth-child(5n + 2) { background: linear-gradient(#F6D3BA, #E2B394 60%, #B98966); box-shadow: 0 4px 0 #9C7254, 0 8px 12px rgba(122, 53, 23, 0.18); }
+html.js .dd--clay .part-break:not(.is-in) i { transform: translateY(-8px) scaleY(1.35); }
+.dd--clay .part-break.is-in i { animation: clay-press 0.9s cubic-bezier(.2, .9, .3, 1.25) both; animation-delay: calc(var(--k) * 45ms); }
+@keyframes clay-press { 0% { transform: translateY(-8px) scaleY(1.35); } 55% { transform: translateY(2px) scaleY(0.72); } 100% { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .dd--clay .part-break i { animation: none !important; transform: none !important; } }
