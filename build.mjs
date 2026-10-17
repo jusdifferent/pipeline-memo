@@ -317,7 +317,7 @@ function deepDiveArticle(dd) {
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${dd.readUrl ? ` data-read-url="${e(dd.readUrl)}"` : ''} style="${brandVars(dd)}">
       <h2>Keep reading</h2>
-      <p>Enter your email to read the rest of this deep dive. You'll also get the next one the day it's published.</p>
+      <p>Enter your email to read the rest of this deep dive. You'll also get every new deep dive and essay the day it comes out.</p>
       ${subForm({ id: `gate-${dd.slug}`, button: 'Read the rest', mode, source: dd.slug })}
       <p class="gate-fine">Free. Unsubscribe anytime.</p>
     </div>
@@ -357,7 +357,7 @@ function essayArticle(es) {
     sheet = `<div class="prose preview-text">${preview}</div>
     <div class="gate" data-gate data-mode="${mode}"${es.readUrl ? ` data-read-url="${e(es.readUrl)}"` : ''} style="${ESSAY_VARS}">
       <h2>Keep reading</h2>
-      <p>Enter your email to read the rest of this essay. You'll also get new essays and deep dives the day they're published.</p>
+      <p>Enter your email to read the rest of this essay. You'll also get every new essay and deep dive the day it comes out.</p>
       ${subForm({ id: `gate-${es.slug}`, button: 'Read the rest', mode, source: `essay-${es.slug}` })}
       <p class="gate-fine">Free. Unsubscribe anytime.</p>
     </div>
