@@ -1,5 +1,13 @@
-// Designed essays: the animated figures between sections.
-// "Momentum leaks at every handoff" ([data-leak]): buyer momentum, drawn as green dots, flows through the
+// Designed essays: the animated figures between sections. Each scene follows the claude-motion-v2 rules: it's a
+// pure function of time, seek(t), so the same t always draws the same frame; objects may bounce a little, data
+// never overshoots, and text appears only once things are still. A scene plays once when it scrolls into view,
+// then offers Replay; reduced motion and ?fx get the final frame. Scenes:
+//   leak     (SVG) momentum leaks at every handoff, essay: You Lose Most of Your Pipeline After the Click
+//   race     (DOM) your records race ahead of the buyer, essay: The Difference Between Interest, Intent, and Readiness
+//   travel   (DOM) the ad's idea is repeated in a meeting you're not in, essay: Why Most B2B Ads Get Attention…
+//   reframe  (DOM) a new diagnosis reshuffles the shortlist, essay: Why the Company That Frames the Problem Wins the Deal
+//
+// "Momentum leaks at every handoff" (leak): buyer momentum, drawn as green dots, flows through the
 // handoffs from marketing to procurement. At each seam a few dots fall through, land with a little weight and
 // turn gray, and once a pile is still its label appears ("Context lost"...). Built to the claude-motion-v2
 // rules: the scene is a pure function of time, seek(t), with seeded jitter instead of Math.random; dots may
@@ -145,27 +153,148 @@ function seek(g, parts, t) {
   });
 }
 
-function mount(fig) {
-  const svg = fig.querySelector('.leak-svg');
-  const replay = fig.querySelector('.leak-replay');
+// ------------------------------------------------------------ shared timing helpers (pure)
+const clampT = (t, a, d) => clamp01((t - a) / d);
+const inOut = (x) => { x = clamp01(x); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const backOut = (x) => { x = clamp01(x); const c1 = 1.25, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); }; // a small overshoot, for objects only
+const show = (el, a, dy = 8) => { el.style.opacity = a; el.style.transform = a >= 1 ? '' : `translateY(${((1 - a) * dy).toFixed(1)}px)`; };
+
+// ------------------------------------------------------------ leak (SVG, rebuilt on resize)
+const leak = {
+  setup(fig) {
+    const svg = fig.querySelector('.leak-svg');
+    let g, parts;
+    const build_ = () => { g = layout(Math.round(svg.getBoundingClientRect().width) || 640); parts = build(svg, g); };
+    build_();
+    return { get end() { return g.end; }, seek: (t) => seek(g, parts, t), resize: build_, watch: svg };
+  },
+};
+
+// ------------------------------------------------------------ race: your records move, the buyer doesn't
+// The record (ink) hops eagerly from Lead to Forecast; the buyer (green) drifts slowly to Intent and stops. A brace
+// marks the gap, "Confidence without evidence". Then the buyer's own actions arrive one by one, each moving the
+// buyer a third of the way to Ready, until the gap closes.
+const race = {
+  setup(fig) {
+    const rec = fig.querySelector('.rc-dot.is-record'), buyer = fig.querySelector('.rc-dot.is-buyer');
+    const recStops = [...fig.querySelectorAll('.rc-records .rc-stops li')], buyStops = [...fig.querySelectorAll('.rc-buyer .rc-stops li')];
+    const gap = fig.querySelector('.rc-gap'), actions = [...fig.querySelectorAll('.rc-actions li')];
+    const U = [0, 0.25, 0.5, 0.75, 1], HOP = 0.42, hopAt = (k) => 0.7 + k * 0.55;
+    const actAt = (k) => 5.2 + k * 1.4, MOVE = 0.7;
+    const end = actAt(2) + 0.35 + MOVE + 0.9;
+    const recU = (t) => { let u = 0; for (let k = 0; k < 4; k++) if (t >= hopAt(k)) u = U[k] + (U[k + 1] - U[k]) * backOut(clampT(t, hopAt(k), HOP)); return u; };
+    const buyU = (t) => { let u = 0.5 * inOut(clampT(t, 1.0, 1.6)); for (let k = 0; k < 3; k++) u += (1 / 6) * inOut(clampT(t, actAt(k) + 0.35, MOVE)); return u; };
+    return {
+      end,
+      seek(t) {
+        const ra = recU(t), ba = buyU(t);
+        rec.style.setProperty('--u', ra.toFixed(4)); buyer.style.setProperty('--u', ba.toFixed(4));
+        show(rec, clampT(t, 0.2, 0.3), 0); show(buyer, clampT(t, 0.4, 0.3), 0);
+        recStops.forEach((li, j) => li.classList.toggle('is-hit', j === 0 ? t >= 0.5 : t >= hopAt(j - 1) + HOP * 0.6));
+        buyStops.forEach((li, j) => li.classList.toggle('is-hit', j === 0 ? t >= 0.7 : j === 1 ? t >= 2.4 : ba >= 0.999));
+        gap.style.setProperty('--ua', ra.toFixed(4)); gap.style.setProperty('--ub', ba.toFixed(4));
+        const closing = clampT(t, actAt(2) + 0.35 + MOVE - 0.15, 0.45);
+        gap.style.opacity = (clampT(t, 3.7, 0.45) * (1 - closing)).toFixed(3);
+        actions.forEach((li, k) => show(li, clampT(t, actAt(k), 0.45)));
+        fig.classList.toggle('is-ready', ba >= 0.999);
+      },
+    };
+  },
+};
+
+// ------------------------------------------------------------ travel: the idea is repeated in a meeting you're not in
+// The ad appears; the buyer who saw it lights up in a meeting; they repeat the line in their own words; the idea
+// reaches the CFO, a peer and the executive who signs. The dashboard never moves: no metric recorded it.
+const travel = {
+  setup(fig) {
+    const ad = fig.querySelector('.tv-ad'), champ = fig.querySelector('.tv-node.is-champ');
+    const bubble = fig.querySelector('.tv-bubble'), others = [...fig.querySelectorAll('.tv-node:not(.is-champ)')];
+    const edges = [...fig.querySelectorAll('.tv-edges line')].map((line) => ({ line, x1: +line.getAttribute('x1'), y1: +line.getAttribute('y1'), x2: +line.getAttribute('x2'), y2: +line.getAttribute('y2') }));
+    const none = fig.querySelector('.tv-none');
+    const room = fig.querySelector('.tv-room'), dash = fig.querySelector('.tv-dash');
+    const edgeAt = (k) => 3.6 + k * 0.7, end = edgeAt(2) + 0.5 + 0.4 + 1.6;
+    return {
+      end,
+      seek(t) {
+        show(ad, clampT(t, 0.2, 0.5)); show(room, clampT(t, 0.5, 0.5)); show(dash, clampT(t, 0.8, 0.5));
+        const lit = clampT(t, 1.6, 0.35);
+        champ.classList.toggle('is-lit', lit >= 1);
+        champ.style.transform = lit > 0 && lit < 1 ? `scale(${(1 + 0.12 * Math.sin(lit * Math.PI)).toFixed(3)})` : '';
+        show(bubble, clampT(t, 2.4, 0.45), 6);
+        edges.forEach((e, k) => { // each line grows from the buyer toward the next person
+          const p = inOut(clampT(t, edgeAt(k), 0.5));
+          e.line.setAttribute('x2', (e.x1 + (e.x2 - e.x1) * p).toFixed(2)); e.line.setAttribute('y2', (e.y1 + (e.y2 - e.y1) * p).toFixed(2));
+          e.line.style.opacity = p > 0 ? 1 : 0;
+        });
+        others.forEach((node, k) => {
+          const p = clampT(t, edgeAt(k) + 0.5, 0.4);
+          node.classList.toggle('is-lit', p > 0);
+          node.style.transform = p > 0 && p < 1 ? `scale(${backOut(p).toFixed(3)})` : '';
+        });
+        show(none, clampT(t, edgeAt(2) + 1.3, 0.45), 4);
+      },
+    };
+  },
+};
+
+// ------------------------------------------------------------ reframe: a new diagnosis reshuffles the shortlist
+// First frame: deals stall, so the team shops for sales training. A cue appears ("After talking to lost
+// prospects"), the diagnosis changes while everything else is still, then what counts and the shortlist follow.
+const reframe = {
+  setup(fig) {
+    const pick = (sel) => [...fig.querySelectorAll(sel)];
+    const dA = fig.querySelector('.rf-diag .rf-a'), dB = fig.querySelector('.rf-diag .rf-b'), cue = fig.querySelector('.rf-cue');
+    const cA = pick('.rf-crit .rf-a li'), cB = pick('.rf-crit .rf-b li'), sA = pick('.rf-short .rf-a li'), sB = pick('.rf-short .rf-b li');
+    const diag = fig.querySelector('.rf-diag'), arrows = pick('.rf-arrow');
+    const end = 6.1 + 0.12 * (sB.length - 1) + 0.45 + 0.8;
+    return {
+      end,
+      seek(t) {
+        arrows.forEach((a, k) => { a.style.opacity = clampT(t, 0.6 + k * 0.6, 0.4); });
+        show(dA, clampT(t, 0.2, 0.45) * (1 - clampT(t, 4.0, 0.25)));
+        cA.forEach((li, k) => show(li, clampT(t, 0.9 + 0.12 * k, 0.4) * (1 - clampT(t, 4.9, 0.22))));
+        sA.forEach((li, k) => show(li, clampT(t, 1.6 + 0.12 * k, 0.4) * (1 - clampT(t, 5.6, 0.22))));
+        show(cue, clampT(t, 3.1, 0.4), 4);
+        diag.classList.toggle('is-cued', t >= 3.1);
+        show(dB, clampT(t, 4.3, 0.45));
+        cB.forEach((li, k) => show(li, clampT(t, 5.15 + 0.12 * k, 0.45)));
+        sB.forEach((li, k) => show(li, clampT(t, 5.85 + 0.12 * k, 0.45)));
+        fig.classList.toggle('is-reframed', t >= 5.85);
+      },
+    };
+  },
+};
+
+// ------------------------------------------------------------ the runner: play once in view, then Replay
+const SCENES = { leak, race, travel, reframe };
+function mountScene(fig) {
+  const scene = SCENES[fig.dataset.scene];
+  if (!scene) return;
+  const replay = fig.querySelector('.scene-replay');
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches || new URLSearchParams(location.search).has('fx');
-  let g, parts, t = 0, t0 = null, raf = 0, started = false;
-  const draw = () => seek(g, parts, t);
-  const setup = () => { g = layout(Math.round(svg.getBoundingClientRect().width) || 640); parts = build(svg, g); if (still || (started && !raf)) t = g.end; draw(); };
+  const ctx = scene.setup(fig);
+  let t = 0, t0 = null, raf = 0, started = false;
+  const draw = () => ctx.seek(t);
   const frame = (now) => {
     if (t0 === null) t0 = now;
-    t = Math.min(g.end, (now - t0) / 1000);
+    t = Math.min(ctx.end, (now - t0) / 1000);
     draw();
-    if (t < g.end) raf = requestAnimationFrame(frame);
-    else { raf = 0; replay.hidden = false; }
+    if (t < ctx.end) raf = requestAnimationFrame(frame);
+    else { raf = 0; if (replay) replay.hidden = false; }
   };
-  const play = () => { cancelAnimationFrame(raf); started = true; t0 = null; t = 0; replay.hidden = true; raf = requestAnimationFrame(frame); };
-  setup();
+  const play = () => { cancelAnimationFrame(raf); started = true; t0 = null; t = 0; if (replay) replay.hidden = true; raf = requestAnimationFrame(frame); };
+  t = still ? ctx.end : 0;
+  draw();
   if (still) return;
-  replay.addEventListener('click', play);
+  if (replay) replay.addEventListener('click', play);
   new IntersectionObserver((entries, io) => { if (entries[0].isIntersecting) { io.disconnect(); play(); } }, { threshold: 0.45 }).observe(fig);
-  let w = svg.getBoundingClientRect().width;
-  new ResizeObserver(() => { const nw = svg.getBoundingClientRect().width; if (Math.abs(nw - w) > 2) { w = nw; setup(); } }).observe(svg);
+  if (ctx.resize && ctx.watch) {
+    let w = ctx.watch.getBoundingClientRect().width;
+    new ResizeObserver(() => {
+      const nw = ctx.watch.getBoundingClientRect().width;
+      if (Math.abs(nw - w) > 2) { w = nw; ctx.resize(); if (started && !raf) t = ctx.end; draw(); }
+    }).observe(ctx.watch);
+  }
 }
 
-document.querySelectorAll('[data-leak]').forEach(mount);
+document.querySelectorAll('[data-scene]').forEach(mountScene);

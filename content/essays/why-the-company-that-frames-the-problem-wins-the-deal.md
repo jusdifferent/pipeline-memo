@@ -1,4 +1,5 @@
 ---
+design: essay
 date: 2026-10-14
 dek: 81% of buyers have a favorite vendor before the first call. Framing the problem is how you take that spot.
 ---
@@ -10,6 +11,9 @@ By the time vendors enter the conversation, most buyers have already settled on 
 That explanation shapes the competition. Once reporting speed is the priority, automation features and hours saved become the obvious scorecard. A vendor can spend the entire sales process proving it's the best answer to a diagnosis nobody tested.
 
 This happens earlier than most teams assume. In 6sense's 2024 survey of more than 2,500 B2B buyers, buyers were nearly 70% of the way through their buying process before they talked to a seller. 85% had largely set their requirements, and 81% already had a preferred vendor when they first made contact (6sense, *2024 Buyer Experience Report*).
+
+
+{{figure:journey | Source: 6sense, 2024 Buyer Experience Report, a survey of more than 2,500 B2B buyers.}}
 
 **How a buyer explains the problem decides what they shop for. Shape the explanation and you shape the deal.**
 
@@ -47,6 +51,9 @@ That changes the competitive set. Now leadership is comparing an outside service
 
 **A reframe matters commercially when it changes what counts as a solution.**
 
+
+{{figure:reframe | The essay's example: the same stalled deals, diagnosed two ways, lead to two different shortlists.}}
+
 That's a bigger move than making your offer sound more compelling, because it changes the investment under consideration. One buyer who asked for a new tool discovers that an existing one is enough if the workflow changes. Another discovers that the process fix they expected can't get around a limit in their current technology.
 
 The same thing happens at the scale of a whole market. In 2023, the data startup Clay put a reframe on its homepage: "Not another data provider. All of the data providers." Buyers had been comparing contact databases against each other. Clay changed the question to coverage across all of them. By 2025, Apollo and ZoomInfo had both shipped their own versions of Clay's multi-provider lookup. When competitors rebuild their product around your question, you've won the frame.
@@ -70,6 +77,9 @@ This is where framing becomes useful to leadership. It connects a cause to a bus
 ## Your Marketing Can Shape the Brief
 
 Buyers spend surprisingly little of their buying time with vendors. Gartner's research puts it at 17%, split across every supplier they're considering. With three vendors in the running, that's roughly 5% to 6% each. Most of the rest goes to independent research and meetings with their own buying group (Gartner, *The B2B Buying Journey*).
+
+
+{{figure:time | Share of B2B buying time by activity. Source: Gartner, The B2B Buying Journey. "Everything else" groups activities this essay doesn't cite.}}
 
 So your marketing has to be useful while the buyer's judgments are forming. If you wait for discovery to introduce your diagnosis, it arrives after the buyer has already adopted someone else's.
 
@@ -100,3 +110,8 @@ The signal you want is a buyer revising a requirement for a reason they can defe
 That's where I'd focus when strong demos keep failing to move an evaluation: find out whether the buyer is testing the right thing. If the diagnosis is sound, close the capability, commercial, or execution gap. If it's incomplete, help the buyer build better criteria before you present more evidence against the old ones.
 
 **You earn influence over the buying criteria by improving the diagnosis behind them.**
+
+:::finale
+How a buyer explains the problem
+decides *what they shop for.*
+:::

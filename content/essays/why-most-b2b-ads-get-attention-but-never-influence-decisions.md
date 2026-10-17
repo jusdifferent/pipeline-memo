@@ -1,4 +1,5 @@
 ---
+design: essay
 date: 2026-10-07
 dek: Most B2B ads earn a second of attention. Whether that second ever becomes pipeline depends on what the buyer still remembers when it's finally time to buy.
 ---
@@ -37,6 +38,9 @@ No tension, nothing specific enough to stick. They read it passively and keep sc
 
 The cost is bigger than one wasted impression. Research from Ehrenberg-Bass for LinkedIn's B2B Institute estimates that only about 5% of B2B buyers are in market in any given quarter (Dawes, *Advertising Effectiveness and the 95-5 Rule*, 2021). Almost everyone who sees your ad will buy months later, if at all.
 
+
+{{figure:ninetyfive | About 5% of B2B buyers are in market in a given quarter, a rule of thumb from the Ehrenberg-Bass Institute. Source: Dawes, Advertising Effectiveness and the 95-5 Rule, LinkedIn B2B Institute, 2021.}}
+
 The ad can't win the deal that day. Its job is to leave something behind that's still there when the buying starts, and generic language doesn’t leave anything.
 
 At best it builds memory for the category, which your competitors get to share.
@@ -44,6 +48,9 @@ At best it builds memory for the category, which your competitors get to share.
 Specific language works differently. Compare "We help companies improve pipeline" with "Your SDR response times are killing high-intent pipeline." Or "Modernize your security operations" with "Most security teams are drowning in alerts they can't realistically prioritize."
 
 The second line in each pair describes a moment the buyer has lived through. Marketing scientists call these moments category entry points: the situations that make someone think about a category in the first place (Romaniuk, *Better Brand Health*, 2023).
+
+
+{{figure:adpair | The essay's example pair. The generic line fits any company; the specific one names a situation the buyer recognizes.}}
 
 An ad that ties your company to one of those situations gives the buyer's memory a hook, so the next time the situation shows up at work, you come to mind with it.
 
@@ -64,6 +71,9 @@ The practical test for any piece of creative is whether a buyer could reuse it i
 And that language travels to people your targeting never reached, like the CFO, the peer on another team, and the executive who signs.
 
 An ad has influenced a decision when the buyer repeats it in a meeting you're not in.
+
+
+{{figure:travel | An illustration: the idea travels to people your targeting never reached, and no dashboard records it.}}
 
 ## Ads compete against existing beliefs
 
@@ -120,3 +130,8 @@ Then they make the message consistent everywhere the buyer meets it. Creative, p
 If you only do one thing this quarter, listen to ten recent first calls and write down the words buyers use to describe their problem. If none of those words came from your marketing, your ads are earning attention and nothing else.
 
 Because the team that shapes how buyers explain the problem shapes where the budget goes. Attention gets you seen. Influence gets you repeated, and the vendor whose explanation gets repeated is the one that wins the deal.
+
+:::finale
+Attention gets you seen.
+Influence gets you *repeated.*
+:::

@@ -1,4 +1,5 @@
 ---
+design: essay
 date: 2026-10-07
 dek: A buyer can agree with everything you say and still never buy. Interest, intent, and readiness are three different things, but your funnel treats them as one.
 ---
@@ -8,6 +9,9 @@ A buyer can fully agree with your message and still never become pipeline.
 They recognize the problem, spend time with your content, and take a meeting. The engagement is real. The mistake comes when we read more into it than it tells us: someone is exploring a solution, so we start expecting their company to buy one.
 
 Consider two people asking the same detailed questions about your product. One is comparing vendors for an active project. The other is gathering evidence to convince their boss that the project deserves to exist. Both are serious about the problem. But they have different work ahead of them before a purchase can happen.
+
+
+{{figure:twins | An illustration from the essay's example: the same actions in your systems, different work ahead before a purchase.}}
 
 Treating those conversations as equally close to revenue hides that difference. The activity looks promising while the conditions needed to move forward remain unexamined.
 
@@ -59,6 +63,9 @@ That creates a gap between what the campaign produced and what the business expe
 
 Stronger evidence comes from what the company does next: assigns someone to lead the project, brings in the people needed to decide, or allocates time to assess implementation. Those actions involve the organization putting resources behind the evaluation. They give the opportunity a more concrete path forward.
 
+
+{{figure:race | An illustration: each internal handoff adds confidence to the record, but only the buyer's own actions move the purchase.}}
+
 Without that distinction, teams can spend the pipeline review debating whether the leads were good when the more useful question is what changed for the buyer between one stage and the next.
 
 ## Find What Would Let the Purchase Move
@@ -71,8 +78,16 @@ Use the buyer’s explanation and get specific. A note saying “bad timing” t
 
 The answer should shape both the sales approach and what marketing creates. If the problem hasn’t earned priority, help the champion build a case around its business consequences. If the team is comparing approaches, provide evidence that helps them choose. If adoption is the concern, show what implementation would require and how similar customers handled it.
 
+
+{{figure:nextstep | From the essay: match the next step to what's actually missing.}}
+
 That work can help a company become ready. Marketing has a role in building internal support and reducing uncertainty, alongside attracting people who already have a project underway.
 
 Some constraints will still require time. If the buyer can’t act until resources become available, agree on the milestone that would make another conversation useful. The account can remain worth investing in without carrying an immediate revenue expectation.
 
 The next step should address what’s missing. Progress means the buyer has resolved a question, secured a commitment, or removed an obstacle that brings the purchase closer.
+
+:::finale
+A lead can advance through your funnel
+while the purchase *stands still.*
+:::
