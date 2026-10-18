@@ -85,7 +85,7 @@
     .hr-card b { display: block; font: 400 1.2rem/1.1 var(--hv-serif); }
     .hr-card span { display: block; margin-top: 6px; font: 400 0.8rem/1.35 var(--sans); color: var(--hv-muted); }
     .hr-mark { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: clamp(140px, 13vw, 190px); aspect-ratio: 1; border-radius: 22%; background: var(--hv-ink); box-shadow: 0 40px 100px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(201, 162, 74, 0.5); animation: hr-land linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
-    .hr-mark b { font: 400 clamp(5rem, 4rem + 3vw, 7.4rem)/1 var(--hv-serif); color: var(--hv-paper); transform: translateY(4%); }
+    .hr-mark svg { display: block; width: 46%; height: auto; color: var(--hv-paper); }
   }
 }
 
