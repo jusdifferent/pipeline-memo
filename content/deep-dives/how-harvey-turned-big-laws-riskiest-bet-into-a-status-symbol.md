@@ -1,5 +1,5 @@
 ---
-date: 2026-10-24
+date: 2026-10-18
 design: harvey
 dek: Lawyers follow precedent, so Harvey set one, and it now brings in $400 million a year.
 ---
