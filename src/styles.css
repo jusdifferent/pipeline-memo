@@ -176,13 +176,13 @@ p { margin: 0 0 1em; }
 .chapters strong { font-family: var(--sans); font-size: 1.1rem; }
 .chapters span { color: var(--muted); font-size: 1.05rem; line-height: 1.55; }
 .preview-text { position: relative; }
-.preview-text:not(.is-open)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7em; background: linear-gradient(to bottom, rgba(242, 238, 230, 0), var(--paper)); pointer-events: none; }
 .gate { margin: 8px 0 12px; padding: clamp(24px, 4vw, 36px); border-radius: 12px; background: var(--ep-bg); color: var(--ep-fg); }
 .gate h2 { font-size: 1.6rem; margin-bottom: 8px; letter-spacing: -0.02em; }
 .gate p { font-family: var(--serif); opacity: 0.92; }
 .gate .quick input { border-color: transparent; }
 .gate .btn { background: var(--ep-fg); color: var(--ep-bg); }
 .gate .form-status.error { color: inherit; text-decoration: underline; }
+.pitch { margin: clamp(32px, 5vw, 48px) 0; }
 .gate-fine { font-family: var(--sans) !important; font-size: 0.88rem; margin: 12px 0 0; opacity: 0.8 !important; }
 .essay-rest { margin-top: 1.2em; }
 .related { padding: clamp(48px, 7vw, 80px) var(--pad) 0; }
@@ -621,5 +621,7 @@ html.js .finale:not(.is-in) .fin-flourish path { stroke-dashoffset: 1; }
 
 /* A finale already ends the page with the signup form; the footer band would ask a second time. */
 body.designed:has(.finale) .signup-band { display: none; }
+/* Without the band, the related row would touch the footer: keep the same gap the band leaves. */
+body.designed:has(.finale) main { padding-bottom: clamp(64px, 9vw, 112px); }
 /* Safety net: nothing on a designed page may push it sideways. */
 .dd--designed { overflow-x: clip; }

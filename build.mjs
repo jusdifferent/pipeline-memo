@@ -344,6 +344,38 @@ const CHAPTERS = {
   category: [['The unnamed problem', 'The pain buyers felt before anyone had a word for it.'], ['The frame', 'How the problem was named, and why the name stuck.'], ['How the category spread', 'Events, content, analysts, and the people who carried the idea.'], ['Who captured the value', 'Whether the category\u2019s creator ended up owning it.'], ['The mechanism', 'Why this category play worked, or didn\u2019t.']],
 };
 
+// Everything is free to read. Two subscribe cards sit in the article instead of a gate: one where the
+// preview used to end, and one at a section break about two-thirds through the rest. Subscribers don't see them.
+const PITCHES = {
+  'deep dive': [
+    ['Get the next deep dive by email', 'Every new deep dive and essay arrives the day it comes out, so you never have to come looking.'],
+    ['Still reading? This is written for you.', 'Buyline is for the people who make the calls. Subscribe and each new piece comes straight to your inbox.'],
+  ],
+  essay: [
+    ['Get the next essay by email', 'Every new essay and deep dive arrives the day it comes out, so you never have to come looking.'],
+    ['Still reading? This is written for you.', 'Buyline is for the people who make the calls. Subscribe and each new piece comes straight to your inbox.'],
+  ],
+};
+function pitch(kind, n, { id, source, style }) {
+  const [h, p] = PITCHES[kind][n];
+  return `<aside class="gate pitch" data-pitch aria-label="Subscribe" style="${style}">
+      <h2>${e(h)}</h2>
+      <p>${e(p)}</p>
+      ${subForm({ id: `${id}-${n + 1}`, button: 'Subscribe', source: `${source}-pitch${n + 1}` })}
+      <p class="gate-fine">Free. Unsubscribe anytime.</p>
+    </aside>`;
+}
+function withPitches(preview, rest, kind, opts) {
+  const blocks = rest.split('\n');
+  const heads = blocks.map((b, i) => (b.startsWith('<h2') ? i : -1)).filter((i) => i > 0);
+  const target = blocks.length * 0.6;
+  const at = heads.length ? heads.reduce((a, b) => (Math.abs(b - target) < Math.abs(a - target) ? b : a)) : -1;
+  const restHtml = at > 0 ? `${blocks.slice(0, at).join('\n')}\n</div>\n    ${pitch(kind, 1, opts)}\n    <div class="prose essay-rest">${blocks.slice(at).join('\n')}` : rest;
+  return `<div class="prose preview-text">${preview}</div>
+    ${pitch(kind, 0, opts)}
+    <div class="prose essay-rest">${restHtml}</div>`;
+}
+
 function splitEssay(html) {
   const blocks = html.split('\n');
   let paras = 0, i = 0;
@@ -408,15 +440,7 @@ function deepDiveArticle(dd) {
   const parts = dd.published ? pullSections(dd.essay) : {};
   if (dd.published) {
     const { preview, rest } = splitEssay(renderMarkdown(parts.body, { figure: figureFor('deep-dives', dd.slug), block: renderBlock }).html);
-    const mode = dd.readUrl ? 'redirect' : 'unlock';
-    sheet = `<div class="prose preview-text">${preview}</div>
-    <div class="gate" data-gate data-mode="${mode}"${dd.readUrl ? ` data-read-url="${e(dd.readUrl)}"` : ''} style="${brandVars(dd)}">
-      <h2>Keep reading</h2>
-      <p>Enter your email to read the rest of this deep dive. You'll also get every new deep dive and essay the day it comes out.</p>
-      ${subForm({ id: `gate-${dd.slug}`, button: 'Read the rest', mode, source: dd.slug })}
-      <p class="gate-fine">Free. Unsubscribe anytime.</p>
-    </div>
-    ${dd.readUrl ? '' : `<div class="prose essay-rest" data-rest hidden>${rest}</div>`}`;
+    sheet = withPitches(preview, rest, 'deep dive', { id: `pitch-${dd.slug}`, source: dd.slug, style: brandVars(dd) });
   } else {
     sheet = `<div class="prose">
       <h2>What this deep dive covers</h2>
@@ -457,21 +481,13 @@ function deepDiveArticle(dd) {
 function designedEssay(es) {
   const parts = pullSections(es.essay);
   const { preview, rest } = splitEssay(renderMarkdown(parts.body, { figure: figureFor('essays', es.slug), block: renderBlock }).html);
-  const mode = es.readUrl ? 'redirect' : 'unlock';
   return `<article class="dd essay dd--designed dd--${es.design}" data-dd="${es.slug}" style="${ESSAY_VARS}">
   <header class="essay-hero">
     <h1>${e(es.title)}</h1>
     ${es.dek ? `<p class="dd-dek">${e(es.dek)}</p>` : ''}
   </header>
   <div class="dd-sheet"><p class="crumb dd-meta"><a href="/essays">Essays</a><span>${e(fmtDate(es.date))}, ${es.minutes} min read</span></p>
-    <div class="prose preview-text">${preview}</div>
-    <div class="gate" data-gate data-mode="${mode}"${es.readUrl ? ` data-read-url="${e(es.readUrl)}"` : ''} style="${ESSAY_VARS}">
-      <h2>Keep reading</h2>
-      <p>Enter your email to read the rest of this essay. You'll also get every new essay and deep dive the day it comes out.</p>
-      ${subForm({ id: `gate-${es.slug}`, button: 'Read the rest', mode, source: `essay-${es.slug}` })}
-      <p class="gate-fine">Free. Unsubscribe anytime.</p>
-    </div>
-    ${es.readUrl ? '' : `<div class="prose essay-rest" data-rest hidden>${rest}</div>`}
+    ${withPitches(preview, rest, 'essay', { id: `pitch-${es.slug}`, source: `essay-${es.slug}`, style: ESSAY_VARS })}
   </div>
   ${finaleSection(parts.finale, { slug: `essay-${es.slug}` }, { hook: 'Get the next essay the day it comes out.', lit: true })}
 </article>`;
@@ -482,15 +498,7 @@ function essayArticle(es) {
   let sheet;
   if (es.published) {
     const { preview, rest } = splitEssay(renderMarkdown(es.essay, { figure: figureFor('essays', es.slug), block: renderBlock }).html);
-    const mode = es.readUrl ? 'redirect' : 'unlock';
-    sheet = `<div class="prose preview-text">${preview}</div>
-    <div class="gate" data-gate data-mode="${mode}"${es.readUrl ? ` data-read-url="${e(es.readUrl)}"` : ''} style="${ESSAY_VARS}">
-      <h2>Keep reading</h2>
-      <p>Enter your email to read the rest of this essay. You'll also get every new essay and deep dive the day it comes out.</p>
-      ${subForm({ id: `gate-${es.slug}`, button: 'Read the rest', mode, source: `essay-${es.slug}` })}
-      <p class="gate-fine">Free. Unsubscribe anytime.</p>
-    </div>
-    ${es.readUrl ? '' : `<div class="prose essay-rest" data-rest hidden>${rest}</div>`}`;
+    sheet = withPitches(preview, rest, 'essay', { id: `pitch-${es.slug}`, source: `essay-${es.slug}`, style: ESSAY_VARS });
   } else {
     sheet = `<div class="gate" data-gate data-mode="notify" style="${ESSAY_VARS}">
       <h2>This essay is in research</h2>
