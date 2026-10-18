@@ -14,7 +14,7 @@ Y | Yes | One elite firm said yes in public. The rest of Big Law followed.
 :::
 
 :::manifesto
-Make the risky choice *the defensible one,* then make it *the one everyone wants.*
+When trust is the product, *borrow it* until *your name is enough.*
 :::
 
 In July 2026, Harvey posted a three-minute video shot in a wood-paneled library, with a stone fireplace, mustard velvet chairs and warm, low light.
@@ -276,4 +276,4 @@ is the one *everyone wants to be seen with.*
 
 Weinberg's whole strategy fits in one answer to Sequoia. Earn the trust of a few firms, and "the rest of them will trust you." Four years later, Harvey is worth $15.5 billion, and its most persuasive asset is still the list of firms that trusted it first.
 
-**Any company selling to cautious buyers can run the same play. Win the customer everyone copies, help them say so, and make following them the safe choice.**
+**Any company selling to cautious buyers can run the same play. Sell to the firm everyone copies, and every yes after it gets easier to say.**

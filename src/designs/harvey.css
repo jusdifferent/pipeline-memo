@@ -93,6 +93,7 @@
 .dd--harvey .manifesto p { font: 400 clamp(2.1rem, 1rem + 4.1vw, 4.9rem)/1.07 var(--hv-serif); letter-spacing: -0.01em; text-transform: none; }
 .dd--harvey .fin-line { font: 400 clamp(1.9rem, 1rem + 3.1vw, 3.7rem)/1.1 var(--hv-serif); letter-spacing: -0.005em; text-transform: none; }
 .dd--harvey .manifesto em, .dd--harvey .finale em { color: var(--hv-brass-hi); }
+@media (min-width: 400px) { .dd--harvey .manifesto em { white-space: nowrap; } } /* keep "borrow it" whole */
 .dd--harvey .fin-line em { white-space: normal; } /* "everyone wants to be seen with" is too long to hold on one line on phones */
 
 /* ------------------------------------------------------------ the article in Harvey's colors */
