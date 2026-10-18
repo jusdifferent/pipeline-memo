@@ -134,6 +134,11 @@ const essayUrl = (es) => `/essays/${es.slug}`;
 const TOPICS_LIVE = TOPICS.filter((t) => ESSAYS.some((x) => x.topic === t.slug));
 const ESSAY_VARS = '--ep-bg:#141414;--ep-fg:#FAF8F3;--ep-ac:#FFFFFF';
 
+// The Buyline wordmark (public/brand), inlined so it takes the text color: ink on paper, paper on black.
+const WORDMARK = fs.readFileSync(path.join(ROOT, 'public/brand/buyline-wordmark.svg'), 'utf8').trim()
+  .replace(/<title>.*?<\/title>/, '').replace(/ role="img" aria-label="[^"]*"/, ' aria-hidden="true" focusable="false"')
+  .replace(/ width="[\d.]+" height="[\d.]+"/, '').replaceAll('fill="#141414"', 'fill="currentColor"').replaceAll('fill="#3B7A57"', 'fill="var(--logo-green)"');
+const wordmark = () => `<a class="wordmark" href="/" aria-label="${e(cfg.name)} home">${WORDMARK}</a>`;
 const css = fs.readFileSync(path.join(ROOT, 'src/styles.css'), 'utf8');
 const js = fs.readFileSync(path.join(ROOT, 'src/site.js'), 'utf8');
 const ver = crypto.createHash('md5').update(css + js).digest('hex').slice(0, 8);
@@ -202,6 +207,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <meta property="og:image" content="${e(cfg.url)}/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="${e(cfg.name)}" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -215,7 +221,7 @@ ${head}
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-head">
   <div class="head-row">
-    <a class="wordmark" href="/">${e(cfg.name)}</a>
+    ${wordmark()}
     <form class="search" action="${searchIn === 'essays' ? '/essays' : '/'}" method="get" role="search" data-search>
       <label class="sr-only" for="q">Search deep dives</label>
       <input id="q" name="q" type="search" placeholder="${searchIn === 'essays' ? 'Search essays' : 'Search deep dives'}" autocomplete="off">
@@ -239,7 +245,7 @@ ${body}
 </section>
 <footer class="site-foot">
   <div class="wrap foot-grid">
-    <div><a class="wordmark" href="/">${e(cfg.name)}</a><p class="foot-tag">${e(cfg.tagline)}</p></div>
+    <div>${wordmark()}<p class="foot-tag">${e(cfg.tagline)}</p></div>
     <div><h2 class="foot-h">Deep dives</h2><ul class="foot-links"><li><a href="/">All deep dives</a></li>${SERIES_LIVE.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul></div>
     <div><h2 class="foot-h">Essays</h2><ul class="foot-links"><li><a href="/essays">All essays</a></li>${TOPICS_LIVE.map((t) => `<li><a href="/essays?topic=${t.slug}">${e(t.name)}</a></li>`).join('')}</ul></div>
     <div><h2 class="foot-h">${e(cfg.name)}</h2><ul class="foot-links"><li><a href="/about">About</a></li><li><a href="/advisory">Work with me</a></li>${cfg.linkedin ? `<li><a href="${e(cfg.linkedin)}" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>` : ''}${cfg.contactEmail ? `<li><a href="mailto:${e(cfg.contactEmail)}">Email</a></li>` : ''}<li><a href="/feed.xml">RSS</a></li></ul></div>
