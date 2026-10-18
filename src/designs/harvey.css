@@ -1,0 +1,170 @@
+/* Harvey deep dive: Harvey's own look. Cream paper, black ink, a high-contrast serif (Gloock, standing in for
+   Harvey's TWK Ghost), brass from the velvet chairs and lamplight of its video sets, and a deep library green for
+   the manifesto and finale.
+   Hero: the giant HARVEY letters, each playing a scene from the story, and a pile of announcements popping up
+   beside the title: firms saying they went first, teams naming Harvey their legal AI (harvey.hero.html, harvey.js).
+   Interlude (harvey.run.html): the hero shrinks away, the announcements fly in and pile up, Harvey's mark lands.
+   The shared article and section styles live in styles.css (.dd--designed). */
+.dd--harvey {
+  --hv-paper: #F4F0E6; --hv-ink: #151412; --hv-muted: #5E5850; --hv-brass: #9A7425; --hv-brass-hi: #C9A24A;
+  --hv-card: #FFFDF8; --hv-line: #D8D0BF; --hv-green: #24302B; --hv-serif: Gloock, "Times New Roman", serif;
+  --accent: #8A6820; --accent-deep: #5E4716; --accent-light: #EADFC4; --accent-hi: #C9A24A; --page: #F4F0E6;
+  --man-bg: #24302B; --man-fg: #F4F0E6;
+}
+
+/* ------------------------------------------------------------ hero */
+.dd--harvey .dd-hero { --hx: max(var(--pad), calc((100vw - 1240px) / 2 + 44px)); min-height: max(640px, 100svh - var(--head-h)); padding-top: clamp(26px, 4.5vh, 52px); color: var(--hv-ink); background: var(--hv-paper); }
+.dd--harvey .dd-hero.has-word { justify-content: space-between; }
+.dd--harvey .hero-shade { display: none; }
+.dd--harvey .dd-hero .dd-head-grid { z-index: 4; max-width: min(55%, 760px); }
+.dd--harvey .dd-hero h1, .dd--harvey.dd--designed .dd-hero.has-word h1 { max-width: 14em; color: var(--hv-ink); text-shadow: none; font: 400 clamp(2.1rem, 1rem + 2.7vw, 3.8rem)/1.05 var(--hv-serif); letter-spacing: -0.005em; }
+.dd--harvey .dd-hero.has-word .dd-dek { max-width: 30em; color: #3E3A34; opacity: 1; }
+
+/* The letters: Harvey's legal-journal serif in black ink, spread across the page like a masthead.
+   Scenes. H: Harvey Specter's pinstripes. A: the Am Law 100, mostly brass. R: the firms that said yes.
+   V: $15.5 billion. E: the glowing 2023 "Elite Law Firms" page. Y: yes after yes. */
+.dd--harvey .hero-word { margin: 0; }
+.dd--harvey .hl-ch, .dd--harvey .hl::after { font: 400 min(15.2vw, 24vh)/0.86 var(--hv-serif); letter-spacing: 0; text-transform: none; }
+.dd--harvey .hl-ch { color: var(--hv-ink); }
+.dd--harvey .hl-cap { background: var(--hv-card); color: var(--hv-ink); border: 1px solid var(--hv-line); box-shadow: 0 16px 34px rgba(40, 30, 10, 0.18); }
+.dd--harvey .hl-cap b { color: var(--hv-brass); }
+.dd--harvey .hl:focus-visible { outline-color: var(--hv-ink); }
+.dd--harvey .hl-1 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Crect width='18' height='18' fill='%23202838'/%3E%3Crect x='8' width='1.2' height='18' fill='%23A7B0BF'/%3E%3C/svg%3E"); --scene-size: 18px 18px; --scene-anim: hv-side 1.4s linear infinite; }
+.dd--harvey .hl-2 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Crect width='44' height='44' fill='%23F4F0E6'/%3E%3Crect x='2' y='2' width='18' height='18' rx='2' fill='%23B58B37'/%3E%3Crect x='24' y='2' width='18' height='18' rx='2' fill='%23B58B37'/%3E%3Crect x='2' y='24' width='18' height='18' rx='2' fill='%23B58B37'/%3E%3Crect x='24' y='24' width='18' height='18' rx='2' fill='%23E2D9C6'/%3E%3C/svg%3E"); --scene-size: 44px 44px; --scene-anim: hv-diag 2.4s linear infinite; }
+.dd--harvey .hl-3 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='46'%3E%3Crect width='360' height='46' fill='%2324302B'/%3E%3Ctext x='8' y='31' font-family='Georgia, serif' font-size='22' fill='%23F4F0E6'%3EA%26amp;O %C2%B7 PwC %C2%B7 Latham %C2%B7 Ashurst %C2%B7%3C/text%3E%3C/svg%3E"); --scene-size: 360px 46px; --scene-anim: hv-ticker 6s linear infinite; }
+.dd--harvey .hl-4 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='54'%3E%3Crect width='150' height='54' fill='%23151412'/%3E%3Ctext x='10' y='38' font-family='Georgia, serif' font-size='30' fill='%23C9A24A'%3E%2415.5B%3C/text%3E%3C/svg%3E"); --scene-size: 150px 54px; --scene-anim: hv-roll 1.3s linear infinite; }
+.dd--harvey .hl-5 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='48'%3E%3Crect width='120' height='48' fill='%23070B22'/%3E%3Ctext x='10' y='32' font-family='Arial, sans-serif' font-size='22' fill='%235B7BFF'%3EElite%3C/text%3E%3C/svg%3E"); --scene-size: 120px 48px; --scene-anim: hv-diag 2.6s linear infinite; }
+.dd--harvey .hl-6 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='50'%3E%3Crect width='84' height='50' fill='%237E241C'/%3E%3Ctext x='6' y='34' font-family='Georgia, serif' font-size='25' fill='%23F4F0E6'%3EYes %C2%B7%3C/text%3E%3C/svg%3E"); --scene-size: 84px 50px; --scene-anim: hv-yes 1.5s linear infinite; }
+@keyframes hv-side { to { background-position: 18px 0; } }
+@keyframes hv-diag { to { background-position: 44px 44px; } }
+@keyframes hv-ticker { to { background-position: -360px 0; } }
+@keyframes hv-roll { to { background-position: 0 -54px; } }
+@keyframes hv-yes { to { background-position: -84px 0; } }
+
+/* The pile of announcements, to the right of the title and below the letters (harvey.js sets --word-h). */
+.hv-scene { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.hv-pile { position: absolute; left: calc(var(--hx) + (100% - 2 * var(--hx)) * 0.55 + 28px); right: var(--hx); top: calc(var(--word-h, 34vh) + clamp(18px, 3vh, 34px)); bottom: clamp(30px, 6vh, 62px); }
+.hv-pop { position: absolute; left: 0; top: 0; width: min(100%, 300px); padding: 13px 16px 12px; border: 1px solid var(--hv-line); border-radius: 8px; background: var(--hv-card); color: var(--hv-ink); box-shadow: 0 18px 36px -22px rgba(40, 30, 10, 0.6); opacity: 0; transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg)) scale(0.82); transition: opacity 0.45s ease, transform 0.6s cubic-bezier(.2, 1.35, .35, 1); }
+.hv-pop.in { opacity: 1; transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--r, 0deg)) scale(1); }
+.hv-pop.old { opacity: 0; transform: translate(var(--x, 0), calc(var(--y, 0) + 16px)) rotate(var(--r, 0deg)) scale(0.96); transition: opacity 0.8s ease, transform 0.8s ease; }
+.hv-pop b { display: block; font: 400 1.22rem/1.1 var(--hv-serif); }
+.hv-pop span { display: block; margin-top: 6px; font: 400 0.82rem/1.38 var(--sans); color: var(--hv-muted); }
+.hv-pop i { display: block; margin-top: 8px; font: 600 0.7rem/1 var(--sans); font-style: normal; letter-spacing: 0.1em; color: var(--hv-brass); }
+.dd-hero.is-away .hv-pop { transition: none; }
+@media (max-width: 760px) {
+  .dd--harvey .dd-hero { min-height: max(620px, 100svh - var(--head-h)); }
+  .dd--harvey .dd-hero .dd-head-grid { max-width: none; }
+  .hv-pile { left: var(--pad); right: var(--pad); bottom: auto; height: max(150px, var(--head-t, 0px) - var(--word-h, 34vh) - 48px); }
+  .hv-pop { width: min(100%, 300px); }
+}
+
+/* ------------------------------------------------------------ interlude: the announcements pile up
+   Pinned on wide screens: the hero shrinks and fades into the green, the announcements fly in from every side
+   and pile up in the middle, and Harvey's mark lands on top. */
+.hr { display: none; }
+@keyframes hv-shrink { 0% { border-radius: 0; } 55% { transform: scale(0.7); opacity: 1; border-radius: 40px; } 100% { transform: scale(0.62); opacity: 0; border-radius: 40px; } }
+@keyframes hv-pile-out { to { opacity: 0; transform: translateY(-24px); } }
+@keyframes hr-gather {
+  0% { opacity: 0; transform: translate(-50%, -50%) translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(1.15); }
+  10% { opacity: 1; }
+  48%, 64% { opacity: 1; transform: translate(-50%, -50%) translate(var(--ex), var(--ey)) rotate(var(--tr)) scale(1); }
+  80%, 100% { opacity: 0; transform: translate(-50%, -50%) translate(calc(var(--ex) * 0.4), calc(var(--ey) * 0.4)) rotate(var(--tr)) scale(0.6); }
+}
+@keyframes hr-land {
+  0%, 52% { opacity: 0; transform: translate(-50%, -50%) scale(1.8) rotate(-8deg); }
+  58% { opacity: 1; }
+  68% { opacity: 1; transform: translate(-50%, -50%) scale(0.94) rotate(0deg); }
+  76%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+@supports (animation-timeline: view()) {
+  @media (min-width: 761px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+    .dd--harvey .hero-run .run-stage > .dd-hero { animation: hv-shrink linear both; animation-timeline: --run; animation-range: contain 0% contain 62%; }
+    .dd--harvey .hero-run .hv-pile { animation: hv-pile-out linear both; animation-timeline: --run; animation-range: contain 0% contain 10%; }
+    .hr { display: block; position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+    .hr-card { position: absolute; left: 50%; top: 50%; width: clamp(200px, 17vw, 260px); padding: 14px 16px 13px; border: 1px solid var(--hv-line); border-radius: 8px; background: var(--hv-card); color: var(--hv-ink); box-shadow: 0 26px 50px rgba(0, 0, 0, 0.45); animation: hr-gather linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
+    .hr-card b { display: block; font: 400 1.2rem/1.1 var(--hv-serif); }
+    .hr-card span { display: block; margin-top: 6px; font: 400 0.8rem/1.35 var(--sans); color: var(--hv-muted); }
+    .hr-mark { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: clamp(140px, 13vw, 190px); aspect-ratio: 1; border-radius: 22%; background: var(--hv-ink); box-shadow: 0 40px 100px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(201, 162, 74, 0.5); animation: hr-land linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
+    .hr-mark b { font: 400 clamp(5rem, 4rem + 3vw, 7.4rem)/1 var(--hv-serif); color: var(--hv-paper); transform: translateY(4%); }
+  }
+}
+
+/* ------------------------------------------------------------ manifesto and finale in Harvey's serif */
+.dd--harvey .manifesto p { font: 400 clamp(2.1rem, 1rem + 4.1vw, 4.9rem)/1.07 var(--hv-serif); letter-spacing: -0.01em; text-transform: none; }
+.dd--harvey .fin-line { font: 400 clamp(1.9rem, 1rem + 3.1vw, 3.7rem)/1.1 var(--hv-serif); letter-spacing: -0.005em; text-transform: none; }
+.dd--harvey .manifesto em, .dd--harvey .finale em { color: var(--hv-brass-hi); }
+.dd--harvey .fin-line em { white-space: normal; } /* "everyone wants to be seen with" is too long to hold on one line on phones */
+
+/* ------------------------------------------------------------ the article in Harvey's colors */
+.dd--harvey .prose h2::before { border-top-color: var(--hv-brass); color: var(--hv-brass); }
+.dd--harvey .prose p.carrier { border-left-color: var(--hv-brass); color: var(--accent-deep); }
+.dd--harvey .preview-text > p:first-child::first-letter { font-family: var(--hv-serif); font-weight: 400; color: var(--hv-ink); }
+.dd--harvey .prose a { color: var(--hv-ink); text-decoration-color: var(--hv-brass); text-decoration-thickness: 2px; }
+.dd--harvey .bl-title em { color: var(--hv-brass); }
+.dd--harvey .bl-founder { background: var(--hv-card); box-shadow: 10px 10px 0 var(--accent-light); }
+.dd--harvey .bl-pull p { color: var(--hv-ink); }
+
+/* On the record: cream, ink, brass and library green cards. */
+.dd--harvey .bl-fan li:nth-child(4n+1) { background: var(--hv-card); color: var(--hv-ink); }
+.dd--harvey .bl-fan li:nth-child(4n+2) { background: var(--hv-ink); color: var(--hv-paper); }
+.dd--harvey .bl-fan li:nth-child(4n+3) { background: var(--accent-light); color: var(--hv-ink); }
+.dd--harvey .bl-fan li:nth-child(4n) { background: var(--hv-green); color: var(--hv-paper); }
+
+/* Moodboard on cream, taped in brass: four homepages, from glowing blue to legal journal. */
+.dd--harvey .bl-mood { background: #EFE9DC; box-shadow: inset 0 0 0 1px var(--hv-line); }
+.dd--harvey .note::before { background: rgba(201, 162, 74, 0.75); }
+@media (min-width: 900px) {
+  .dd--harvey .bl-mood.has-shots .note-1 { grid-column: 1 / span 6; }
+  .dd--harvey .bl-mood.has-shots .note-2 { grid-column: 7 / span 6; margin-top: 52px; }
+  .dd--harvey .bl-mood.has-shots .note-3 { grid-column: 1 / span 6; margin-top: -10px; }
+  .dd--harvey .bl-mood.has-shots .note-4 { grid-column: 7 / span 6; margin-top: 30px; }
+}
+
+/* ------------------------------------------------------------ figures */
+/* First in my market: each firm's announcement, with the market it claimed. */
+.fig-firsts ol { margin-left: 92px; border-left-color: var(--hv-line); }
+.fig-firsts .yr { left: -96px; width: 76px; }
+.fig-firsts li::before { border-color: var(--hv-ink); }
+.fig-firsts .hl { font: 400 1.18rem/1.2 var(--hv-serif); }
+.fig-firsts .sub q { quotes: "“" "”"; }
+.fig-firsts .mkt { display: inline-block; margin-top: 8px !important; padding: 3px 10px; border-radius: 999px; background: var(--accent-light); color: var(--accent-deep); font: 600 0.74rem/1.3 var(--sans); }
+
+/* The Am Law 100 by Harvey's count: 100 tiles, a date slider and the count at that date (harvey.js). */
+.fig-amlaw { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); gap: clamp(18px, 4vw, 40px); align-items: center; }
+.al-grid { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 5px; aspect-ratio: 1; max-width: 340px; width: 100%; }
+.al-grid i { border-radius: 3px; background: #E2D9C6; transition: background-color 0.35s ease, transform 0.35s ease; }
+.al-grid i.on { background: #B58B37; }
+.al-read b { display: block; font: 400 clamp(3rem, 2rem + 3vw, 4.4rem)/1 var(--hv-serif); color: var(--hv-brass); }
+.al-read .al-of { display: block; margin-top: 6px; font-size: 0.95rem; }
+.al-read .al-when { display: block; margin-top: 4px; font-size: 0.85rem; color: var(--muted); }
+.al-read input[type=range] { width: 100%; margin: 18px 0 6px; accent-color: #B58B37; }
+.al-ticks { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--muted); }
+.al-note { margin-top: 10px !important; font-size: 0.8rem; color: var(--muted); }
+
+/* The two cascades. */
+.fig-loop .m-title { color: var(--hv-ink); }
+.fig-loop .m-flow li { border-color: var(--hv-ink); }
+.fig-loop .m-flow li:first-child { background: var(--hv-ink); color: var(--hv-paper); }
+.fig-loop .m-flow li:first-child span { color: rgba(244, 240, 230, 0.78); }
+.fig-loop .m-flow li:last-child { background: var(--accent-light); }
+
+/* Revenue: in-house share and annual recurring revenue, as stated by Harvey. */
+.fig-mix { display: grid; gap: 26px; }
+.fig-mix .mx-head { margin: 0 0 10px; font: 600 0.76rem/1.3 var(--cond); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fig-mix .bar { background: var(--hv-brass); }
+.fig-mix .is-ink .bar { background: var(--hv-ink); }
+
+/* A team in every legal market. */
+.fig-teams ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.fig-teams li { padding: 14px 16px; border: 1px solid var(--hv-line); border-radius: 10px; background: var(--hv-card); }
+.fig-teams .city { display: block; font: 400 1.3rem/1.1 var(--hv-serif); }
+.fig-teams .team { display: block; margin-top: 6px; font-weight: 600; font-size: 0.9rem; }
+.fig-teams .why { display: block; margin-top: 4px; font-size: 0.8rem; line-height: 1.4; color: var(--muted); }
+.fig-teams .when { display: block; margin-top: 8px; font: 600 0.7rem/1 var(--sans); letter-spacing: 0.1em; color: var(--hv-brass); }
+
+@media (max-width: 640px) {
+  .fig-amlaw { grid-template-columns: 1fr; }
+  .al-grid { max-width: 280px; }
+  .fig-firsts ol { margin-left: 6px; }
+  .fig-firsts .yr { position: static; display: block; width: auto; margin-bottom: 2px; text-align: left; }
+}

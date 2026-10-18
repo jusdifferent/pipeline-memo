@@ -441,6 +441,24 @@
    "label": "Ramp"
   },
   {
+   "slug": "how-harvey-turned-big-laws-riskiest-bet-into-a-status-symbol",
+   "company": "Harvey",
+   "title": "How Harvey Turned Big Law's Riskiest Bet Into a Status Symbol",
+   "series": "gtm",
+   "number": 10,
+   "industry": "Legal",
+   "dek": "Lawyers follow precedent, so Harvey set one, and it now brings in $400 million a year.",
+   "featured": false,
+   "brand": {
+    "bg": "#151412",
+    "fg": "#F4F0E6",
+    "ac": "#C9A24A"
+   },
+   "domain": "harvey.ai",
+   "label": "Harvey",
+   "logoMono": true
+  },
+  {
    "slug": "how-gong-created-demand-before-buyers-knew-the-category",
    "company": "Gong",
    "title": "How Gong Created Demand Before Buyers Knew the Category",
