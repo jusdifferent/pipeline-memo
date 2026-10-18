@@ -1,9 +1,9 @@
 :root {
-  --paper: #FAF8F3;
-  --paper-2: #F0ECE3;
+  --paper: #F2EEE6; /* dimmed from #FAF8F3 so the page is easier on the eyes at night */
+  --paper-2: #E8E3D9;
   --ink: #141414;
   --muted: #5E5B55;
-  --rule: #D9D4C9;
+  --rule: #D3CDC1;
   --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --cond: "IBM Plex Sans Condensed", "IBM Plex Sans", "Arial Narrow", sans-serif;
   --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
@@ -176,7 +176,7 @@ p { margin: 0 0 1em; }
 .chapters strong { font-family: var(--sans); font-size: 1.1rem; }
 .chapters span { color: var(--muted); font-size: 1.05rem; line-height: 1.55; }
 .preview-text { position: relative; }
-.preview-text:not(.is-open)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7em; background: linear-gradient(to bottom, rgba(250, 248, 243, 0), var(--paper)); pointer-events: none; }
+.preview-text:not(.is-open)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7em; background: linear-gradient(to bottom, rgba(242, 238, 230, 0), var(--paper)); pointer-events: none; }
 .gate { margin: 8px 0 12px; padding: clamp(24px, 4vw, 36px); border-radius: 12px; background: var(--ep-bg); color: var(--ep-fg); }
 .gate h2 { font-size: 1.6rem; margin-bottom: 8px; letter-spacing: -0.02em; }
 .gate p { font-family: var(--serif); opacity: 0.92; }

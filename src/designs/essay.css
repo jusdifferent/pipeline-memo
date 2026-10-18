@@ -3,7 +3,7 @@
    motion rules (one thing at a time, data never overshoots), and a finale on the green tint that ends on the
    essay's rule, its words lighting up as you scroll. The animated figure lives in essay.js. */
 .dd.dd--essay {
-  --accent: #3B7A57; --accent-deep: #2C5E42; --accent-light: #DCEBE2; --accent-hi: #3B7A57; --page: #FAF8F3;
+  --accent: #3B7A57; --accent-deep: #2C5E42; --accent-light: #DCEBE2; --accent-hi: #3B7A57; --page: var(--paper);
   --man-bg: #DCEBE2; --man-fg: #141414; --essay-gray: #B9B3AC;
 }
 
@@ -79,12 +79,12 @@ html.js .dd-figure:not(.is-in) .fc-dot { transform: scale(0); }
 .rc-line::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: #E2DDD4; }
 .rc-stops { margin: 0; padding: 0; list-style: none; }
 .rc-stops li { position: absolute; left: calc(var(--u) * 100%); top: 0; transform: translateX(-50%); font-size: 0.8rem; color: #8B857E; white-space: nowrap; transition: color 0.3s ease; }
-.rc-stops li::after { content: ""; position: absolute; left: 50%; top: 22px; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: #FAF8F3; box-shadow: inset 0 0 0 2px #CFC9BF; }
+.rc-stops li::after { content: ""; position: absolute; left: 50%; top: 22px; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: var(--paper); box-shadow: inset 0 0 0 2px #CFC9BF; }
 .rc-stops li:first-child { transform: none; } .rc-stops li:first-child::after { left: 0; margin-left: -4.5px; }
 .rc-stops li:last-child { transform: translateX(-100%); } .rc-stops li:last-child::after { left: auto; right: -4.5px; margin-left: 0; }
 .rc-stops li.is-hit { color: #141414; font-weight: 600; }
 .rc-buyer .rc-stops li.is-hit { color: var(--accent-deep); }
-.rc-dot { position: absolute; left: calc(var(--u, 0) * 100%); top: 50%; z-index: 2; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: #141414; box-shadow: 0 0 0 4px #FAF8F3; }
+.rc-dot { position: absolute; left: calc(var(--u, 0) * 100%); top: 50%; z-index: 2; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: #141414; box-shadow: 0 0 0 4px var(--paper); }
 .rc-dot.is-buyer { background: var(--accent); }
 .rc-gap { position: relative; height: 40px; margin: 0 8px 0 calc(104px + 12px + 8px); }
 .rc-brace { position: absolute; left: calc(var(--ub) * 100%); width: calc((var(--ua) - var(--ub)) * 100%); top: 6px; height: 12px; border: 2px solid #141414; border-top: 0; border-radius: 0 0 6px 6px; }
@@ -186,7 +186,7 @@ html.js .dd-figure:not(.is-in) .g5-grid i.is-in { transform: scale(0.4); backgro
 .tm-seg b { display: block; font-size: 1.05rem; color: #141414; }
 .tm-seg.is-rest { background: repeating-linear-gradient(-45deg, #F1EEE7 0 6px, #ECE8E0 6px 12px); }
 .tm-seg.is-vendors { display: flex; flex-direction: column; justify-content: flex-end; padding-top: 26px; background: var(--accent-light); color: var(--accent-deep); }
-.tm-seg.is-vendors i { position: absolute; top: 0; height: 18px; width: calc(100% / 3); background: rgba(59, 122, 87, 0.35); box-shadow: inset -1px 0 0 #FAF8F3; }
+.tm-seg.is-vendors i { position: absolute; top: 0; height: 18px; width: calc(100% / 3); background: rgba(59, 122, 87, 0.35); box-shadow: inset -1px 0 0 var(--paper); }
 .tm-seg.is-vendors i:nth-child(1) { left: 0; background: var(--accent); color: #fff; font: 600 0.62rem/18px var(--sans); font-style: normal; text-align: center; }
 .tm-seg.is-vendors i:nth-child(2) { left: calc(100% / 3); } .tm-seg.is-vendors i:nth-child(3) { left: calc(200% / 3); }
 .tm-note { display: flex; gap: 10px; align-items: flex-start; margin-top: 12px !important; font-size: 0.88rem; line-height: 1.45; color: #4A4744; }
