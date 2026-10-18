@@ -621,5 +621,7 @@ html.js .finale:not(.is-in) .fin-flourish path { stroke-dashoffset: 1; }
 
 /* A finale already ends the page with the signup form; the footer band would ask a second time. */
 body.designed:has(.finale) .signup-band { display: none; }
+/* Without the band, the related row would touch the footer: keep the same gap the band leaves. */
+body.designed:has(.finale) main { padding-bottom: clamp(64px, 9vw, 112px); }
 /* Safety net: nothing on a designed page may push it sideways. */
 .dd--designed { overflow-x: clip; }
