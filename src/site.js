@@ -222,9 +222,9 @@
   var activeLabel = document.querySelector('[data-active-label]');
   var activeCount = document.querySelector('[data-active-count]');
   var emptyEl = document.querySelector('[data-empty]');
-  var state = { q: params.get('q') || '', series: params.get('series') || '', industry: params.get('industry') || '' };
-  var seriesName = function (slug) {
-    var a = document.querySelector('#menu-modal a[href="/?series=' + slug + '"]');
+  var state = { q: params.get('q') || '', series: params.get('series') || '', industry: params.get('industry') || '', topic: params.get('topic') || '' };
+  var linkName = function (href, slug) {
+    var a = document.querySelector('#menu-modal a[href="' + href + '"]');
     return a ? a.textContent : slug;
   };
   var apply = function (push) {
@@ -232,11 +232,13 @@
     cards.forEach(function (c) {
       var ok = (!state.series || c.getAttribute('data-series') === state.series) &&
         (!state.industry || c.getAttribute('data-industry') === state.industry) &&
+        (!state.topic || c.getAttribute('data-topic') === state.topic) &&
         terms.every(function (t) { return c.getAttribute('data-search').indexOf(t) !== -1; });
       c.hidden = !ok; if (ok) shown++;
     });
     var labels = [];
-    if (state.series) labels.push(seriesName(state.series));
+    if (state.series) labels.push(linkName('/?series=' + state.series, state.series));
+    if (state.topic) labels.push(linkName('/essays?topic=' + state.topic, state.topic));
     if (state.industry) labels.push(state.industry);
     if (state.q) labels.push('\u201c' + state.q + '\u201d');
     active.hidden = labels.length === 0 || shown === 0;
@@ -248,6 +250,7 @@
       if (state.q) p.set('q', state.q);
       if (state.series) p.set('series', state.series);
       if (state.industry) p.set('industry', state.industry);
+      if (state.topic) p.set('topic', state.topic);
       var qs = p.toString();
       baseUrl = location.pathname + (qs ? '?' + qs : '');
       history.replaceState(null, '', baseUrl);
@@ -256,15 +259,15 @@
   searchForm.addEventListener('submit', function (ev) { ev.preventDefault(); q.blur(); });
   q.addEventListener('input', function () { state.q = q.value.trim(); apply(true); });
   document.querySelectorAll('[data-reset]').forEach(function (b) {
-    b.addEventListener('click', function () { state = { q: '', series: '', industry: '' }; q.value = ''; apply(true); });
+    b.addEventListener('click', function () { state = { q: '', series: '', industry: '', topic: '' }; q.value = ''; apply(true); });
   });
-  // Menu links filter in place on the deep-dives tab instead of reloading.
-  document.getElementById('menu-modal').addEventListener('click', function (ev) {
-    var a = ev.target.closest('a[href^="/?"]');
-    if (!a || !gridEl) return;
+  // Menu and footer links to this page's filters (or to the whole list) filter in place instead of reloading.
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest('#menu-modal a, .site-foot a');
+    if (!a || a.pathname !== location.pathname || a.origin !== location.origin) return;
     ev.preventDefault();
-    var p = new URLSearchParams(a.getAttribute('href').slice(1));
-    state = { q: '', series: p.get('series') || '', industry: p.get('industry') || '' };
+    var p = new URLSearchParams(a.search);
+    state = { q: '', series: p.get('series') || '', industry: p.get('industry') || '', topic: p.get('topic') || '' };
     q.value = '';
     apply(true);
     document.getElementById('menu-modal').close();

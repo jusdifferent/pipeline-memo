@@ -114,7 +114,10 @@ function logoBox(dd, cls) {
 }
 
 // ------------------------------------------------------------------ essays (text-only list)
-const ESSAY_TITLES = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/essays.json'), 'utf8')).essays;
+const ESSAY_DATA = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/essays.json'), 'utf8'));
+const ESSAY_TITLES = ESSAY_DATA.essays;
+const TOPICS = ESSAY_DATA.topics;
+const topicBy = Object.fromEntries(TOPICS.map((t) => [t.slug, t]));
 const slugify = (t) => t.toLowerCase().replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const ALL_ESSAYS = ESSAY_TITLES.map((title) => ({ title, slug: slugify(title) }));
 for (const es of ALL_ESSAYS) {
@@ -122,12 +125,13 @@ for (const es of ALL_ESSAYS) {
   if (!fs.existsSync(file)) continue;
   const { data: fm, body } = parseFrontmatter(fs.readFileSync(file, 'utf8'));
   if (fm.published === false) continue;
-  Object.assign(es, { essay: body, date: fm.date, dek: fm.dek || '', readUrl: fm.readUrl || '', design: fm.design || '', published: true, minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)) });
+  Object.assign(es, { essay: body, date: fm.date, dek: fm.dek || '', readUrl: fm.readUrl || '', design: fm.design || '', topic: topicBy[fm.topic] ? fm.topic : '', published: true, minutes: Math.max(1, Math.round(body.split(/\s+/).length / 230)) });
 }
 // Only published essays are built or listed; the rest of essays.json stays a private backlog.
 // Newest first by date; essays with the same date keep their order in essays.json.
 const ESSAYS = ALL_ESSAYS.filter((x) => x.published).sort((a, b) => String(b.date).localeCompare(String(a.date)));
 const essayUrl = (es) => `/essays/${es.slug}`;
+const TOPICS_LIVE = TOPICS.filter((t) => ESSAYS.some((x) => x.topic === t.slug));
 const ESSAY_VARS = '--ep-bg:#141414;--ep-fg:#FAF8F3;--ep-ac:#FFFFFF';
 
 const css = fs.readFileSync(path.join(ROOT, 'src/styles.css'), 'utf8');
@@ -236,9 +240,9 @@ ${body}
 <footer class="site-foot">
   <div class="wrap foot-grid">
     <div><a class="wordmark" href="/">${e(cfg.name)}</a><p class="foot-tag">${e(cfg.tagline)}</p></div>
-    <div><h2 class="foot-h">The series</h2><ul class="foot-links">${SERIES_LIVE.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul></div>
-    <div><h2 class="foot-h">More</h2><ul class="foot-links"><li><a href="/about">About</a></li><li><a href="/advisory">Work with me</a></li></ul></div>
-    <div><h2 class="foot-h">Elsewhere</h2><ul class="foot-links">${cfg.linkedin ? `<li><a href="${e(cfg.linkedin)}" rel="noopener">LinkedIn</a></li>` : ''}${cfg.contactEmail ? `<li><a href="mailto:${e(cfg.contactEmail)}">Email</a></li>` : ''}<li><a href="/feed.xml">RSS</a></li></ul></div>
+    <div><h2 class="foot-h">Deep dives</h2><ul class="foot-links"><li><a href="/">All deep dives</a></li>${SERIES_LIVE.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul></div>
+    <div><h2 class="foot-h">Essays</h2><ul class="foot-links"><li><a href="/essays">All essays</a></li>${TOPICS_LIVE.map((t) => `<li><a href="/essays?topic=${t.slug}">${e(t.name)}</a></li>`).join('')}</ul></div>
+    <div><h2 class="foot-h">${e(cfg.name)}</h2><ul class="foot-links"><li><a href="/about">About</a></li><li><a href="/advisory">Work with me</a></li>${cfg.linkedin ? `<li><a href="${e(cfg.linkedin)}" rel="noopener">LinkedIn <span aria-hidden="true">↗</span></a></li>` : ''}${cfg.contactEmail ? `<li><a href="mailto:${e(cfg.contactEmail)}">Email</a></li>` : ''}<li><a href="/feed.xml">RSS</a></li></ul></div>
   </div>
   <div class="wrap foot-base"><p>© ${new Date().getFullYear()} ${e(cfg.author || cfg.name)}. Company names and logos belong to their owners and are used for identification only.</p></div>
 </footer>
@@ -253,12 +257,20 @@ ${body}
   <button type="button" class="modal-x" data-close aria-label="Close menu">${CLOSE}</button>
   <h2 id="menu-h" class="sr-only">Menu</h2>
   <nav aria-label="Browse">
-    <h3>Series</h3>
-    <ul>${SERIES_LIVE.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul>
-    <h3>Industry</h3>
-    <ul class="menu-cols">${INDUSTRIES.map((i) => `<li><a href="/?industry=${encodeURIComponent(i)}">${e(i)}</a></li>`).join('')}</ul>
-    <h3>More</h3>
-    <ul><li><a href="/">All deep dives</a></li><li><a href="/essays">All essays</a></li><li><a href="/about">About</a></li><li><a href="/advisory">Work with me</a></li></ul>
+    <section class="menu-sec">
+      <h3>Deep dives</h3>
+      <ul><li><a class="menu-all" href="/">All deep dives <span aria-hidden="true">→</span></a></li>${SERIES_LIVE.map((s) => `<li><a href="/?series=${s.slug}">${e(s.name)}</a></li>`).join('')}</ul>
+      <p class="menu-sub">By industry</p>
+      <ul class="menu-row">${INDUSTRIES.map((i) => `<li><a href="/?industry=${encodeURIComponent(i)}">${e(i)}</a></li>`).join('')}</ul>
+    </section>
+    <section class="menu-sec">
+      <h3>Essays</h3>
+      <ul><li><a class="menu-all" href="/essays">All essays <span aria-hidden="true">→</span></a></li>${TOPICS_LIVE.map((t) => `<li><a href="/essays?topic=${t.slug}">${e(t.name)}</a></li>`).join('')}</ul>
+    </section>
+    <section class="menu-sec">
+      <h3>${e(cfg.name)}</h3>
+      <ul class="menu-row"><li><a href="/about">About</a></li><li><a href="/advisory">Work with me</a></li><li><a href="/feed.xml">RSS</a></li></ul>
+    </section>
   </nav>
 </dialog>
 <dialog class="modal modal-sub" id="subscribe-modal" aria-labelledby="sub-modal-h">
@@ -306,7 +318,7 @@ function essayList() {
     <p>Showing <strong data-active-label></strong> <span data-active-count></span></p>
     <button type="button" class="pill" data-reset>Show all</button>
   </div>
-  <ul class="essay-list">${ESSAYS.map((x) => `<li data-search="${e(x.title.toLowerCase())}"><a href="${essayUrl(x)}">${e(x.title)}</a>${x.published ? `<span class="essay-status">${e(fmtDate(x.date))}</span>` : ''}</li>`).join('')}</ul>
+  <ul class="essay-list">${ESSAYS.map((x) => `<li data-topic="${x.topic}" data-search="${e(x.title.toLowerCase())}"><a href="${essayUrl(x)}">${e(x.title)}</a>${x.published ? `<span class="essay-status">${x.topic ? `<span class="essay-topic">${e(topicBy[x.topic].name)}</span>` : ''}${e(fmtDate(x.date))}</span>` : ''}</li>`).join('')}</ul>
   <div class="empty" data-empty hidden><p>No essays match that search.</p><button type="button" class="pill" data-reset>Show all</button></div>
 </section>`;
 }
@@ -537,15 +549,16 @@ ${related.length ? `<section class="related"><h2>Related deep dives</h2><ul clas
 
 // ------------------------------------------------------------------ simple pages
 function prosePage({ title, pathName, description, lede, html }) {
-  return layout({ title, pathName, description, body: `<section class="page-head wrap"><h1>${e(title)}</h1>${lede ? `<p class="lede">${lede}</p>` : ''}</section>
-<section class="wrap"><div class="prose prose-page">${html}</div></section>` });
+  return layout({ title, pathName, description, body: `<section class="page-head wrap prose-wrap"><h1>${e(title)}</h1>${lede ? `<p class="lede">${lede}</p>` : ''}</section>
+<section class="wrap prose-wrap"><div class="prose prose-page">${html}</div></section>` });
 }
 const about = () => prosePage({
   title: 'About', pathName: '/about', description: `About ${cfg.name}.`, lede: e(cfg.tagline),
   html: `${(cfg.bio || []).map((p) => `<p>${e(p)}</p>`).join('\n')}
 <h2>Why ${e(cfg.name)}</h2>
 <p>${e(cfg.intro)}</p>
-<p>Information about B2B growth is everywhere. Judgment is scarce: which signals matter, why a system that looks healthy stops producing pipeline, and what to fix first. Each piece is written for someone about to make that call.</p>
+<p>That's where Buyline looks. It covers how buyers really decide, and how companies like Datadog, Clay and Ramp built the machines that win them over.</p>
+<p>There's no shortage of B2B growth advice. What's hard to find is the judgment to know which of it applies to you. Every piece is written for the person about to decide where the next budget goes.</p>
 <h2>Deep dives and essays</h2>
 <p>The deep dives take one company's growth machine apart at a time: the decisions that mattered, how the go-to-market was built, and the mechanism underneath. The essays use that evidence to explain how buyers decide and why pipeline breaks.</p>
 <h2>How they're researched</h2>

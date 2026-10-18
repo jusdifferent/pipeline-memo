@@ -1,4 +1,5 @@
 ---
+topic: ads
 design: essay
 date: 2026-10-07
 dek: Most B2B ads earn a second of attention. Whether that second ever becomes pipeline depends on what the buyer still remembers when it's finally time to buy.

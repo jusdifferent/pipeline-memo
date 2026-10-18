@@ -1,5 +1,23 @@
 {
  "_note": "Essays are listed newest first: published essays by date, then these in the order below.",
+ "topics": [
+  {
+   "slug": "buyers",
+   "name": "How buyers decide"
+  },
+  {
+   "slug": "pipeline",
+   "name": "Pipeline and demand"
+  },
+  {
+   "slug": "ads",
+   "name": "Ads and attention"
+  },
+  {
+   "slug": "positioning",
+   "name": "Positioning and narrative"
+  }
+ ],
  "essays": [
   "You Lose Most of Your Pipeline After the Click",
   "Why Your MQLs Don't Turn Into Pipeline",

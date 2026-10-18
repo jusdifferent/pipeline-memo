@@ -1,4 +1,5 @@
 ---
+topic: buyers
 design: essay
 date: 2026-10-07
 dek: A buyer can agree with everything you say and still never buy. Interest, intent, and readiness are three different things, but your funnel treats them as one.
