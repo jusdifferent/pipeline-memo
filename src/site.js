@@ -19,6 +19,8 @@
   };
   var applySubscribed = function (scope) {
     if (!isSubscribed()) return;
+    // Subscribers don't need the in-article subscribe cards.
+    scope.querySelectorAll('[data-pitch]').forEach(function (el) { if (!el.contains(document.activeElement)) el.hidden = true; });
     scope.querySelectorAll('[data-gate]').forEach(function (gate) {
       var mode = gate.getAttribute('data-mode');
       if (mode === 'unlock') unlock(gate);
