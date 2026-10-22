@@ -1,4 +1,5 @@
 ---
+published: false
 date: 2026-10-07
 design: datadog
 dek: The pricing, product, and sales choices that made Datadog too valuable to sell.

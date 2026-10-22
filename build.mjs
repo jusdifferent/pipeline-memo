@@ -571,7 +571,7 @@ const about = () => prosePage({
   html: `${(cfg.bio || []).map((p) => `<p>${e(p)}</p>`).join('\n')}
 <h2>Why ${e(cfg.name)}</h2>
 <p>${e(cfg.intro)}</p>
-<p>That's where Buyline looks. It covers how buyers really decide, and how companies like Datadog, Clay and Ramp built the machines that win them over.</p>
+<p>That's where Buyline looks. It covers how buyers really decide, and how companies like Clay, Ramp and Harvey built the machines that win them over.</p>
 <p>There's no shortage of B2B growth advice. What's hard to find is the judgment to know which of it applies to you. Every piece is written for the person about to decide where the next budget goes.</p>
 <h2>Deep dives and essays</h2>
 <p>The deep dives take one company's growth machine apart at a time: the decisions that mattered, how the go-to-market was built, and the mechanism underneath. The essays use that evidence to explain how buyers decide and why pipeline breaks.</p>
