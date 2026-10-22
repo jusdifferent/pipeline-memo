@@ -24,8 +24,8 @@
    Scenes. H: Harvey Specter's pinstripes. A: the Am Law 100, mostly brass. R: the firms that said yes.
    V: $15.5 billion. E: the glowing 2023 "Elite Law Firms" page. Y: yes after yes. */
 .dd--harvey .hero-word { margin: 0; }
-.dd--harvey .hl-ch, .dd--harvey .hl::after { font: 400 min(15.2vw, 24vh)/0.86 var(--hv-serif); letter-spacing: 0; text-transform: none; }
-.dd--harvey .hl-ch { color: var(--hv-ink); }
+.dd--harvey .hl-ch, .dd--harvey .hl::after { font: 400 min(15.2vw, 19vh)/0.86 var(--hv-serif); letter-spacing: 0; text-transform: none; }
+.dd--harvey .hl-ch { color: #D5C5A0; } /* soft brass, so the black title leads */
 .dd--harvey .hl-cap { background: var(--hv-card); color: var(--hv-ink); border: 1px solid var(--hv-line); box-shadow: 0 16px 34px rgba(40, 30, 10, 0.18); }
 .dd--harvey .hl-cap b { color: var(--hv-brass); }
 .dd--harvey .hl:focus-visible { outline-color: var(--hv-ink); }

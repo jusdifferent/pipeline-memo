@@ -463,7 +463,7 @@ html.js .dd-figure:not(.is-in) .fig-draw { stroke-dashoffset: 1; }
    Shared article treatment. Each src/designs/<name>.css sets --accent, --accent-deep, --accent-light,
    --page, and its own hero. */
 body:has(.dd--designed) { background: var(--page, var(--paper)); }
-.dd--designed .dd-hero { position: relative; overflow: hidden; display: flex; align-items: flex-end; min-height: min(86svh, 860px); padding-top: clamp(96px, 14vh, 160px); padding-bottom: clamp(36px, 6vh, 64px); }
+.dd--designed .dd-hero { position: relative; overflow: hidden; display: flex; align-items: flex-end; min-height: min(86svh, 860px); padding-top: clamp(96px, 14vh, 160px); padding-bottom: clamp(56px, 10vh, 112px); }
 .dd--designed .hero-fx { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.4s ease; }
 .dd--designed .dd-hero.fx-on .hero-fx { opacity: 1; }
 .dd--designed .hero-shade { position: absolute; inset: 0; pointer-events: none; }
@@ -494,16 +494,18 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 
 /* Giant hover letters. Each letter is a window: hovering plays a scene inside its shape. */
 .dd--designed .dd-hero.has-word { flex-direction: column; align-items: stretch; justify-content: flex-end; }
-.dd--designed .dd-hero.has-word h1 { max-width: 16em; margin-bottom: 0.25em; font-size: clamp(2.3rem, 1.25rem + 4vw, 4.4rem); line-height: 1.02; text-wrap: balance; }
+.dd--designed .dd-hero.has-word h1 { max-width: 16em; margin-bottom: 0.45em; font-size: clamp(2.3rem, 1.25rem + 4vw, 4.4rem); line-height: 1.02; text-wrap: balance; }
 .dd--designed .dd-hero.has-word .dd-dek { max-width: 34em; color: #fff; opacity: 0.9; font-size: clamp(1.15rem, 1rem + 0.55vw, 1.55rem); text-wrap: pretty; }
 /* The series, date and read time sit quietly at the top of the article instead of in the hero. */
 .dd-sheet > .dd-meta { margin: 0 0 clamp(24px, 3.5vw, 36px); gap: 4px 16px; font: 600 0.74rem/1.4 var(--cond); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .dd-meta a { color: var(--accent); text-decoration: none; }
 .dd-meta a:hover { text-decoration: underline; }
 .dd-meta span { opacity: 1; }
-.hero-word { position: relative; display: flex; justify-content: space-between; margin: 0 0 clamp(16px, 3.4vh, 38px); }
+/* The letters are the picture and the title is the text: letters take a brand tone (never the title's color)
+   and shrink with the screen height, so the title and dek always fit above the fold. */
+.hero-word { position: relative; display: flex; justify-content: space-between; margin: 0 0 clamp(20px, 4.5vh, 52px); }
 .hl { position: relative; flex: 0 1 auto; display: grid; padding: 0; border: 0; border-radius: 8px; background: none; color: inherit; font: inherit; cursor: pointer; }
-.hl-ch, .hl::after { grid-area: 1 / 1; font: 700 min(19vw, 29vh)/0.78 var(--cond); letter-spacing: -0.01em; text-transform: uppercase; }
+.hl-ch, .hl::after { grid-area: 1 / 1; font: 700 min(19vw, 23vh)/0.78 var(--cond); letter-spacing: -0.01em; text-transform: uppercase; }
 .hl-ch { color: #F3EDE4; transition: opacity 0.3s ease; }
 .hl::after { content: attr(data-ch); color: transparent; background: var(--scene, var(--accent)); background-size: var(--scene-size, auto); -webkit-background-clip: text; background-clip: text; opacity: 0; transition: opacity 0.35s ease; animation: var(--scene-anim, none); }
 .hl.is-on::after, .hl.is-hover::after, .hl.is-glimpse::after, .hl:focus-visible::after { opacity: 1; }

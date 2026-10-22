@@ -23,6 +23,7 @@
   -webkit-mask: radial-gradient(circle var(--lr) at calc(var(--lx) - var(--ox, -999px)) calc(var(--ly) - var(--oy, -999px)), transparent calc(100% - 1.5px), #000 100%);
   mask: radial-gradient(circle var(--lr) at calc(var(--lx) - var(--ox, -999px)) calc(var(--ly) - var(--oy, -999px)), transparent calc(100% - 1.5px), #000 100%); }
 .hero-word-ghost { position: absolute; left: var(--wx); top: var(--wy); width: var(--ww); margin: 0 !important; pointer-events: none; }
+.dd--datadog [data-hero-word] .hl-ch { color: #7A4FD0; } /* Datadog purple, so the white title leads */
 .hero-word-ghost .hl-ch { color: #2B1A47; }
 .hero-word-ghost .hl-cap { display: none; }
 .lens-scene { position: absolute; inset: 0; overflow: hidden; font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; }

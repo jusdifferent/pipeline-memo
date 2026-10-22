@@ -22,8 +22,8 @@
 /* The letters: a heavy grotesk in Ramp's ink. Scenes. R: receipts streaming past. A: spending going down.
    M: the 7.5% median savings. P: the share-of-payments counter. */
 .dd--ramp .hero-word { justify-content: flex-start; gap: clamp(4px, 1.3vw, 24px); }
-.dd--ramp .hl-ch, .dd--ramp .hl::after { font: 800 min(19vw, 26vh)/0.8 "Inter Tight", var(--sans); letter-spacing: -0.035em; }
-.dd--ramp .hl-ch { color: var(--ramp-ink); }
+.dd--ramp .hl-ch, .dd--ramp .hl::after { font: 800 min(19vw, 21vh)/0.8 "Inter Tight", var(--sans); letter-spacing: -0.035em; }
+.dd--ramp .hl-ch { color: var(--lime); } /* Ramp lime, so the black title leads */
 .dd--ramp .hl-cap b { display: inline-block; padding: 2px 6px; border-radius: 4px; background: var(--lime); color: var(--ramp-ink); }
 .dd--ramp .hl:focus-visible { outline-color: var(--ramp-ink); }
 .dd--ramp .hl-1 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='80'%3E%3Crect width='60' height='80' fill='%23E4F222'/%3E%3Cpath d='M14 8h32v52l-4 4-4-4-4 4-4-4-4 4-4-4-4 4-4-4z' fill='%23fff'/%3E%3Crect x='19' y='15' width='14' height='3' fill='%230C0A08'/%3E%3Crect x='19' y='23' width='22' height='2' fill='%23B9B3AC'/%3E%3Crect x='19' y='29' width='18' height='2' fill='%23B9B3AC'/%3E%3Crect x='19' y='35' width='22' height='2' fill='%23B9B3AC'/%3E%3Crect x='19' y='46' width='22' height='3' fill='%230C0A08'/%3E%3C/svg%3E"); --scene-size: 60px 80px; --scene-anim: ramp-up 1.4s linear infinite; }

@@ -21,7 +21,7 @@
 
 /* The letters: Fredoka (clay.head.html) in four colors of clay, each with a pressed, extruded edge. */
 .dd--clay .hero-word { justify-content: flex-start; gap: clamp(2px, 0.9vw, 16px); }
-.dd--clay .hl-ch, .dd--clay .hl::after { font: 700 min(24vw, 30vh)/0.86 "Fredoka", var(--cond); letter-spacing: 0; }
+.dd--clay .hl-ch, .dd--clay .hl::after { font: 700 min(24vw, 25vh)/0.86 "Fredoka", var(--cond); letter-spacing: 0; }
 .dd--clay .hl-ch { --edge: #000; text-shadow: 0 3px 0 var(--edge), 0 6px 0 var(--edge), 0 9px 0 color-mix(in srgb, var(--edge) 82%, #000), 0 20px 28px rgba(40, 30, 20, 0.22); }
 .dd--clay .hl-1 .hl-ch { color: var(--c-blue); --edge: var(--c-blue-d); }
 .dd--clay .hl-2 .hl-ch { color: var(--c-pink); --edge: var(--c-pink-d); }
