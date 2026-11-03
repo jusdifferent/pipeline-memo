@@ -206,7 +206,9 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <meta property="og:url" content="${e(canon)}">
 <meta property="og:image" content="${e(cfg.url)}/og.png">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="${e(cfg.name)}" href="/feed.xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
