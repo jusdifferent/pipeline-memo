@@ -11,3 +11,7 @@ research/
 # AI Video workspace (licensed skill + 6 GB of videos): local only, never commit (repo is public)
 /ai-video
 /ai-video/
+
+# Keyframes pack (paid, local only)
+/keyframes
+/keyframes/
