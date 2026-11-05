@@ -12,8 +12,6 @@
 }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
-/* No italics anywhere (owner's call, November 2026). Emphasis is upright; accents use color, the way the Canva deep dive does. */
-em, i, cite, dfn, var, address { font-style: normal; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 1.0625rem; line-height: 1.55; padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
 img, svg { max-width: 100%; }
@@ -247,7 +245,7 @@ html.modal-open { overflow: hidden; }
 .site-foot { background: var(--ink); color: var(--paper); padding: clamp(40px, 6vw, 56px) 0 calc(96px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid rgba(250, 248, 243, 0.14); }
 .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 32px; }
 .site-foot .wordmark { --logo-green: #6DBB8E; width: 112px; color: var(--paper); }
-.foot-tag { font: 500 1.06rem/1.5 var(--sans); opacity: 0.86; margin-top: 12px; max-width: 22em; }
+.foot-tag { font: italic 500 1.12rem/1.45 "Newsreader", Georgia, serif; opacity: 0.86; margin-top: 12px; max-width: 22em; }
 .foot-h { font: 500 0.88rem var(--cond); text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; margin-bottom: 12px; }
 .foot-links { list-style: none; margin: 0; padding: 0; }
 .foot-links li { margin-bottom: 8px; }
@@ -396,20 +394,20 @@ html.js .dd-figure:not(.is-in) .fig-draw { stroke-dashoffset: 1; }
 }
 
 /* ------------------------------------------------------------ editorial blocks (:::name in deep dives and essays) */
-:root { --display: "Newsreader", Georgia, serif; --accent-font: var(--display); --accent: var(--ep-bg, var(--ink)); }
+:root { --display: "Newsreader", Georgia, serif; --italic: "Newsreader", "IBM Plex Serif", Georgia, serif; --accent: var(--ep-bg, var(--ink)); }
 .dd, .essay { --accent: var(--ep-bg); }
 .bl { margin: 2.6em 0; font-family: var(--sans); }
 .bl-title { margin: 0 0 0.6em; font: 700 clamp(2rem, 1.4rem + 2.4vw, 2.9rem)/1.04 var(--display); letter-spacing: -0.015em; }
-.bl-title em { font: inherit; letter-spacing: inherit; color: var(--accent); }
+.bl-title em { font: italic 600 1.04em/1 var(--italic); letter-spacing: -0.02em; margin-left: 0.04em; color: var(--accent); }
 
 /* Big pull quote: the thesis line, between heavy rules. */
 .bl-pull { margin: 2.2em 0; padding: 0.9em 0; border-top: 4px solid var(--ink); border-bottom: 1px solid var(--ink); }
-.bl-pull p { margin: 0; font: 700 clamp(1.45rem, 1.15rem + 1.15vw, 2.05rem)/1.22 var(--accent-font); letter-spacing: -0.01em; text-wrap: balance; }
+.bl-pull p { margin: 0; font: italic 600 clamp(1.45rem, 1.15rem + 1.15vw, 2.05rem)/1.22 var(--italic); letter-spacing: -0.01em; text-wrap: balance; }
 
 /* On the record: torn-paper clippings. */
 .bl-record ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
 .clip { padding: 16px 20px 14px; background: #fff; box-shadow: 0 2px 14px rgba(20, 18, 14, 0.1); clip-path: polygon(0 4%, 3% 0, 22% 3%, 41% 0, 63% 4%, 82% 1%, 100% 3%, 99% 97%, 78% 100%, 56% 96%, 34% 100%, 12% 97%, 0 100%); }
-.clip q { display: block; quotes: "“" "”"; font: 700 clamp(1.15rem, 1rem + 0.6vw, 1.45rem)/1.25 var(--accent-font); text-wrap: balance; }
+.clip q { display: block; quotes: "“" "”"; font: italic 600 clamp(1.15rem, 1rem + 0.6vw, 1.45rem)/1.25 var(--italic); text-wrap: balance; }
 .clip span { display: block; margin-top: 8px; font: 600 0.74rem/1.3 var(--cond); letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.65; }
 .clip-1 { transform: rotate(-1deg); margin-right: 10%; }
 .clip-2 { transform: rotate(0.8deg); margin-left: 12%; }
@@ -420,18 +418,18 @@ html.js .dd-figure:not(.is-in) .fig-draw { stroke-dashoffset: 1; }
 /* The machine: numbered parts in a grid. */
 .bl-machine ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 28px 32px; }
 .bl-machine li { padding-top: 12px; border-top: 1px solid var(--ink); }
-.bl-machine .n { display: block; font: 700 2.6rem/0.9 var(--accent-font); color: var(--accent); }
+.bl-machine .n { display: block; font: italic 600 2.7rem/0.9 var(--italic); color: var(--accent); }
 .bl-machine strong { display: block; margin-top: 8px; font: 600 1.06rem/1.28 var(--sans); }
 .bl-machine p { margin: 8px 0 0; font: 400 0.98rem/1.55 var(--serif); }
 
 /* Moodboard: pinned notes on linen. */
 .bl-mood { padding: clamp(22px, 4vw, 36px); background-color: #E6DFD1; background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.22) 0 1px, transparent 1px 4px), repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 4px); border-radius: 4px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05); }
-.bl-sub { margin: -0.1em 0 0; font: 500 clamp(1.1rem, 1rem + 0.5vw, 1.35rem)/1.35 var(--sans); color: #5d584f; }
+.bl-sub { margin: -0.1em 0 0; font: italic 400 clamp(1.15rem, 1rem + 0.5vw, 1.4rem)/1.35 var(--serif); color: #5d584f; }
 .bl-mood ul { list-style: none; margin: 18px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 22px 20px; }
 .note { position: relative; padding: 18px 18px 16px; background: #FFFDF8; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.13); rotate: var(--rot, 0deg); }
 .note::before { content: ""; position: absolute; top: -10px; left: 32%; width: 36%; height: 20px; background: rgba(236, 226, 198, 0.88); transform: rotate(-3deg); }
-.note .yr { display: block; font: 700 1.4rem/1 var(--accent-font); color: var(--accent); }
-.note q { display: block; margin-top: 6px; quotes: "“" "”"; font: 700 1.1rem/1.25 var(--accent-font); }
+.note .yr { display: block; font: italic 600 1.45rem/1 var(--italic); color: var(--accent); }
+.note q { display: block; margin-top: 6px; quotes: "“" "”"; font: italic 600 1.12rem/1.25 var(--italic); }
 .note small { display: block; margin-top: 8px; font: 400 0.86rem/1.45 var(--serif); color: var(--muted); }
 .note-1 { --rot: -2deg; } .note-2 { --rot: 1.6deg; } .note-3 { --rot: 1deg; background: #FFF4C4; }
 .note-4 { --rot: -1.4deg; } .note-5 { --rot: -0.8deg; background: var(--ink); color: #fff; }
@@ -446,11 +444,11 @@ html.js .dd-figure:not(.is-in) .fig-draw { stroke-dashoffset: 1; }
 /* Who's that founder? A dictionary-style card. */
 .bl-founder { padding: clamp(22px, 4vw, 32px); border: 1px solid var(--ink); background: #fff; }
 .bl-kicker { margin: 0; font: 600 0.78rem/1 var(--cond); letter-spacing: 0.16em; text-transform: uppercase; }
-.bl-kicker em { font: 700 1.4em/1 var(--accent-font); letter-spacing: 0; text-transform: none; margin-left: 0.15em; color: var(--accent); }
+.bl-kicker em { font: italic 600 1.5em/1 var(--italic); letter-spacing: 0; text-transform: none; margin-left: 0.15em; }
 .bl-name { margin: 12px 0 14px; font: 700 clamp(2.3rem, 1.6rem + 2.8vw, 3.4rem)/1 var(--display); letter-spacing: -0.015em; }
-.bl-name span { font: 500 1rem/1 var(--sans); letter-spacing: 0; margin-left: 0.4em; color: var(--muted); }
+.bl-name span { font: italic 400 1.05rem/1 var(--serif); letter-spacing: 0; margin-left: 0.4em; color: var(--muted); }
 .bl-founder ol { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; font: 400 1.02rem/1.55 var(--serif); }
-.bl-founder .bl-said { margin: 22px 0 0; font: 600 clamp(1.25rem, 1.1rem + 0.65vw, 1.6rem)/1.3 var(--accent-font); }
+.bl-founder .bl-said { margin: 22px 0 0; font: italic 500 clamp(1.25rem, 1.1rem + 0.65vw, 1.6rem)/1.3 var(--italic); }
 
 @media (max-width: 640px) {
   .bl-machine ol, .bl-mood ul { grid-template-columns: 1fr; }
@@ -480,7 +478,7 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 .dd--designed .preview-text > p:first-child::first-letter { float: left; margin: 0.08em 0.1em 0 0; font: 700 4.7em/0.78 var(--display); color: var(--accent); }
 .dd--designed .prose h2 { counter-increment: part; margin-top: 2.6em; font: 700 clamp(1.9rem, 1.35rem + 1.9vw, 2.65rem)/1.04 var(--display); letter-spacing: -0.01em; text-wrap: balance; }
 .dd--designed .prose h2::before { content: "Part " counter(part, decimal-leading-zero); display: block; width: max-content; margin-bottom: 16px; padding-top: 10px; border-top: 3px solid var(--accent); font: 600 0.78rem/1 var(--cond); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
-.dd--designed .prose p.carrier { margin: 1.6em 0; padding-left: 20px; border-left: 3px solid var(--accent); font: 600 clamp(1.2rem, 1.1rem + 0.45vw, 1.4rem)/1.38 var(--accent-font); color: var(--accent-deep); }
+.dd--designed .prose p.carrier { margin: 1.6em 0; padding-left: 20px; border-left: 3px solid var(--accent); font: italic 500 clamp(1.22rem, 1.1rem + 0.45vw, 1.42rem)/1.38 var(--italic); color: var(--accent-deep); }
 .dd--designed .prose p.carrier strong { font-weight: inherit; }
 .dd--designed .bl-pull { border-top-color: var(--accent); border-bottom-color: var(--accent); }
 .dd--designed .bl-pull p { color: var(--accent-deep); }
@@ -555,10 +553,7 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 .manifesto { padding: clamp(80px, 14vh, 160px) var(--pad); background: var(--man-bg, var(--ink)); color: var(--man-fg, #fff); }
 .hero-run + .manifesto { padding-top: clamp(36px, 6vh, 72px); }
 .manifesto p { max-width: 1180px; margin: 0 auto; text-align: center; font: 700 clamp(2rem, 0.9rem + 4.4vw, 5.2rem)/1.02 var(--sans); letter-spacing: -0.025em; text-transform: uppercase; text-wrap: balance; }
-.manifesto em, .finale em { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--accent-hi, var(--accent)); }
-/* Deep dives set the thesis and closing lines in the house serif, upright, like Canva and Harvey (essays keep the sans caps). */
-:where(.dd--designed:not(.dd--essay)) .manifesto p { font: 700 clamp(2.1rem, 1rem + 4.2vw, 5rem)/1.06 var(--display); letter-spacing: -0.015em; text-transform: none; }
-:where(.dd--designed:not(.dd--essay)) .finale .fin-line { font: 700 clamp(1.9rem, 1rem + 3.1vw, 3.7rem)/1.1 var(--display); letter-spacing: -0.01em; text-transform: none; }
+.manifesto em, .finale em { font: italic 500 1.06em/1 var(--italic); letter-spacing: -0.01em; text-transform: none; color: var(--accent-hi, var(--accent)); }
 html.js .manifesto .mw { opacity: 0.16; transition: opacity 0.45s ease; }
 html.js .manifesto .mw.on { opacity: 1; }
 
@@ -573,7 +568,7 @@ html.js .manifesto .mw.on { opacity: 1; }
 .bl-fan li:nth-child(5n) { --rot: -0.8deg; margin-right: 12%; }
 .bl-fan li:nth-child(even) { background: var(--accent); color: #fff; }
 .bl-fan li:nth-child(3n) { background: var(--accent-light, #eee); color: #141414; }
-.bl-fan q { display: block; quotes: "“" "”"; font: 700 clamp(1.15rem, 1rem + 0.6vw, 1.4rem)/1.25 var(--accent-font); text-wrap: balance; }
+.bl-fan q { display: block; quotes: "“" "”"; font: italic 600 clamp(1.15rem, 1rem + 0.6vw, 1.4rem)/1.25 var(--italic); text-wrap: balance; }
 .bl-fan span { display: block; margin-top: 10px; font: 600 0.72rem/1.3 var(--cond); letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; }
 html.js .bl-fan li:not(.is-in) { opacity: 0; translate: 0 28px; rotate: calc(var(--rot, 0deg) * 4); }
 @media (prefers-reduced-motion: reduce) { .bl-fan li { transition: none; } }
@@ -613,7 +608,7 @@ html.js .bl-fan li:not(.is-in) { opacity: 0; translate: 0 28px; rotate: calc(var
 /* Finale: the closing line, a self-drawing underline, and the companies named in the story. */
 .finale { margin-top: clamp(64px, 9vw, 110px); padding: clamp(90px, 14vh, 150px) var(--pad) 46px; background: var(--man-bg, var(--ink)); color: var(--man-fg, #fff); text-align: center; overflow: hidden; }
 .fin-line { max-width: 1000px; margin: 0 auto; font: 700 clamp(1.8rem, 0.9rem + 3.4vw, 4rem)/1.04 var(--sans); letter-spacing: -0.02em; text-transform: uppercase; text-wrap: balance; }
-@media (min-width: 900px) { .fin-line em { white-space: nowrap; } } /* upright caps run wider than the old italics, so phones may wrap */
+@media (min-width: 360px) { .fin-line em { white-space: nowrap; } }
 .fin-flourish { display: block; width: min(420px, 70vw); height: auto; margin: 6px auto 0; overflow: visible; }
 .fin-flourish path { fill: none; stroke: var(--accent-hi, var(--accent)); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s ease 0.2s; }
 html.js .finale:not(.is-in) .fin-flourish path { stroke-dashoffset: 1; }
