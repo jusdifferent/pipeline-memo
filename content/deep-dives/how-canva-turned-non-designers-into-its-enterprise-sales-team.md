@@ -1,5 +1,5 @@
 ---
-date: 2026-11-11
+date: 2026-11-04
 design: canva
 dek: Employees picked it for free. Their companies now pay Canva $500 million a year to manage it.
 ---
