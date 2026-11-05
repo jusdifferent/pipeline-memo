@@ -98,7 +98,7 @@ p { margin: 0 0 1em; }
   .episodes .grid { column-gap: var(--gx); max-width: calc(3 * var(--tile) + 2 * var(--gx)); }
 }
 .tile-stack { position: relative; display: block; }
-.tile { container-type: inline-size; position: relative; z-index: 1; display: block; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--ep-bg); color: var(--ep-fg); transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease; }
+.tile { container-type: inline-size; position: relative; z-index: 1; display: block; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--ep-grad, var(--ep-bg)); color: var(--ep-fg); transition: transform 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s ease; }
 /* The page tucked behind each tile: on hover it slides up like an essay pulled from a file folder. */
 .tile-page {
   position: absolute; z-index: 0; left: 8%; right: 8%; top: 0; height: 72%;

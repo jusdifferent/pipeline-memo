@@ -218,18 +218,19 @@
    "logoTheme": false
   },
   {
-   "slug": "how-canva-moved-from-smb-self-serve-to-enterprise",
+   "slug": "how-canva-turned-non-designers-into-its-enterprise-sales-team",
    "company": "Canva",
-   "title": "How Canva Moved From SMB Self-Serve to Enterprise",
+   "title": "How Canva Turned Non-Designers Into Its Enterprise Sales Team",
    "series": "build",
    "number": 12,
    "industry": "Design",
-   "dek": "Canva won millions of individual users first. What changed in the machine when it started selling to large organizations.",
+   "dek": "Employees picked it for free. Their companies now pay Canva $500 million a year to manage it.",
    "featured": false,
    "brand": {
     "bg": "#7D2AE8",
     "fg": "#FFFFFF",
-    "ac": "#00C4CC"
+    "ac": "#00C4CC",
+    "grad": "linear-gradient(135deg, #00C4CC 0%, #3F6FF0 48%, #7D2AE8 100%)"
    },
    "domain": "canva.com",
    "label": "Canva"

@@ -1,0 +1,318 @@
+/* Canva deep dive: Canva's own look. A light editor canvas, ink text, Canva's teal-to-purple gradient, rounded
+   cards with the editor's purple selection handles, and a friendly geometric sans (Plus Jakarta Sans, standing in
+   for Canva Sans). Accents are upright, in the gradient, with no italics.
+   Hero: the giant CANVA letters, each playing a scene from the story, with real Canva things drifting around them,
+   each with a file tag (canva.hero.html, canva.js). They scatter as you scroll.
+   Interlude (canva.run.html): the hero shrinks away, the scattered designs line up in one company workspace,
+   snap to the brand's colors, and a padlock closes on top.
+   The shared article and section styles live in styles.css (.dd--designed). */
+.dd--canva {
+  --cv-ink: #0E1318; --cv-muted: #59616D; --cv-line: #DCDFE6; --cv-canvas: #F1F2F6; --cv-card: #FFFFFF;
+  --cv-teal: #00C4CC; --cv-blue: #3E8BE6; --cv-purple: #7D2AE8; --cv-violet: #8B3DFF; --cv-deep: #170F35;
+  --cv-grad: linear-gradient(100deg, #00C4CC 0%, #3E8BE6 45%, #7D2AE8 100%);
+  --cv-font: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  --accent: #7D2AE8; --accent-deep: #4E14A6; --accent-light: #ECE3FF; --accent-hi: #00C4CC; --page: #F7F7FA;
+  --man-bg: #170F35; --man-fg: #FFFFFF;
+}
+
+/* ------------------------------------------------------------ hero */
+.dd--canva .dd-hero { --hx: max(var(--pad), calc((100vw - 1240px) / 2 + 44px)); min-height: max(640px, 100svh - var(--head-h)); padding-top: clamp(26px, 4.5vh, 52px); color: var(--cv-ink); background-color: var(--cv-canvas); background-image: radial-gradient(circle at 1px 1px, rgba(14, 19, 24, 0.09) 1px, transparent 0); background-size: 22px 22px; }
+.dd--canva .dd-hero.has-word { justify-content: space-between; }
+.dd--canva .hero-shade { display: none; }
+.dd--canva .dd-hero .dd-head-grid { position: relative; z-index: 5; max-width: min(56%, 780px); }
+.dd--canva .dd-hero h1, .dd--canva.dd--designed .dd-hero.has-word h1 { max-width: 15em; color: var(--cv-ink); text-shadow: none; font: 800 clamp(2.1rem, 1rem + 2.8vw, 3.9rem)/1.04 var(--cv-font); letter-spacing: -0.025em; }
+.dd--canva .dd-hero.has-word .dd-dek { max-width: 30em; color: #3A414B; opacity: 1; font-family: var(--cv-font); font-weight: 500; }
+
+/* The letters: Canva's gradient, stepped letter by letter from teal to purple, so the ink title leads.
+   Scenes. C: a wall of templates. A: 95% of the Fortune 500. N: "I made this." V: 265 million a month.
+   A: a prompt where the template used to be. */
+.dd--canva .hero-word { position: relative; z-index: 3; margin: 0; }
+.dd--canva .hl-ch, .dd--canva .hl::after { font: 800 min(17vw, 21vh)/0.86 var(--cv-font); letter-spacing: -0.03em; text-transform: none; }
+.dd--canva .hl-1 .hl-ch { color: #00C4CC; } .dd--canva .hl-2 .hl-ch { color: #1DA8DC; } .dd--canva .hl-3 .hl-ch { color: #3E8BE6; }
+.dd--canva .hl-4 .hl-ch { color: #5E5CE8; } .dd--canva .hl-5 .hl-ch { color: #7D2AE8; }
+.dd--canva .hl-cap { background: var(--cv-card); color: var(--cv-ink); border: 1px solid var(--cv-line); border-radius: 12px; box-shadow: 0 16px 34px rgba(30, 20, 70, 0.18); font-family: var(--cv-font); }
+.dd--canva .hl-cap b { color: var(--cv-purple); font-family: var(--cv-font); letter-spacing: 0.06em; }
+.dd--canva .hl:focus-visible { outline-color: var(--cv-purple); }
+.dd--canva .hl-1 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect width='48' height='48' fill='%23FFFFFF'/%3E%3Crect x='3' y='3' width='19' height='19' rx='4' fill='%23FF7A59'/%3E%3Crect x='26' y='3' width='19' height='19' rx='4' fill='%2300C4CC'/%3E%3Crect x='3' y='26' width='19' height='19' rx='4' fill='%237D2AE8'/%3E%3Crect x='26' y='26' width='19' height='19' rx='4' fill='%23F5C400'/%3E%3C/svg%3E"); --scene-size: 48px 48px; --scene-anim: cv-diag 2.4s linear infinite; }
+.dd--canva .hl-2 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='46'%3E%3Crect width='84' height='46' fill='%237D2AE8'/%3E%3Ctext x='8' y='31' font-family='Arial, sans-serif' font-weight='700' font-size='22' fill='%23FFFFFF'%3E95%25%3C/text%3E%3C/svg%3E"); --scene-size: 84px 46px; --scene-anim: cv-roll 1.4s linear infinite; }
+.dd--canva .hl-3 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='44'%3E%3Crect width='200' height='44' fill='%2300A3AA'/%3E%3Ctext x='8' y='29' font-family='Arial, sans-serif' font-weight='700' font-size='20' fill='%23FFFFFF'%3EI made this %C2%B7%3C/text%3E%3C/svg%3E"); --scene-size: 200px 44px; --scene-anim: cv-ticker 3.2s linear infinite; }
+.dd--canva .hl-4 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='50'%3E%3Crect width='110' height='50' fill='%23170F35'/%3E%3Ctext x='8' y='34' font-family='Arial, sans-serif' font-weight='700' font-size='24' fill='%2300C4CC'%3E265M%3C/text%3E%3C/svg%3E"); --scene-size: 110px 50px; --scene-anim: cv-roll50 1.6s linear infinite; }
+.dd--canva .hl-5 { --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='44'%3E%3Crect width='300' height='44' fill='%236420C8'/%3E%3Ctext x='8' y='29' font-family='Arial, sans-serif' font-weight='700' font-size='20' fill='%23FFFFFF'%3EStart with an idea %C2%B7%3C/text%3E%3C/svg%3E"); --scene-size: 300px 44px; --scene-anim: cv-ticker300 4.6s linear infinite; }
+@keyframes cv-diag { to { background-position: 48px 48px; } }
+@keyframes cv-roll { to { background-position: 0 -46px; } }
+@keyframes cv-roll50 { to { background-position: 0 -50px; } }
+@keyframes cv-ticker { to { background-position: -200px 0; } }
+@keyframes cv-ticker300 { to { background-position: -300px 0; } }
+
+/* The constellation. canva.js places each artifact on an ellipse around the letters and turns it slowly;
+   the ones on the near side pass in front of the letters, the far side behind. Positions come from --x/--y/--s. */
+.cv-scene { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.cv-art { position: absolute; left: 0; top: 0; z-index: var(--z, 1); display: grid; justify-items: center; gap: 6px; opacity: var(--o, 0); transform: translate(var(--x, 50vw), var(--y, 30vh)) translate(-50%, -50%) scale(var(--s, 1)) rotate(var(--r, 0deg)); will-change: transform, opacity; font-family: var(--cv-font); }
+.cv-d { position: relative; display: grid; align-content: center; border-radius: 10px; background: #fff; box-shadow: 0 14px 30px -14px rgba(30, 20, 70, 0.42), 0 0 0 1px rgba(14, 19, 24, 0.06); overflow: hidden; }
+.cv-tag { padding: 2px 7px; border-radius: 6px; background: rgba(255, 255, 255, 0.86); color: #59616D; font: 600 0.62rem/1.4 var(--cv-font); letter-spacing: 0.01em; white-space: nowrap; box-shadow: 0 0 0 1px rgba(14, 19, 24, 0.06); }
+/* Canva's selection frame: one artifact at a time gets the purple box and corner handles. */
+.cv-art::after { content: ""; position: absolute; inset: -7px -7px auto -7px; height: calc(100% - 22px + 14px); border: 2px solid var(--cv-violet); border-radius: 13px; opacity: 0; transition: opacity 0.3s ease; background: radial-gradient(circle, #fff 2.5px, var(--cv-violet) 3px, var(--cv-violet) 4.5px, transparent 5px) 0 0 / 100% 100% no-repeat; }
+.cv-art.is-sel::after { opacity: 1; }
+.cv-art.is-sel .cv-tag { background: var(--cv-violet); color: #fff; }
+.cv-wedding .cv-d { width: 104px; height: 140px; padding: 12px 10px; background: #FBF6EE; text-align: center; color: #5A4632; }
+.cv-wedding .cv-orn { display: block; width: 46px; height: 10px; margin: 0 auto 10px; border-radius: 50%; border-top: 2px solid #C9A46A; }
+.cv-wedding .cv-d b { display: block; font: 700 0.92rem/1.1 Georgia, serif; } .cv-wedding .cv-d span { display: block; margin-top: 6px; font-size: 0.55rem; } .cv-wedding .cv-d small { display: block; margin-top: 10px; font-size: 0.52rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.cv-insta .cv-d { width: 112px; height: 112px; background: linear-gradient(135deg, #FF7A59, #E2368D); color: #fff; text-align: center; }
+.cv-insta .cv-d b { display: block; font: 800 2rem/1 var(--cv-font); } .cv-insta .cv-d span { display: block; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.cv-resume .cv-d { width: 98px; height: 132px; padding: 12px 10px; align-content: start; gap: 5px; }
+.cv-resume .cv-av { width: 26px; height: 26px; border-radius: 50%; background: #CFD6E4; } .cv-resume .cv-d b { font: 700 0.66rem/1.1 var(--cv-font); color: var(--cv-ink); }
+.cv-resume .cv-d span { display: block; height: 4px; border-radius: 2px; background: #E3E6EC; } .cv-resume .cv-d span:nth-of-type(2) { width: 70%; } .cv-resume .cv-d span:nth-of-type(4) { width: 82%; }
+.cv-bcard .cv-d { width: 132px; height: 76px; padding: 10px 12px; background: #1F3B2D; color: #F1E9D2; }
+.cv-bcard .cv-d b { font: 700 1rem/1 Georgia, serif; } .cv-bcard .cv-d span { margin-top: 4px; font-size: 0.56rem; letter-spacing: 0.06em; }
+.cv-deck .cv-d { width: 150px; height: 86px; padding: 10px 12px; align-content: space-between; background: #F7F4FF; }
+.cv-deck .cv-d b { font: 800 0.78rem/1 var(--cv-font); color: var(--cv-purple); }
+.cv-bars { display: flex; align-items: flex-end; gap: 5px; height: 40px; } .cv-bars i { flex: 1; border-radius: 3px 3px 0 0; background: var(--cv-blue); } .cv-bars i:nth-child(1) { height: 35%; } .cv-bars i:nth-child(2) { height: 55%; } .cv-bars i:nth-child(3) { height: 72%; } .cv-bars i:nth-child(4) { height: 100%; background: var(--cv-purple); }
+.cv-flyer .cv-d { width: 100px; height: 132px; padding: 12px 10px; align-content: end; background: #FFD43B; color: #3A1F00; }
+.cv-flyer .cv-d b { font: 800 1.08rem/0.95 var(--cv-font); } .cv-flyer .cv-d span { margin-top: 5px; font-size: 0.56rem; font-weight: 700; }
+.cv-monkey .cv-d { width: 92px; height: 92px; background: #EAF9F9; } .cv-monkey .cv-d svg { width: 70px; height: 70px; margin: auto; }
+.cv-kit .cv-d { width: 126px; height: 84px; padding: 10px 12px; align-content: space-between; }
+.cv-kit .cv-d b { font: 700 0.62rem/1 var(--cv-font); color: var(--cv-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.cv-sw { display: flex; gap: 5px; } .cv-sw i { width: 18px; height: 18px; border-radius: 50%; } .cv-sw i:nth-child(1) { background: #00C4CC; } .cv-sw i:nth-child(2) { background: #3E8BE6; } .cv-sw i:nth-child(3) { background: #7D2AE8; } .cv-sw i:nth-child(4) { background: #0E1318; }
+.cv-kit .cv-d small { position: absolute; right: 10px; bottom: 8px; font: 800 1.2rem/1 var(--cv-font); color: var(--cv-ink); }
+.cv-lockart .cv-d { width: 120px; height: 62px; padding: 0 12px; grid-auto-flow: column; justify-content: start; align-items: center; gap: 8px; color: var(--cv-purple); }
+.cv-lockart .cv-d svg { width: 22px; height: 22px; } .cv-lockart .cv-d span { font: 700 0.66rem/1.2 var(--cv-font); color: var(--cv-ink); }
+.cv-share .cv-d { padding: 9px 18px; border-radius: 9px; background: var(--cv-violet); color: #fff; font: 700 0.86rem/1 var(--cv-font); }
+.cv-bday .cv-d { width: 112px; height: 112px; padding: 12px; background: #7D2AE8; color: #fff; text-align: center; background-image: radial-gradient(circle at 20% 20%, #00C4CC 4px, transparent 5px), radial-gradient(circle at 80% 30%, #FFD43B 4px, transparent 5px), radial-gradient(circle at 30% 80%, #FF7A59 4px, transparent 5px); }
+.cv-bday .cv-d b { font: 800 1rem/1 var(--cv-font); } .cv-bday .cv-d span { margin-top: 6px; font-size: 0.58rem; }
+.cv-prompt .cv-d { width: 168px; padding: 10px 12px; grid-auto-flow: column; justify-content: space-between; align-items: center; border-radius: 999px; color: var(--cv-muted); font: 600 0.7rem/1 var(--cv-font); box-shadow: 0 0 0 2px var(--cv-violet), 0 14px 30px -14px rgba(30, 20, 70, 0.5); }
+.cv-prompt .cv-d i { width: 18px; height: 18px; border-radius: 50%; background: var(--cv-grad); }
+@media (max-width: 760px) {
+  .dd--canva .dd-hero { min-height: max(620px, 100svh - var(--head-h)); }
+  .dd--canva .dd-hero .dd-head-grid { max-width: none; }
+  .cv-art { --s2: 0.78; }
+  .cv-tag { display: none; }
+}
+
+/* ------------------------------------------------------------ interlude: the designs line up, the brand locks
+   Pinned on wide screens: the hero shrinks and fades into the deep indigo, nine scattered designs fly into one
+   company workspace, snap to the brand's colors, and a padlock closes on top. */
+.crn { display: none; }
+@keyframes cv-shrink { 0% { border-radius: 0; } 55% { transform: scale(0.7); opacity: 1; border-radius: 40px; } 100% { transform: scale(0.62); opacity: 0; border-radius: 40px; } }
+@keyframes cv-scene-out { to { opacity: 0; } }
+@keyframes crn-gather {
+  0% { opacity: 0; transform: translate(-50%, -50%) translate(var(--sx), var(--sy)) rotate(var(--sr)) scale(1.1); background-color: var(--c); }
+  10% { opacity: 1; }
+  44% { transform: translate(-50%, -50%) translate(calc(var(--ex) * var(--gx)), calc(var(--ey) * var(--gy))) rotate(0deg) scale(1); background-color: var(--c); }
+  56%, 80% { opacity: 1; transform: translate(-50%, -50%) translate(calc(var(--ex) * var(--gx)), calc(var(--ey) * var(--gy))) rotate(0deg) scale(1); background-color: #7D2AE8; }
+  100% { opacity: 0; transform: translate(-50%, -50%) translate(calc(var(--ex) * var(--gx) * 0.6), calc(var(--ey) * var(--gy) * 0.6)) scale(0.7); background-color: #7D2AE8; }
+}
+@keyframes crn-frame { 0%, 36% { opacity: 0; transform: translate(-50%, -50%) scale(1.06); } 46%, 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } }
+@keyframes crn-lock { 0%, 54% { opacity: 0; transform: translate(-50%, -50%) translateY(-60px) scale(1.4); } 62% { opacity: 1; transform: translate(-50%, -50%) scale(0.95); } 68%, 84% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); } }
+@keyframes crn-shackle { 0%, 64% { transform: translateY(-3px); } 72%, 100% { transform: translateY(0); } }
+@supports (animation-timeline: view()) {
+  @media (min-width: 761px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
+    .dd--canva .hero-run .run-stage > .dd-hero { animation: cv-shrink linear both; animation-timeline: --run; animation-range: contain 0% contain 62%; }
+    .dd--canva .hero-run .cv-art .cv-d, .dd--canva .hero-run .cv-tag { animation: cv-scene-out linear both; animation-timeline: --run; animation-range: contain 0% contain 14%; }
+    .crn { --gx: clamp(120px, 11vw, 170px); --gy: clamp(96px, 9vw, 132px); display: block; position: absolute; inset: 0; z-index: 3; pointer-events: none; font-family: var(--cv-font); }
+    .crn-frame { position: absolute; left: 50%; top: 50%; width: calc(var(--gx) * 3 + 40px); height: calc(var(--gy) * 3 + 64px); border: 2px solid rgba(255, 255, 255, 0.75); border-radius: 22px; background: rgba(255, 255, 255, 0.06); animation: crn-frame linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
+    .crn-frame span { position: absolute; left: 16px; top: -12px; padding: 3px 10px; border-radius: 999px; background: #fff; color: var(--cv-deep); font: 700 0.78rem/1.4 var(--cv-font); }
+    .crn-t { position: absolute; left: 50%; top: 50%; display: grid; align-content: end; gap: 6px; width: calc(var(--gx) - 18px); height: calc(var(--gy) - 18px); padding: 12px; border-radius: 12px; box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4); animation: crn-gather linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
+    .crn-t b { width: 62%; height: 12px; border-radius: 4px; background: rgba(255, 255, 255, 0.92); }
+    .crn-t i { width: 84%; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.6); } .crn-t i + i { width: 54%; }
+    .crn-lock { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: clamp(96px, 8vw, 120px); aspect-ratio: 1; border-radius: 28px; background: #fff; color: var(--cv-purple); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 0 6px rgba(0, 196, 204, 0.35); animation: crn-lock linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
+    .crn-lock svg { width: 54%; height: auto; overflow: visible; }
+    .crn-shackle { animation: crn-shackle linear both; animation-timeline: --run; animation-range: contain 8% contain 92%; }
+  }
+}
+
+/* ------------------------------------------------------------ manifesto and finale: upright, accents in the gradient */
+.dd--canva .manifesto p { font: 800 clamp(2.1rem, 1rem + 4.2vw, 5rem)/1.04 var(--cv-font); letter-spacing: -0.03em; text-transform: none; }
+.dd--canva .fin-line { font: 800 clamp(1.9rem, 1rem + 3.1vw, 3.7rem)/1.08 var(--cv-font); letter-spacing: -0.025em; text-transform: none; }
+.dd--canva .manifesto em, .dd--canva .finale em { font: inherit; font-style: normal; letter-spacing: inherit; color: transparent; background: linear-gradient(95deg, #00C4CC, #7FD8FF 45%, #B48CFF); -webkit-background-clip: text; background-clip: text; }
+@media (min-width: 400px) { .dd--canva .manifesto em { white-space: nowrap; } }
+.dd--canva .fin-line em { white-space: normal; }
+.dd--canva .fin-flourish path { stroke: #00C4CC; }
+
+/* ------------------------------------------------------------ the article in Canva's colors */
+.dd--canva .prose h2 { font-family: var(--cv-font); font-weight: 800; letter-spacing: -0.02em; }
+.dd--canva .prose h2::before { border-top-color: var(--cv-purple); color: var(--cv-purple); }
+.dd--canva .prose p.carrier { border-left-color: var(--cv-teal); color: var(--accent-deep); font: 700 clamp(1.14rem, 1.04rem + 0.4vw, 1.32rem)/1.42 var(--cv-font); letter-spacing: -0.01em; }
+.dd--canva .preview-text > p:first-child::first-letter { font-family: var(--cv-font); font-weight: 800; color: var(--cv-purple); }
+.dd--canva .prose a { color: var(--cv-ink); text-decoration-color: var(--cv-teal); text-decoration-thickness: 2px; }
+.dd--canva .bl-title { font-family: var(--cv-font); font-weight: 800; letter-spacing: -0.03em; }
+.dd--canva .bl-title em { font-style: normal; color: var(--cv-purple); }
+.dd--canva .bl-kicker em { font: 800 1.35em/1 var(--cv-font); font-style: normal; color: var(--cv-purple); }
+.dd--canva .bl-name span { font: 600 0.95rem/1 var(--cv-font); font-style: normal; }
+.dd--canva .bl-founder { background: var(--cv-card); box-shadow: 10px 10px 0 var(--accent-light); }
+.dd--canva .bl-founder .bl-name, .dd--canva .bl-founder .bl-said { font-family: var(--cv-font); font-style: normal; }
+.dd--canva .bl-pull p { color: var(--cv-ink); font-style: normal; font-family: var(--cv-font); font-weight: 700; }
+
+/* On the record: white, purple, teal and indigo cards, upright. */
+.dd--canva .bl-fan q { font-family: var(--cv-font); font-style: normal; font-weight: 700; letter-spacing: -0.01em; }
+.dd--canva .bl-fan li:nth-child(4n+1) { background: var(--cv-card); color: var(--cv-ink); }
+.dd--canva .bl-fan li:nth-child(4n+2) { background: var(--cv-purple); color: #fff; }
+.dd--canva .bl-fan li:nth-child(4n+3) { background: #D9F7F8; color: var(--cv-ink); }
+.dd--canva .bl-fan li:nth-child(4n) { background: var(--cv-deep); color: #fff; }
+
+/* The machine, upright. */
+.dd--canva .bl-machine .n, .dd--canva .bl-machine strong { font-family: var(--cv-font); font-style: normal; }
+.dd--canva .bl-machine .n { color: var(--cv-purple); font-weight: 800; }
+
+/* Moodboard: each homepage on a device of its year. 2013 laptop, 2014 desktop, 2018 laptop, 2019 tablet,
+   2025 laptop, 2026 phone. The screenshots sit in the screen; the frames are CSS. */
+.dd--canva .bl-mood { background: #ECEEF3; background-image: radial-gradient(circle at 1px 1px, rgba(14, 19, 24, 0.08) 1px, transparent 0); background-size: 20px 20px; box-shadow: inset 0 0 0 1px var(--cv-line); }
+.dd--canva .bl-mood .note { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; padding: 0; background: none; box-shadow: none; rotate: 0deg; }
+.dd--canva .bl-mood .note::before { content: none; }
+.dd--canva .bl-mood .note.has-shot img { order: 0; width: 100%; margin: 0; border: 9px solid #15171B; border-radius: 12px 12px 3px 3px; background: #fff; outline: none; box-sizing: border-box; aspect-ratio: 16 / 10; }
+.dd--canva .bl-mood .note::after { content: ""; order: 1; display: block; width: 114%; height: 12px; margin-top: -1px; border-radius: 2px 2px 12px 12px; background: linear-gradient(#D7DBE2, #A9AFBA); box-shadow: 0 10px 18px -10px rgba(0, 0, 0, 0.5); }
+.dd--canva .bl-mood .note .yr { order: 2; margin-top: 14px; font: 800 1.2rem/1 var(--cv-font); font-style: normal; color: var(--cv-purple); }
+.dd--canva .bl-mood .note q { order: 3; margin-top: 6px; font: 700 1rem/1.25 var(--cv-font); font-style: normal; text-align: center; color: var(--cv-ink); }
+.dd--canva .bl-mood .note small { order: 4; margin-top: 6px; font: 500 0.82rem/1.45 var(--cv-font); text-align: center; color: var(--cv-muted); }
+.dd--canva .bl-mood .note.has-shot .yr, .dd--canva .bl-mood .note.has-shot q, .dd--canva .bl-mood .note.has-shot small { padding: 0 6px; }
+/* 2014: a desktop with a chin and a stand. */
+.dd--canva .bl-mood .note-2.has-shot img { border-width: 10px 10px 26px; border-radius: 10px; border-color: #1B1D21; }
+.dd--canva .bl-mood .note-2::after { width: 22%; height: 34px; margin-top: -2px; border-radius: 0 0 6px 6px; background: linear-gradient(90deg, #BFC4CC, #E6E9EE 50%, #BFC4CC); box-shadow: 0 8px 0 -2px #C9CED6, 0 16px 18px -10px rgba(0, 0, 0, 0.45); }
+/* 2018: a thinner, darker laptop. */
+.dd--canva .bl-mood .note-3.has-shot img { border-color: #2B2D31; border-width: 7px; }
+.dd--canva .bl-mood .note-3::after { background: linear-gradient(#8E939C, #5E636C); }
+/* 2019: a tablet, bezel all round. */
+.dd--canva .bl-mood .note-4.has-shot img { aspect-ratio: 1194 / 834; border: 14px solid #1A1B1E; border-radius: 22px; }
+.dd--canva .bl-mood .note-4::after { content: none; }
+/* 2025: a modern laptop, thin bezel. */
+.dd--canva .bl-mood .note-5.has-shot img { border-width: 6px; border-color: #0F1013; border-radius: 12px 12px 2px 2px; }
+/* 2026: a phone. */
+.dd--canva .bl-mood .note-6.has-shot img { width: 62%; aspect-ratio: 390 / 844; border: 9px solid #0F1013; border-radius: 34px; }
+.dd--canva .bl-mood .note-6::after { content: none; }
+@media (min-width: 900px) {
+  .dd--canva .bl-mood.has-shots ul { align-items: end; gap: 56px 44px; }
+  .dd--canva .bl-mood.has-shots .note.note-1 { grid-column: 1 / span 6; margin-top: 0; }
+  .dd--canva .bl-mood.has-shots .note.note-2 { grid-column: 7 / span 6; margin-top: 0; }
+  .dd--canva .bl-mood.has-shots .note.note-3 { grid-column: 1 / span 6; margin-top: 0; }
+  .dd--canva .bl-mood.has-shots .note.note-4 { grid-column: 7 / span 6; margin-top: 0; }
+  .dd--canva .bl-mood.has-shots .note.note-5 { grid-column: 1 / span 8; margin-top: 0; }
+  .dd--canva .bl-mood.has-shots .note.note-6 { grid-column: 9 / span 4; margin-top: 0; }
+  .dd--canva .bl-mood.has-shots .note:hover { rotate: 0deg; translate: 0 -6px; scale: 1; box-shadow: none; }
+}
+.dd--canva .bl-mood .bl-sub { font: 600 clamp(1.1rem, 1rem + 0.5vw, 1.4rem)/1.35 var(--cv-font); font-style: normal; color: var(--cv-muted); }
+
+/* ------------------------------------------------------------ figures */
+.dd--canva .dd-figure { font-family: var(--cv-font); }
+
+/* Search for the job: pick a job, watch the search, the job's page and the editor (canva.js). */
+.cv-search .cs-jobs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.cs-job { padding: 8px 14px; border: 1px solid var(--cv-line); border-radius: 999px; background: #fff; color: var(--cv-ink); font: 600 0.86rem/1 var(--cv-font); cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+.cs-job.is-on { border-color: var(--cv-purple); background: var(--cv-purple); color: #fff; }
+.cs-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.cs-step { display: grid; align-content: start; gap: 10px; padding: 12px; border: 1px solid var(--cv-line); border-radius: 14px; background: #fff; min-height: 210px; }
+.cs-n { font: 700 0.7rem/1.2 var(--cv-font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--cv-muted); }
+.cs-bar { display: flex; align-items: center; gap: 2px; padding: 9px 12px; border: 1px solid var(--cv-line); border-radius: 999px; font: 500 0.84rem/1.2 var(--cv-font); color: var(--cv-ink); overflow: hidden; white-space: nowrap; }
+.cs-caret { width: 2px; height: 1em; background: var(--cv-ink); animation: cv-blink 1s steps(1) infinite; }
+@keyframes cv-blink { 50% { opacity: 0; } }
+.cs-result { display: grid; gap: 3px; padding: 4px 2px; } .cs-result b { font: 700 0.92rem/1.25 var(--cv-font); color: #1A4FC4; } .cs-result span { font-size: 0.72rem; color: #1E7A3E; } .cs-result i { font-style: normal; font-size: 0.76rem; line-height: 1.4; color: var(--cv-muted); }
+.cs-page { display: grid; gap: 10px; } .cs-page b { font: 800 0.95rem/1.2 var(--cv-font); color: var(--cv-ink); }
+.cs-thumbs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; } .cs-thumbs i { aspect-ratio: 3 / 4; border-radius: 6px; background: var(--t, #EEE); box-shadow: inset 0 -16px 0 rgba(255, 255, 255, 0.4); transition: background-color 0.4s ease; }
+.cs-btn { justify-self: start; padding: 7px 12px; border-radius: 8px; background: var(--cv-violet); color: #fff; font: 700 0.74rem/1 var(--cv-font); }
+.cs-ed { border: 1px solid var(--cv-line); border-radius: 10px; overflow: hidden; }
+.cs-ed-bar { display: flex; align-items: center; gap: 6px; padding: 7px 8px; background: var(--cv-grad); } .cs-ed-bar i { width: 26px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.6); } .cs-ed-bar span { margin-left: auto; padding: 3px 8px; border-radius: 6px; background: #fff; color: var(--cv-purple); font: 700 0.62rem/1.2 var(--cv-font); }
+.cs-ed-body { display: grid; grid-template-columns: 26px 1fr; min-height: 132px; background: var(--cv-canvas); }
+.cs-ed-side { display: grid; align-content: start; gap: 6px; padding: 6px 4px; background: #fff; border-right: 1px solid var(--cv-line); } .cs-ed-side i { aspect-ratio: 1; border-radius: 5px; background: #E4E7EE; }
+.cs-ed-canvas { position: relative; justify-self: center; align-self: center; width: 62%; aspect-ratio: 3 / 4; margin: 10px 0; border-radius: 4px; background: var(--t, #FBF6EE); box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12); transition: background-color 0.4s ease; }
+.cs-ed-canvas::before { content: attr(data-label); position: absolute; inset: 18% 8% auto; font: 800 0.7rem/1.1 var(--cv-font); text-align: center; color: var(--tx, #5A4632); }
+.cs-sel { position: absolute; inset: 14% 6% auto; height: 24%; border: 1.5px solid var(--cv-violet); border-radius: 3px; }
+.cs-langs { margin: 14px 0 0 !important; font: 500 0.84rem/1.4 var(--cv-font); color: var(--cv-muted); } .cs-langs b { margin-right: 6px; color: var(--cv-purple); }
+
+/* Inside the company: 1,000 dots, 100 of them lit; and the Fortune 500 at Canva's three counts (canva.js). */
+.cv-inside { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(18px, 4vw, 40px); align-items: start; }
+.ci-head { margin: 0 0 10px !important; font: 800 0.98rem/1.3 var(--cv-font); color: var(--cv-ink); } .ci-head span { display: block; margin-top: 2px; font: 500 0.76rem/1.3 var(--cv-font); color: var(--cv-muted); }
+.ci-depts { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 3px; margin-bottom: 4px; font: 600 0.58rem/1.1 var(--cv-font); color: var(--cv-muted); text-align: center; }
+.ci-grid { display: grid; grid-template-columns: repeat(40, minmax(0, 1fr)); gap: 2px; }
+.ci-grid i { aspect-ratio: 1; border-radius: 50%; background: #DADDE5; transition: background-color 0.5s ease, transform 0.5s ease; }
+.ci-grid i:nth-child(40n+5), .ci-grid i:nth-child(40n+10), .ci-grid i:nth-child(40n+15), .ci-grid i:nth-child(40n+20), .ci-grid i:nth-child(40n+25), .ci-grid i:nth-child(40n+30), .ci-grid i:nth-child(40n+35) { margin-right: 3px; }
+.ci-grid i.on { background: var(--cv-purple); transform: scale(1.15); }
+.ci-read { margin: 12px 0 0 !important; font: 500 0.88rem/1.45 var(--cv-font); } .ci-read b { font-weight: 800; color: var(--cv-purple); }
+.ci-f500-grid { display: grid; grid-template-columns: repeat(25, minmax(0, 1fr)); gap: 2px; }
+.ci-f500-grid i { aspect-ratio: 1; border-radius: 2px; background: #DADDE5; transition: background-color 0.4s ease; }
+.ci-f500-grid i.on { background: var(--cv-teal); }
+.ci-years { display: flex; gap: 6px; margin-top: 12px; }
+.ci-years button { padding: 6px 12px; border: 1px solid var(--cv-line); border-radius: 999px; background: #fff; font: 700 0.8rem/1 var(--cv-font); color: var(--cv-ink); cursor: pointer; }
+.ci-years button.is-on { border-color: var(--cv-teal); background: var(--cv-teal); color: #fff; }
+
+/* The live demo: an editor running by itself through four steps (canva.js sets data-step). */
+.cv-demo .cd-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+.cd-steps button { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--cv-line); border-radius: 10px; background: #fff; color: var(--cv-muted); font: 600 0.78rem/1.2 var(--cv-font); text-align: left; cursor: pointer; transition: border-color 0.2s ease, color 0.2s ease; }
+.cd-steps button b { display: grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 50%; background: #E9EBF0; color: var(--cv-ink); font-size: 0.72rem; }
+.cd-steps button.is-on { border-color: var(--cv-purple); color: var(--cv-ink); } .cd-steps button.is-on b { background: var(--cv-purple); color: #fff; }
+.cd-screen { border-radius: 14px; overflow: hidden; background: var(--cv-canvas); box-shadow: 0 0 0 1px var(--cv-line), 0 24px 50px -30px rgba(30, 20, 70, 0.5); }
+.cd-top { display: flex; align-items: center; gap: 12px; padding: 9px 14px; background: var(--cv-grad); color: #fff; font: 700 0.82rem/1 var(--cv-font); }
+.cd-logo { font: 800 1rem/1 var(--cv-font); letter-spacing: -0.02em; } .cd-file { opacity: 0.9; font-weight: 600; } .cd-share { margin-left: auto; padding: 6px 12px; border-radius: 8px; background: #fff; color: var(--cv-purple); }
+.cd-stage { --flyer-bg: #FF5FA2; --flyer-ink: #FFF36B; --flyer-font: Georgia, serif; position: relative; height: clamp(320px, 38vw, 420px); overflow: hidden; }
+.cd-wall { position: absolute; left: 3%; top: 6%; width: 58%; height: 88%; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 8px; padding: 10px; border: 2px dashed transparent; border-radius: 14px; opacity: 0; transition: opacity 0.6s ease, border-color 0.6s ease, background-color 0.6s ease; }
+.cd-wall i { --dx: var(--mx, 0px); --dy: var(--my, 0px); --dr: var(--mr, 0deg); border-radius: 6px; background: var(--c, #ccc); box-shadow: inset 0 -10px 0 rgba(255, 255, 255, 0.35); transform: translate(var(--dx), var(--dy)) rotate(var(--dr)); transition: transform 0.8s cubic-bezier(.2, .8, .2, 1), background-color 0.6s ease; }
+.cd-flyer { position: absolute; left: 50%; top: 50%; display: grid; align-content: center; gap: 8px; width: min(44%, 300px); aspect-ratio: 3 / 4; padding: 18px; border-radius: 6px; background: var(--flyer-bg); color: var(--flyer-ink); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18); transform: translate(-50%, -50%); transition: transform 0.8s cubic-bezier(.2, .8, .2, 1), opacity 0.5s ease, background-color 0.6s ease, color 0.6s ease; }
+.cd-fl-kicker { font: 700 0.66rem/1.2 var(--cv-font); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.85; }
+.cd-fl-head { display: flex; align-items: center; font: 700 clamp(1.3rem, 0.9rem + 1.2vw, 2rem)/1.05 var(--flyer-font); }
+.cd-caret { width: 2px; height: 0.9em; margin-left: 2px; background: currentColor; animation: cv-blink 1s steps(1) infinite; }
+.cd-fl-sub { font: 600 0.78rem/1.3 var(--cv-font); }
+.cd-fl-dot { position: absolute; right: 14px; bottom: 14px; width: 34px; height: 34px; border-radius: 50%; background: currentColor; opacity: 0.85; }
+.cd-sel { position: absolute; inset: 36% 6% auto; height: 18%; border: 2px solid var(--cv-violet); border-radius: 4px; transition: opacity 0.3s ease; }
+.cd-admin { position: absolute; right: 3%; top: 6%; width: 34%; height: 88%; display: grid; align-content: start; gap: 10px; padding: 14px; border-radius: 14px; background: #fff; box-shadow: 0 16px 34px -18px rgba(30, 20, 70, 0.45); opacity: 0; transform: translateX(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.cd-ad-h { margin: 0 !important; font: 700 0.7rem/1.2 var(--cv-font); letter-spacing: 0.08em; text-transform: uppercase; color: var(--cv-muted); }
+.cd-ad-count { margin: 0 !important; font: 600 0.84rem/1.35 var(--cv-font); } .cd-ad-count b { display: block; font: 800 1.8rem/1.05 var(--cv-font); color: var(--cv-purple); }
+.cd-ad-rows { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; } .cd-ad-rows li { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid #EEF0F4; font: 500 0.74rem/1.2 var(--cv-font); } .cd-ad-rows b { font-weight: 800; }
+.cd-ad-btn { justify-self: start; padding: 8px 12px; border-radius: 8px; background: var(--cv-violet); color: #fff; font: 700 0.74rem/1.2 var(--cv-font); transition: transform 0.2s ease, background-color 0.3s ease; }
+.cd-kit { display: none; gap: 8px; padding-top: 4px; }
+.cd-kit-h { display: flex; align-items: center; justify-content: space-between; margin: 0 !important; font: 800 0.86rem/1.2 var(--cv-font); }
+.cd-lock { width: 18px; height: 18px; background: no-repeat center / contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 11V8a5 5 0 0 1 10 0v3' stroke='%237D2AE8' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3Crect x='5' y='11' width='14' height='10' rx='2.5' fill='%237D2AE8'/%3E%3C/svg%3E"); }
+.cd-kit-colors { display: flex; gap: 6px; } .cd-kit-colors i { width: 24px; height: 24px; border-radius: 50%; } .cd-kit-colors i:nth-child(1) { background: #12355B; } .cd-kit-colors i:nth-child(2) { background: #1FB5A6; } .cd-kit-colors i:nth-child(3) { background: #F4F1EA; box-shadow: inset 0 0 0 1px #ddd; } .cd-kit-colors i:nth-child(4) { background: #F2A541; }
+.cd-kit-font { margin: 0 !important; font: 600 0.8rem/1.2 var(--cv-font); } .cd-kit-font b { margin-right: 6px; font: 800 1.1rem/1 var(--cv-font); }
+.cd-kit-note { margin: 0 !important; font: 500 0.72rem/1.35 var(--cv-font); color: var(--cv-muted); }
+.cd-label { margin: 10px 0 0 !important; font: 500 0.76rem/1.3 var(--cv-font); color: var(--cv-muted); }
+/* Step 2: the flyer becomes one tile in a wall of everyone's designs; the admin sees the count. */
+.cv-demo[data-step="2"] .cd-wall, .cv-demo[data-step="3"] .cd-wall, .cv-demo[data-step="4"] .cd-wall { opacity: 1; }
+.cv-demo:not([data-step="1"]) .cd-flyer { opacity: 0; transform: translate(-50%, -50%) scale(0.25); }
+.cd-wall i.is-you { box-shadow: inset 0 -10px 0 rgba(255, 255, 255, 0.35), 0 0 0 2px var(--cv-violet); }
+.cv-demo[data-step="2"] .cd-admin, .cv-demo[data-step="3"] .cd-admin, .cv-demo[data-step="4"] .cd-admin { opacity: 1; transform: none; }
+/* Step 3: the scattered designs line up in one workspace. */
+.cv-demo[data-step="3"] .cd-wall i, .cv-demo[data-step="4"] .cd-wall i { --dx: 0px; --dy: 0px; --dr: 0deg; }
+.cv-demo[data-step="3"] .cd-wall, .cv-demo[data-step="4"] .cd-wall { border-color: var(--cv-purple); background: rgba(125, 42, 232, 0.05); }
+.cv-demo[data-step="3"] .cd-ad-btn { transform: scale(0.96); background: #5E1FC0; }
+/* Step 4: the brand locks and everything snaps to it. */
+.cv-demo[data-step="4"] .cd-wall i { background: var(--bc, #12355B); }
+.cv-demo[data-step="4"] .cd-ad-btn { display: none; }
+.cv-demo[data-step="4"] .cd-kit { display: grid; }
+
+/* Users and payers: 265 squares, 31 lit; $4 billion with the $500 million business slice. */
+.cv-payers { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(18px, 4vw, 40px); align-items: start; }
+.cp-head { margin: 0 0 10px !important; font: 800 0.98rem/1.3 var(--cv-font); } .cp-head span { display: block; margin-top: 2px; font: 500 0.76rem/1.3 var(--cv-font); color: var(--cv-muted); }
+.cp-grid { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 3px; }
+.cp-grid i { aspect-ratio: 1; border-radius: 3px; background: #DADDE5; transition: background-color 0.4s ease; } .cp-grid i.paid { background: var(--cv-purple); }
+.cp-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 12px 0 0 !important; font: 500 0.8rem/1.3 var(--cv-font); color: var(--cv-muted); }
+.cp-key i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: #DADDE5; } .cp-key i.is-paid, .cp-key i.is-biz { background: var(--cv-purple); } .cp-key i.is-rest { background: #C9CEDA; }
+.cp-bar { display: flex; height: 54px; border-radius: 10px; overflow: hidden; }
+.cp-bar span { display: grid; align-items: center; padding: 0 10px; font: 800 0.9rem/1 var(--cv-font); }
+.cp-biz { width: 12.5%; min-width: 64px; background: var(--cv-purple); color: #fff; } .cp-rest { flex: 1; background: #C9CEDA; color: var(--cv-ink); }
+
+/* Partner and rival. */
+.cv-rivals { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: clamp(12px, 3vw, 28px); align-items: center; }
+.cr-head { margin: 0 0 10px !important; font: 700 0.72rem/1.2 var(--cv-font); letter-spacing: 0.1em; text-transform: uppercase; color: var(--cv-muted); }
+.cv-rivals ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.cv-rivals li { padding: 10px 12px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 1px var(--cv-line); }
+.cv-rivals li b { display: block; font: 800 0.92rem/1.2 var(--cv-font); } .cv-rivals li span { display: block; margin-top: 3px; font: 500 0.76rem/1.4 var(--cv-font); color: var(--cv-muted); }
+.cr-in li { box-shadow: 0 0 0 2px var(--cv-teal); } .cr-vs li { box-shadow: 0 0 0 1px var(--cv-line); }
+.cr-mid span { display: grid; place-items: center; width: clamp(74px, 9vw, 96px); aspect-ratio: 1; border-radius: 50%; background: var(--cv-grad); color: #fff; font: 800 1rem/1 var(--cv-font); box-shadow: 0 16px 30px -12px rgba(125, 42, 232, 0.6); }
+
+@media (max-width: 760px) {
+  .cs-steps { grid-template-columns: 1fr; }
+  .cs-step { min-height: 0; }
+  .cv-inside, .cv-payers { grid-template-columns: 1fr; }
+  .cv-rivals { grid-template-columns: 1fr; }
+  .cr-mid { justify-self: center; order: -1; }
+  .cv-demo .cd-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cd-stage { height: 540px; }
+  .cd-wall { left: 4%; top: 4%; width: 92%; height: 36%; }
+  .cd-flyer { width: 58%; top: 36%; }
+  .cv-demo[data-step="4"] .cd-ad-rows { display: none; }
+  .cd-admin { left: 4%; right: 4%; top: auto; bottom: 4%; width: auto; height: auto; }
+  .dd--canva .bl-mood .note-6.has-shot img { width: 54%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cd-flyer, .cd-wall i, .cd-admin, .cd-wall { transition: none; }
+}
+
+/* The page around the article: a cool off-white instead of the site's warm paper. */
+body:has(.dd--canva) { --page: #F7F7FA; }

@@ -103,7 +103,9 @@ function renderBlock(name, title, items) {
 const url = (dd) => `/deep-dives/${dd.slug}`;
 const fmtDate = (d) => (d ? new Date(`${d}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : '');
 const status = (dd) => (dd.published ? fmtDate(dd.date) : 'In research');
-const brandVars = (dd) => `--ep-bg:${dd.brand.bg};--ep-fg:${dd.brand.fg};--ep-ac:${dd.brand.ac}`;
+// brand.grad (optional) paints tiles with a gradient instead of the flat bg; 'initial' keeps a parent's gradient
+// from leaking into tiles of other companies nested inside it.
+const brandVars = (dd) => `--ep-bg:${dd.brand.bg};--ep-fg:${dd.brand.fg};--ep-ac:${dd.brand.ac};--ep-grad:${dd.brand.grad || 'initial'}`;
 const ONERR = `if(this.dataset.alt){this.src=this.dataset.alt;this.removeAttribute('data-alt')}else{this.closest('[data-logo-box]').classList.add('no-logo');this.remove()}`;
 
 function logoBox(dd, cls) {
