@@ -1,6 +1,6 @@
 /* Canva deep dive: Canva's own look. A light editor canvas, ink text, Canva's teal-to-purple gradient, rounded
    cards with the editor's purple selection handles, and a friendly geometric sans (Plus Jakarta Sans, standing in
-   for Canva Sans). Accents are upright, in the gradient, with no italics.
+   for Canva Sans). Accents are upright, in the gradient, with no italics. Editorial type (title, manifesto, finale, blocks) is the house Newsreader, like the other deep dives.
    Hero: the giant CANVA letters, each playing a scene from the story, with real Canva things drifting around them,
    each with a file tag (canva.hero.html, canva.js). They scatter as you scroll.
    Interlude (canva.run.html): the hero shrinks away, the scattered designs line up in one company workspace,
@@ -20,7 +20,7 @@
 .dd--canva .dd-hero.has-word { justify-content: space-between; }
 .dd--canva .hero-shade { display: none; }
 .dd--canva .dd-hero .dd-head-grid { position: relative; z-index: 5; max-width: min(56%, 780px); }
-.dd--canva .dd-hero h1, .dd--canva.dd--designed .dd-hero.has-word h1 { max-width: 15em; color: var(--cv-ink); text-shadow: none; font: 800 clamp(2.1rem, 1rem + 2.8vw, 3.9rem)/1.04 var(--cv-font); letter-spacing: -0.025em; }
+.dd--canva .dd-hero h1, .dd--canva.dd--designed .dd-hero.has-word h1 { max-width: 15em; color: var(--cv-ink); text-shadow: none; font: 700 clamp(2.1rem, 1rem + 2.8vw, 3.9rem)/1.04 var(--display); letter-spacing: -0.025em; }
 .dd--canva .dd-hero.has-word .dd-dek { max-width: 30em; color: #3A414B; opacity: 1; font-family: var(--cv-font); font-weight: 500; }
 
 /* The letters: Canva's gradient, stepped letter by letter from teal to purple, so the ink title leads.
@@ -121,8 +121,8 @@
 }
 
 /* ------------------------------------------------------------ manifesto and finale: upright, accents in the gradient */
-.dd--canva .manifesto p { font: 800 clamp(2.1rem, 1rem + 4.2vw, 5rem)/1.04 var(--cv-font); letter-spacing: -0.03em; text-transform: none; }
-.dd--canva .fin-line { font: 800 clamp(1.9rem, 1rem + 3.1vw, 3.7rem)/1.08 var(--cv-font); letter-spacing: -0.025em; text-transform: none; }
+.dd--canva .manifesto p { font: 700 clamp(2.1rem, 1rem + 4.2vw, 5rem)/1.04 var(--display); letter-spacing: -0.015em; text-transform: none; }
+.dd--canva .fin-line { font: 700 clamp(1.9rem, 1rem + 3.1vw, 3.7rem)/1.08 var(--display); letter-spacing: -0.01em; text-transform: none; }
 .dd--canva .manifesto em, .dd--canva .finale em { font: inherit; font-style: normal; letter-spacing: inherit; color: transparent; background: linear-gradient(95deg, #00C4CC, #7FD8FF 45%, #B48CFF); -webkit-background-clip: text; background-clip: text; }
 @media (min-width: 400px) { .dd--canva .manifesto em { white-space: nowrap; } }
 .dd--canva .fin-line em { white-space: normal; }
@@ -131,26 +131,27 @@
 /* ------------------------------------------------------------ the article in Canva's colors */
 .dd--canva .prose h2 { font-family: var(--cv-font); font-weight: 800; letter-spacing: -0.02em; }
 .dd--canva .prose h2::before { border-top-color: var(--cv-purple); color: var(--cv-purple); }
-.dd--canva .prose p.carrier { border-left-color: var(--cv-teal); color: var(--accent-deep); font: 700 clamp(1.14rem, 1.04rem + 0.4vw, 1.32rem)/1.42 var(--cv-font); letter-spacing: -0.01em; }
+.dd--canva .prose p.carrier { border-left-color: var(--cv-teal); color: var(--accent-deep); font: 600 clamp(1.2rem, 1.1rem + 0.45vw, 1.4rem)/1.38 var(--display); letter-spacing: 0; }
 .dd--canva .preview-text > p:first-child::first-letter { font-family: var(--cv-font); font-weight: 800; color: var(--cv-purple); }
 .dd--canva .prose a { color: var(--cv-ink); text-decoration-color: var(--cv-teal); text-decoration-thickness: 2px; }
-.dd--canva .bl-title { font-family: var(--cv-font); font-weight: 800; letter-spacing: -0.03em; }
+.dd--canva .bl-title { font-family: var(--display); font-weight: 700; letter-spacing: -0.015em; }
 .dd--canva .bl-title em { font-style: normal; color: var(--cv-purple); }
-.dd--canva .bl-kicker em { font: 800 1.35em/1 var(--cv-font); font-style: normal; color: var(--cv-purple); }
+.dd--canva .bl-kicker em { font: 700 1.4em/1 var(--display); font-style: normal; color: var(--cv-purple); }
 .dd--canva .bl-name span { font: 600 0.95rem/1 var(--cv-font); font-style: normal; }
 .dd--canva .bl-founder { background: var(--cv-card); box-shadow: 10px 10px 0 var(--accent-light); }
-.dd--canva .bl-founder .bl-name, .dd--canva .bl-founder .bl-said { font-family: var(--cv-font); font-style: normal; }
-.dd--canva .bl-pull p { color: var(--cv-ink); font-style: normal; font-family: var(--cv-font); font-weight: 700; }
+.dd--canva .bl-founder .bl-name, .dd--canva .bl-founder .bl-said { font-family: var(--display); font-style: normal; }
+.dd--canva .bl-pull p { color: var(--cv-ink); font-style: normal; font-family: var(--display); font-weight: 700; }
 
 /* On the record: white, purple, teal and indigo cards, upright. */
-.dd--canva .bl-fan q { font-family: var(--cv-font); font-style: normal; font-weight: 700; letter-spacing: -0.01em; }
+.dd--canva .bl-fan q { font-family: var(--display); font-style: normal; font-weight: 700; letter-spacing: 0; }
 .dd--canva .bl-fan li:nth-child(4n+1) { background: var(--cv-card); color: var(--cv-ink); }
 .dd--canva .bl-fan li:nth-child(4n+2) { background: var(--cv-purple); color: #fff; }
 .dd--canva .bl-fan li:nth-child(4n+3) { background: #D9F7F8; color: var(--cv-ink); }
 .dd--canva .bl-fan li:nth-child(4n) { background: var(--cv-deep); color: #fff; }
 
 /* The machine, upright. */
-.dd--canva .bl-machine .n, .dd--canva .bl-machine strong { font-family: var(--cv-font); font-style: normal; }
+.dd--canva .bl-machine .n { font-family: var(--display); font-style: normal; }
+.dd--canva .bl-machine strong { font-family: var(--cv-font); font-style: normal; }
 .dd--canva .bl-machine .n { color: var(--cv-purple); font-weight: 800; }
 
 /* Moodboard: each homepage on a device of its year. 2013 laptop, 2014 desktop, 2018 laptop, 2019 tablet,
@@ -160,8 +161,8 @@
 .dd--canva .bl-mood .note::before { content: none; }
 .dd--canva .bl-mood .note.has-shot img { order: 0; width: 100%; margin: 0; border: 9px solid #15171B; border-radius: 12px 12px 3px 3px; background: #fff; outline: none; box-sizing: border-box; aspect-ratio: 16 / 10; }
 .dd--canva .bl-mood .note::after { content: ""; order: 1; display: block; width: 114%; height: 12px; margin-top: -1px; border-radius: 2px 2px 12px 12px; background: linear-gradient(#D7DBE2, #A9AFBA); box-shadow: 0 10px 18px -10px rgba(0, 0, 0, 0.5); }
-.dd--canva .bl-mood .note .yr { order: 2; margin-top: 14px; font: 800 1.2rem/1 var(--cv-font); font-style: normal; color: var(--cv-purple); }
-.dd--canva .bl-mood .note q { order: 3; margin-top: 6px; font: 700 1rem/1.25 var(--cv-font); font-style: normal; text-align: center; color: var(--cv-ink); }
+.dd--canva .bl-mood .note .yr { order: 2; margin-top: 14px; font: 700 1.3rem/1 var(--display); font-style: normal; color: var(--cv-purple); }
+.dd--canva .bl-mood .note q { order: 3; margin-top: 6px; font: 700 1.05rem/1.25 var(--display); font-style: normal; text-align: center; color: var(--cv-ink); }
 .dd--canva .bl-mood .note small { order: 4; margin-top: 6px; font: 500 0.82rem/1.45 var(--cv-font); text-align: center; color: var(--cv-muted); }
 .dd--canva .bl-mood .note.has-shot .yr, .dd--canva .bl-mood .note.has-shot q, .dd--canva .bl-mood .note.has-shot small { padding: 0 6px; }
 /* 2014: a desktop with a chin and a stand. */
