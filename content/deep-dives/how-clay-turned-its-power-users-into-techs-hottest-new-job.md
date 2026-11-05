@@ -1,5 +1,5 @@
 ---
-date: 2026-10-11
+date: 2026-10-01
 design: clay
 dek: The product, pricing, and community choices that made Clay the tool a new career is built on.
 ---

@@ -95,7 +95,7 @@ html.js .dd-figure:not(.is-in) .fc-dot { transform: scale(0); }
 .fig-race.is-ready .rc-buyer .rc-stops li:last-child::after { background: var(--accent); box-shadow: none; }
 
 /* Interest: match the next step to what's missing. */
-.nx-q { margin-bottom: 14px !important; font: italic 600 1.12rem/1.35 var(--display); color: var(--accent-deep); }
+.nx-q { margin-bottom: 14px !important; font: 600 1.12rem/1.35 var(--display); color: var(--accent-deep); }
 .nx-rows { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .nx-rows li { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 6px 16px; align-items: baseline; padding: 11px 14px; border-radius: 10px; background: #F1EEE7; font-size: 0.9rem; line-height: 1.4; }
 .nx-rows b { font-weight: 600; }

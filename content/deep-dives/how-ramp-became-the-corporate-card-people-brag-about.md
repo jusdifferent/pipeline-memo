@@ -1,5 +1,5 @@
 ---
-date: 2026-10-17
+date: 2026-10-10
 design: ramp
 dek: Inside the incentive flip that turned "spend less" into a $60 billion brand.
 ---
@@ -103,7 +103,7 @@ Most companies rewrite their homepage headline every year or two. Ramp has a lin
 
 The Internet Archive shows the arc. In 2019 the site was tryramp.com, titled "The Corporate Card With A Brain." By September 2020 it had moved to ramp.com and was calling itself "the only corporate card that strengthens your finances." Then, by April 2021, a rebrand in lime yellow and cream arrived with a new headline:
 
-*Time is money. Save both.*
+"Time is money. Save both."
 
 Underneath it: "The only corporate card and spend management platform designed to help you spend less."
 
