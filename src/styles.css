@@ -554,6 +554,10 @@ body:has(.dd--designed) { background: var(--page, var(--paper)); }
 .hero-run + .manifesto { padding-top: clamp(36px, 6vh, 72px); }
 .manifesto p { max-width: 1180px; margin: 0 auto; text-align: center; font: 700 clamp(2rem, 0.9rem + 4.4vw, 5.2rem)/1.02 var(--sans); letter-spacing: -0.025em; text-transform: uppercase; text-wrap: balance; }
 .manifesto em, .finale em { font: italic 500 1.06em/1 var(--italic); letter-spacing: -0.01em; text-transform: none; color: var(--accent-hi, var(--accent)); }
+/* Deep dives set the thesis and closing lines like Harvey's: a bold serif in regular case, accents in italic.
+   (Harvey and any design can still set its own typeface; essays keep the sans caps.) */
+:where(.dd--designed:not(.dd--essay)) .manifesto p { font: 700 clamp(2.1rem, 1rem + 4.2vw, 5rem)/1.06 var(--display); letter-spacing: -0.015em; text-transform: none; }
+:where(.dd--designed:not(.dd--essay)) .finale .fin-line { font: 700 clamp(1.9rem, 1rem + 3.1vw, 3.7rem)/1.1 var(--display); letter-spacing: -0.01em; text-transform: none; }
 html.js .manifesto .mw { opacity: 0.16; transition: opacity 0.45s ease; }
 html.js .manifesto .mw.on { opacity: 1; }
 
