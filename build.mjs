@@ -190,7 +190,23 @@ function profileDialog() {
 </dialog>`;
 }
 
-function layout({ title, description = cfg.description, pathName = '/', body, isHome = false, searchIn = 'deep-dives', head = '', bodyClass = '' }) {
+// Structured data for search engines and AI tools: the site on the homepage, an Article on every piece.
+// The author is the publication until site.config.json has an author name.
+const PUBLISHER = { '@type': 'Organization', name: cfg.name, url: cfg.url, logo: { '@type': 'ImageObject', url: `${cfg.url}/brand/buyline-icon-1024.png` } };
+const jsonLd = (data) => `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', ...data }).replace(/</g, '\\u003c')}</script>`;
+function structuredData({ isHome, article, title, description, canon }) {
+  if (isHome) return jsonLd({ '@type': 'WebSite', name: cfg.name, url: cfg.url, description: cfg.description, publisher: PUBLISHER });
+  if (!article) return '';
+  return jsonLd({
+    '@type': 'Article', headline: title, description, url: canon, mainEntityOfPage: canon,
+    datePublished: article.date, dateModified: article.date, image: [`${cfg.url}/og.png`],
+    articleSection: article.section, ...(article.about ? { about: { '@type': 'Organization', name: article.about } } : {}),
+    author: cfg.author ? { '@type': 'Person', name: cfg.author } : { '@type': 'Organization', name: cfg.name, url: cfg.url },
+    publisher: PUBLISHER,
+  });
+}
+
+function layout({ title, description = cfg.description, pathName = '/', body, isHome = false, searchIn = 'deep-dives', head = '', bodyClass = '', article = null }) {
   const full = title ? `${title} | ${cfg.name}` : `${cfg.name}: ${cfg.tagline}`;
   const canon = cfg.url + (pathName === '/' ? '' : pathName);
   return `<!doctype html>
@@ -202,7 +218,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <title>${e(full)}</title>
 <meta name="description" content="${e(description)}">
 <link rel="canonical" href="${e(canon)}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${article ? 'article' : 'website'}">${article ? `\n<meta property="article:published_time" content="${e(article.date)}">\n<meta property="article:section" content="${e(article.section)}">` : ''}
 <meta property="og:title" content="${e(title || cfg.name)}">
 <meta property="og:description" content="${e(description)}">
 <meta property="og:url" content="${e(canon)}">
@@ -213,6 +229,7 @@ function layout({ title, description = cfg.description, pathName = '/', body, is
 <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="${e(cfg.name)}" href="/feed.xml">
+${structuredData({ isHome, article, title, description, canon })}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 ${cfg.brandfetchClientId ? '<link rel="preconnect" href="https://cdn.brandfetch.io" crossorigin>' : ''}
@@ -531,6 +548,7 @@ function essayPage(es) {
   const related = ESSAYS.filter((x) => x !== es).slice(0, 6);
   return layout({
     title: es.title, description: es.dek || `${es.title}: an essay from ${cfg.name}.`, pathName: essayUrl(es), searchIn: 'essays',
+    article: { date: String(es.date), section: 'Essays' },
     head: designHead(es.design), bodyClass: es.design ? `designed design-${es.design}` : '',
     body: `<div class="dd-page">${essayArticle(es)}</div>
 <section class="related essays-related"><h2>More essays</h2>
@@ -559,7 +577,8 @@ function deepDivePage(dd) {
   const related = DIVES.filter((d) => d !== dd && (d.series === dd.series || d.industry === dd.industry))
     .sort((a, b) => (b.industry === dd.industry) - (a.industry === dd.industry)).slice(0, 6);
   return layout({
-    title: dd.title, description: dd.dek, pathName: url(dd), head: designHead(dd.design), bodyClass: dd.design ? `designed design-${dd.design}` : '',
+    title: dd.title, description: dd.dek, pathName: url(dd), head: designHead(dd.design),
+    article: { date: String(dd.date), section: (seriesBy[dd.series] || {}).name || 'Deep dives', about: dd.company }, bodyClass: dd.design ? `designed design-${dd.design}` : '',
     body: `<div class="dd-page">${deepDiveArticle(dd)}</div>
 ${related.length ? `<section class="related"><h2>Related deep dives</h2><ul class="grid">${related.map(card).join('')}</ul></section>` : ''}`,
   });
@@ -614,8 +633,19 @@ write('feed.xml', `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"><channel><title>${e(cfg.name)}</title><link>${e(cfg.url)}</link><description>${e(cfg.description)}</description>
 ${live.map((d) => `<item><title>${e(d.title)}</title><link>${e(cfg.url + (d.isEssay ? essayUrl(d) : url(d)))}</link><guid>${e(cfg.url + (d.isEssay ? essayUrl(d) : url(d)))}</guid><pubDate>${new Date(`${d.date}T12:00:00Z`).toUTCString()}</pubDate><description>${e(d.dek)}</description></item>`).join('\n')}
 </channel></rss>`);
-const pages = ['', '/essays', '/about', '/advisory', '/subscribe', ...DIVES.map(url), ...ESSAYS.map(essayUrl)];
-write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map((p) => `<url><loc>${e(cfg.url + p)}</loc></url>`).join('')}</urlset>`);
+// Sitemap with last-changed dates: each piece's date; the two lists take their newest piece's date.
+const newest = (list) => list.map((x) => String(x.date)).sort().pop();
+const pages = [['', newest(DIVES)], ['/essays', newest(ESSAYS)], ['/about'], ['/advisory'], ['/subscribe'],
+  ...DIVES.map((d) => [url(d), String(d.date)]), ...ESSAYS.map((x) => [essayUrl(x), String(x.date)])];
+write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${pages.map(([p, d]) => `<url><loc>${e(cfg.url + p)}</loc>${d ? `<lastmod>${d}</lastmod>` : ''}</url>`).join('')}</urlset>`);
+// llms.txt (llmstxt.org): a plain-text map of the site for AI tools, built from the same list as the pages.
+write('llms.txt', [
+  `# ${cfg.name}`, '', `> ${cfg.tagline} ${cfg.description}`, '',
+  `${cfg.name} publishes two kinds of pieces, all free to read in full. Deep dives take one company's growth machine apart: its thesis, how it sells, and the rules other companies can borrow. Essays explain one idea about how B2B buyers decide and where pipeline breaks. Every number is sourced, and company claims are labeled as company claims.`, '',
+  '## Deep dives', '', ...DIVES.map((d) => `- [${d.title}](${cfg.url}${url(d)}): ${d.dek}`), '',
+  '## Essays', '', ...ESSAYS.map((x) => `- [${x.title}](${cfg.url}${essayUrl(x)}): ${x.dek || x.title}`), '',
+  '## About', '', `- [About ${cfg.name}](${cfg.url}/about): who it's for and how pieces are researched`, `- [Work with me](${cfg.url}/advisory): advisory work on positioning, paid social and pipeline`, `- [RSS feed](${cfg.url}/feed.xml): every deep dive and essay`, '',
+].join('\n'));
 write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${cfg.url}/sitemap.xml\n`);
 fs.cpSync(path.join(ROOT, 'public'), DIST, { recursive: true });
 const local = DIVES.filter((d) => d.logoLocal).length, remote = DIVES.filter((d) => d.logo && !d.logoLocal).length;
