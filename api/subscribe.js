@@ -47,7 +47,7 @@ module.exports = async function handler(req, res) {
   const pubId = process.env.BEEHIIV_PUBLICATION_ID;
   if (!apiKey || !pubId) {
     console.error('Missing BEEHIIV_API_KEY or BEEHIIV_PUBLICATION_ID');
-    return reply(req, res, 503, { error: 'Subscriptions aren\u2019t open yet. Email us and we\u2019ll add you by hand.' });
+    return reply(req, res, 503, { error: 'Subscriptions aren\u2019t open yet. Email jusdifferent999@gmail.com and we\u2019ll add you by hand.' });
   }
 
   const custom_fields = [
