@@ -1,7 +1,7 @@
 ---
 topic: buyers
 design: essay
-date: 2026-10-14
+date: 2026-11-08
 dek: 81% of buyers have a favorite vendor before the first call. Framing the problem is how you take that spot.
 ---
 

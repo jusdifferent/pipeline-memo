@@ -345,7 +345,7 @@ function essayList() {
     <p>Showing <strong data-active-label></strong> <span data-active-count></span></p>
     <button type="button" class="pill" data-reset>Show all</button>
   </div>
-  <ul class="essay-list">${ESSAYS.map((x) => `<li data-topic="${x.topic}" data-search="${e(x.title.toLowerCase())}"><a href="${essayUrl(x)}">${e(x.title)}</a>${x.published ? `<span class="essay-status">${x.topic ? `<span class="essay-topic">${e(topicBy[x.topic].name)}</span>` : ''}${e(fmtDate(x.date))}</span>` : ''}</li>`).join('')}</ul>
+  <ul class="essay-list">${ESSAYS.map((x) => `<li data-topic="${x.topic}" data-search="${e(x.title.toLowerCase())}"><a href="${essayUrl(x)}">${e(x.title)}</a>${x.published ? `<span class="essay-status">${e(fmtDate(x.date))}</span>` : ''}</li>`).join('')}</ul>
   <div class="empty" data-empty hidden><p>No essays match that search.</p><button type="button" class="pill" data-reset>Show all</button></div>
 </section>`;
 }

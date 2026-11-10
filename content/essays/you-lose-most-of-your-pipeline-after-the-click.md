@@ -1,6 +1,6 @@
 ---
 topic: pipeline
-date: 2026-10-07
+date: 2026-11-01
 design: essay
 dek: Marketing creates the moment of intent. Whether it becomes pipeline depends on what your company does in the hours after someone raises their hand.
 ---
