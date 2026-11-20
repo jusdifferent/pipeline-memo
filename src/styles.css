@@ -632,3 +632,8 @@ body.designed:has(.finale) .signup-band { display: none; }
 body.designed:has(.finale) main { padding-bottom: clamp(64px, 9vw, 112px); }
 /* Safety net: nothing on a designed page may push it sideways. */
 .dd--designed { overflow-x: clip; }
+
+/* Deep dives and essays on phones: body text one step smaller (19px → 17px); headings and pull lines keep their own sizes */
+@media (max-width: 640px) {
+  .dd .prose { font-size: 1.0625rem; line-height: 1.7; }
+}
