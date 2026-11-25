@@ -5,9 +5,12 @@
 //   BEEHIIV_API_KEY         API key from Beehiiv > Settings > Integrations > API
 //   BEEHIIV_PUBLICATION_ID  Publication ID, starts with "pub_"
 // Optional:
+//   KV_REST_API_URL + KV_REST_API_TOKEN  signup database (Vercel > Storage > Upstash Redis). Every signup is
+//                           saved there too, and it is enough on its own: the form works before Beehiiv is set up.
 //   BEEHIIV_SEND_WELCOME    "false" to skip Beehiiv's welcome email (default: sent)
 
 const { sign } = require('./_token');
+const store = require('./_store');
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -43,10 +46,21 @@ module.exports = async function handler(req, res) {
 
   if (!EMAIL.test(email)) return reply(req, res, 400, { error: 'Enter a valid email address.' });
 
+  let stored = false;
+  if (store.enabled()) {
+    try {
+      await store.saveSignup(email, { name, role, company, source, referrer: req.headers.referer || '' });
+      stored = true;
+    } catch (err) {
+      console.error('Signup store failed', err);
+    }
+  }
+
   const apiKey = process.env.BEEHIIV_API_KEY;
   const pubId = process.env.BEEHIIV_PUBLICATION_ID;
   if (!apiKey || !pubId) {
-    console.error('Missing BEEHIIV_API_KEY or BEEHIIV_PUBLICATION_ID');
+    if (stored) return reply(req, res, 200, { ok: true, token: sign(email) });
+    console.error('No signup database and no BEEHIIV_API_KEY / BEEHIIV_PUBLICATION_ID');
     return reply(req, res, 503, { error: 'Subscriptions aren\u2019t open yet. Email jusdifferent999@gmail.com and we\u2019ll add you by hand.' });
   }
 
@@ -71,11 +85,13 @@ module.exports = async function handler(req, res) {
     });
     if (!r.ok) {
       console.error('Beehiiv error', r.status, await r.text());
+      if (stored) return reply(req, res, 200, { ok: true, token: sign(email) });
       return reply(req, res, 502, { error: 'Your request didn\u2019t go through. Try again in a minute.' });
     }
     return reply(req, res, 200, { ok: true, token: sign(email) });
   } catch (err) {
     console.error('Beehiiv request failed', err);
+    if (stored) return reply(req, res, 200, { ok: true, token: sign(email) });
     return reply(req, res, 502, { error: 'Your request didn\u2019t go through. Try again in a minute.' });
   }
 };
